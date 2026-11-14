@@ -110,13 +110,13 @@ jobs:
         run: |
           set PRIV=%CD%\_build\test\lib\ex_mujoco\priv
           echo [nothing added]
-          mix run -e "IO.puts ExMujoco.Native.version()" || echo FAILED-0
+          call mix run -e "IO.puts ExMujoco.Native.version()" || echo FAILED-0
           echo [priv on PATH]
           set PATH=%PRIV%;%PATH%
-          mix run -e "IO.puts ExMujoco.Native.version()" || echo FAILED-1
+          call mix run -e "IO.puts ExMujoco.Native.version()" || echo FAILED-1
           echo [priv and the C++ runtime on PATH]
           set PATH=%PRIV%;%VCToolsRedistDir%x64\Microsoft.VC143.CRT;%PATH%
-          mix run -e "IO.puts ExMujoco.Native.version()" || echo FAILED-2
+          call mix run -e "IO.puts ExMujoco.Native.version()" || echo FAILED-2
       - run: mix test
 
   gen:
