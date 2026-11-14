@@ -65,6 +65,11 @@ are easy to get wrong, and are pinned by `test/ex_mujoco/renderer_test.exs`:
 - **The image may not be larger than the model's offscreen buffer** (`<visual><global
 offwidth=… offheight=…/>`), and asking for more is refused by name rather than rendered
   black.
+- **A machine without OpenGL is the half of the matrix that skips**, so it stays unobserved
+  unless something makes it reachable: `EX_MUJOCO_NO_GL=1` makes `gl::available` answer
+  "no" (with a sentence) on a machine that could render. `EX_MUJOCO_NO_GL=1 mix test` runs
+  the suite as a GL-less runner would, and `renderer_availability_test.exs` pins both
+  answers wherever the suite runs.
 - **A new `.cpp` in `c_src/` also belongs in `Makefile.win`.** The Unix `Makefile` globs
   `c_src/*.cpp`; Windows has no `wildcard`, so its list is written out, and 0.2.0's two new
   units were missed there until the Windows link failed on four unresolved symbols — with a
