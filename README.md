@@ -30,7 +30,7 @@ The plan is phased — physics first, then scene building, then rendering — an
 
 ```elixir
 def deps do
-  [{:ex_mujoco, "~> 0.1.6"}]
+  [{:ex_mujoco, "~> 0.1.7"}]
 end
 ```
 
@@ -154,7 +154,8 @@ The field pages are filed the way MuJoCo's header is: `ExMujoco.Model.geom_pos/1
 `geoms`, `ExMujoco.Data.qpos/1` under `state`, and `ExMujoco.Data.xpos/1` under
 `computed by mj_fwdPosition/mj_kinematics` — the heading MuJoCo writes above the block, so the
 index is MuJoCo's index. `ExMujoco.Api` does the same, and each function there carries MuJoCo's
-own sentence about what it does.
+own sentence about what it does; each `ExMujoco.Types.*` value carries MuJoCo's sentence about
+what it means.
 
 ## Licence
 

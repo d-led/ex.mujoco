@@ -61,6 +61,42 @@ defmodule ExMujoco.DocHeadingsTest do
     end
   end
 
+  describe "a type's page" do
+    test "says what the enumeration is, in MuJoCo's words" do
+      assert moduledoc(ExMujoco.Types.Geom) =~ "type of geometric shape"
+
+      # MuJoCo's own spelling, capitalisation and all — the page copies the
+      # header rather than paraphrasing it.
+      assert moduledoc(ExMujoco.Types.Obj) =~ "type of MujoCo object"
+    end
+
+    test "says what a value means, in MuJoCo's words" do
+      assert doc_of(ExMujoco.Types.Geom, :hfield) =~ "height field"
+      assert doc_of(ExMujoco.Types.Geom, :capsule) =~ "capsule"
+    end
+
+    test "leaves every type module saying what its enumeration is" do
+      for module <- type_modules() do
+        assert moduledoc(module) =~ "From MuJoCo's headers",
+               "#{inspect(module)} does not say what the enumeration is"
+      end
+    end
+  end
+
+  defp moduledoc(module) do
+    {:docs_v1, _, _, _, module_doc, _, _} = Code.fetch_docs(module)
+
+    case module_doc do
+      %{"en" => text} -> text
+      _ -> ""
+    end
+  end
+
+  defp type_modules do
+    {:ok, modules} = :application.get_key(:ex_mujoco, :modules)
+    Enum.filter(modules, &String.starts_with?(Atom.to_string(&1), "ExMujoco.Types."))
+  end
+
   defp heading_of(module, name) do
     {:docs_v1, _, _, _, _, _, docs} = Code.fetch_docs(module)
 

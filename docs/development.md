@@ -100,6 +100,12 @@ documentation is part of a release rather than something added afterwards.
   the same text keeps both, keyed by the name in the declaration (`annotations/1` in
   `lib/ex_mujoco/gen/header.ex`). `ExMujoco.Api` then carries the sentence and the heading, and
   so does the C++ — a NIF with MuJoCo's line above it is easier to review than one without.
+- The enumerations are the third case. `typedef enum mjtGeom_ {  // type of geometric shape`
+  describes the enumeration, and the comment after each value describes that value, so
+  `enums_in/1` reads the header **with** its comments kept. A comment holding a brace would end
+  the body early, so the same scan runs over the text with comments removed and the two have to
+  find the same enumerations, in the same order — a drift raises instead of generating wrong
+  numbers.
 
 ## Releasing
 

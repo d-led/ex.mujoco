@@ -52,6 +52,7 @@ defmodule ExMujoco.Gen.Header do
 
   @type enum :: %{
           name: String.t(),
+          doc: String.t(),
           items: [%{name: String.t(), value: integer() | nil, doc: String.t()}]
         }
 
@@ -635,16 +636,57 @@ defmodule ExMujoco.Gen.Header do
   """
   @spec enums_in(Path.t()) :: [enum()]
   def enums_in(path) do
-    path
-    |> File.read!()
-    |> strip_comments()
+    text = File.read!(path)
+    enums = scan_enums(text)
+
+    # The scan keeps the comments, because a comment after each item is MuJoCo's
+    # description of that item. A brace inside one would end the body early, so
+    # the same scan over the text with comments removed has to find the same
+    # enums — and finds nothing at all if MuJoCo ever writes one.
+    stripped = scan_enums(strip_comments(text))
+
+    if Enum.map(enums, & &1.name) != Enum.map(stripped, & &1.name) do
+      raise """
+      the enums in #{path} read differently with and without their comments — a
+      comment there hides a brace the scan needs to see.
+      """
+    end
+
+    enums
+  end
+
+  defp scan_enums(text) do
+    text
     |> then(
       &Regex.scan(
         ~r/typedef\s+enum\s+([A-Za-z_][A-Za-z0-9_]*)\s*\{(.*?)\}\s*([A-Za-z_][A-Za-z0-9_]*)\s*;/su,
         &1
       )
     )
-    |> Enum.map(fn [_, name, body, _alias] -> %{name: name, items: enum_items(body)} end)
+    |> Enum.map(fn [_, name, body, _alias] ->
+      %{name: name, doc: enum_doc(body), items: enum_items(body)}
+    end)
+  end
+
+  # `typedef enum mjtGeom_ {   // geometric types` — the comment after the brace,
+  # on the first line of the body, is MuJoCo's description of the enum.
+  defp enum_doc(body) do
+    first = body |> String.split("\n") |> hd()
+
+    if comment_only?(first) do
+      first |> split_comment() |> elem(1)
+    else
+      ""
+    end
+  end
+
+  defp comment_only?(line), do: String.starts_with?(String.trim(line), "//")
+
+  defp split_comment(line) do
+    case String.split(line, "//", parts: 2) do
+      [code, comment] -> {code, String.trim(comment)}
+      [code] -> {code, nil}
+    end
   end
 
   # An item's value is usually a decimal, and sometimes an OR of other items in
@@ -653,25 +695,44 @@ defmodule ExMujoco.Gen.Header do
   # same enum, which is enough for every enum MuJoCo declares. What still cannot
   # be resolved is left without a value rather than guessed, and the generated
   # Elixir leaves that name out and says why.
+  #
+  # The comments are MuJoCo's description of the item that ends on their line, so
+  # they are read with the items rather than thrown away with the rest.
   defp enum_items(body) do
-    items =
-      body
-      |> String.split(",")
-      |> Enum.map(&(&1 |> String.replace(~r/\s+/u, " ") |> String.trim()))
-      |> Enum.reject(&(&1 == ""))
-      |> Enum.map(&enum_item/1)
-      |> Enum.reject(&is_nil/1)
+    [first | rest] = String.split(body, "\n")
+    lines = if comment_only?(first), do: rest, else: [first | rest]
 
-    resolve_enum_values(items)
+    {items, buffer, doc} = Enum.reduce(lines, {[], "", nil}, &read_enum_line/2)
+    items = if buffer == "", do: items, else: [%{text: buffer, doc: doc} | items]
+
+    items
+    |> Enum.reverse()
+    |> Enum.map(&enum_item/1)
+    |> Enum.reject(&is_nil/1)
+    |> resolve_enum_values()
   end
 
-  defp enum_item(text) do
+  defp read_enum_line(line, {items, buffer, doc}) do
+    {code, comment} = split_comment(line)
+    text = String.trim(buffer <> " " <> code)
+    doc = comment || doc
+
+    case String.split(text, ",", parts: 2) do
+      [item, rest] ->
+        {[%{text: String.trim(item), doc: doc} | items], String.trim(rest), nil}
+
+      [item] ->
+        {items, item, doc}
+    end
+  end
+
+  defp enum_item(%{text: text, doc: doc}) do
     case Regex.run(~r/^([A-Za-z_][A-Za-z0-9_]*)\s*(?:=\s*(.+))?$/u, text) do
       [_, name] ->
-        %{name: name, expression: nil, value: nil, doc: ""}
+        %{name: name, expression: nil, value: nil, doc: doc || ""}
 
       [_, name, expression] ->
-        %{name: name, expression: String.trim(expression), value: nil, doc: ""}
+        %{name: name, expression: String.trim(expression), value: nil, doc: doc || ""}
 
       nil ->
         raise "could not read the enum item #{inspect(text)}"

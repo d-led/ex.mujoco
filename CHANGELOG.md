@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.7
+
+The type pages say what the numbers mean.
+
+- Every `ExMujoco.Types.*` module is one enumeration, and each value was documented as
+  `mjGEOM_HFIELD is 1.` — the name and the number, nothing about the value. MuJoCo writes that
+  fact next to it in the header, so the pages carry it: `mjGEOM_HFIELD is 1 — height field.`,
+  `mjSTATE_QPOS is 2 — position.` Six hundred and eleven of the six hundred and twenty-seven
+  values have such a comment; the other sixteen are shown as before.
+- The enumeration itself now says what it is: `mjtGeom` — `type of geometric shape`, in MuJoCo's
+  spelling rather than a paraphrase of it.
+- The three kinds of reference page — fields, bound functions, enumerations — now follow one
+  rule: what MuJoCo writes above a thing is what the page says about it.
+
 ## 0.1.6
 
 The raw API page says what the functions do.
