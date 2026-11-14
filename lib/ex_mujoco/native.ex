@@ -32,19 +32,27 @@ defmodule ExMujoco.Native do
     end
   end
 
-  # Windows environment names are case-insensitive, so a shell's `Path` is
-  # this process's `PATH`; `System.get_env/1` would look for the exact name
-  # and find nothing.
   defp add_to_path(directory) do
-    {name, entries} =
-      case Enum.find(:os.getenv(), fn {name, _} -> String.upcase(to_string(name)) == "PATH" end) do
-        {name, value} -> {name, String.split(to_string(value), ";", trim: true)}
-        nil -> {~c"PATH", []}
-      end
+    entries = "PATH" |> value_of() |> String.split(";", trim: true)
 
-    unless directory in entries, do: :os.putenv(name, Enum.join([directory | entries], ";"))
+    unless directory in entries,
+      do: :os.putenv(~c"PATH", String.to_charlist(Enum.join([directory | entries], ";")))
 
     :ok
+  end
+
+  # `:os.getenv/0` answers with `NAME=value` strings, in whatever case this
+  # platform stores the name — Windows is case-insensitive and holds `Path`
+  # where a shell elsewhere holds `PATH`.
+  defp value_of(name) do
+    :os.getenv()
+    |> Enum.map(&to_string/1)
+    |> Enum.find_value("", fn entry ->
+      case String.split(entry, "=", parts: 2) do
+        [entry_name, value] -> if String.upcase(entry_name) == name, do: value
+        [_name_only] -> nil
+      end
+    end)
   end
 
   def model_nq(_model), do: :erlang.nif_error(:nif_not_loaded)
