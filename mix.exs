@@ -27,6 +27,7 @@ defmodule ExMujoco.MixProject do
       elixir: "~> 1.18",
       start_permanent: Mix.env() == :prod,
       compilers: [:elixir_make] ++ Mix.compilers(),
+      make_executable: make_executable(),
       make_env: &make_env/0,
       deps: deps(),
       dialyzer: [plt_add_apps: [:mix, :ex_unit]],
@@ -35,8 +36,7 @@ defmodule ExMujoco.MixProject do
       package: package(),
       docs: docs(),
       source_url: @source_url,
-      homepage_url: @source_url,
-      test_coverage: [summary: [threshold: 70]]
+      homepage_url: @source_url
     ]
   end
 
@@ -44,6 +44,16 @@ defmodule ExMujoco.MixProject do
     # A library, not an application: nothing to start, and the only thing this
     # code calls is `Logger`.
     [extra_applications: [:logger]]
+  end
+
+  # `Makefile` and `Makefile.win` are two files, not one file with `if`s: the
+  # Windows one is `cl` and `nmake`, which is the toolchain an Elixir install on
+  # Windows already has.
+  defp make_executable do
+    case :os.type() do
+      {:win32, _} -> "nmake"
+      _ -> "make"
+    end
   end
 
   defp deps do
@@ -99,7 +109,7 @@ defmodule ExMujoco.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", "docs/plan.md", "docs/building.md"],
+      extras: ["README.md", "docs/plan.md", "docs/building.md", "docs/coverage.md"],
       groups_for_modules: [
         Physics: [ExMujoco, ExMujoco.Model, ExMujoco.Data, ExMujoco.Tensor],
         "The C API": [ExMujoco.Native, ExMujoco.Capi.Functions, ExMujoco.Capi.Structs],

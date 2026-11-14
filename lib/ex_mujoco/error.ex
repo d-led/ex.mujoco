@@ -12,4 +12,7 @@ defmodule ExMujoco.Error do
   `ExMujoco` has re-raised it; call the typed functions instead.
   """
   defexception [:message]
+
+  @typedoc "MuJoCo's message, with the function that raised it in front of it."
+  @type t :: %__MODULE__{message: String.t()}
 end

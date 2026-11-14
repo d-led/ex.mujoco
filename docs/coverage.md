@@ -34,9 +34,12 @@ out in `c_src/ex_mujoco_nif.cpp` rather than generated.
 ### Not bound
 
 426 of MuJoCo's 551 functions take something a
-NIF cannot honestly invent: a callback, a `void*`, an output array whose length
-nothing states, or a variadic argument list. Binding one means deciding that
-question, one function at a time, and that has not been done.
+NIF cannot honestly invent — a callback, a `void*`, an output array whose
+length nothing states, a variadic argument list — and binding one means
+deciding that question, one function at a time. The other
+88
+are expressible and simply not bound yet: a name in `c_src/manifest.exs`, and
+`mix ex_mujoco.gen`.
 
 Decisions worth naming:
 
@@ -52,8 +55,8 @@ Decisions worth naming:
 | `mjModel` | 101 | 484 | 10 |
 | `mjData` | 38 | 180 | 8 |
 
-`docs/fields.md` in MuJoCo's own documentation describes each of them; the
-names and units are MuJoCo's.
+MuJoCo's own API reference describes each of them; the names and the units are
+MuJoCo's, and its documentation is the documentation for the field.
 
 ## Enums
 

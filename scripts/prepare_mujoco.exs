@@ -271,22 +271,36 @@ defmodule PrepareMujoco do
     end
   end
 
-  defp unpack_tarball!(archive, dir) do
-    root = extract_tarball!(archive)
-    File.cp_r!(Path.join(root, "include"), Path.join(dir, "include"))
-    File.cp_r!(Path.join(root, "lib"), Path.join(dir, "lib"))
-  end
-
   defp unpack_zip!(archive, dir) do
     unpack = archive |> Path.dirname() |> Path.join("unpack")
     File.rm_rf!(unpack)
     File.mkdir_p!(unpack)
     unzip!(archive, unpack)
-    root = Path.join(unpack, hd(File.ls!(unpack)))
+    root = archive_root(unpack)
     File.cp_r!(Path.join(root, "include"), Path.join(dir, "include"))
     File.cp_r!(Path.join(root, "lib"), Path.join(dir, "lib"))
     File.cp_r!(Path.join(root, "bin"), Path.join(dir, "bin"))
     File.rm_rf!(unpack)
+  end
+
+  defp unpack_tarball!(archive, dir) do
+    root = archive_root(extract_tarball!(archive) |> Path.dirname())
+    File.cp_r!(Path.join(root, "include"), Path.join(dir, "include"))
+    File.cp_r!(Path.join(root, "lib"), Path.join(dir, "lib"))
+  end
+
+  # An archive may hold one directory, or its contents directly: MuJoCo's
+  # tarballs wrap everything in `mujoco-<version>/`, and its Windows zip does not
+  # wrap at all.
+  defp archive_root(into) do
+    case File.ls!(into) do
+      [only] ->
+        candidate = Path.join(into, only)
+        if File.dir?(candidate), do: candidate, else: into
+
+      _several ->
+        into
+    end
   end
 
   defp extract_tarball!(archive) do
@@ -463,7 +477,10 @@ defmodule PrepareMujoco do
     # `libmujoco.so` is a link to the versioned file in the release; keep it a
     # link rather than a second copy of the library.
     for link <- Enum.filter(files, &symlink?/1), real != [] do
-      File.ln_s!(Path.basename(hd(real)), Path.join(priv, Path.basename(link)))
+      target = Path.join(priv, Path.basename(link))
+
+      unless File.exists?(target) or symlink?(target),
+        do: File.ln_s!(Path.basename(hd(real)), target)
     end
   end
 

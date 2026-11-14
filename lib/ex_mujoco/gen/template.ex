@@ -579,9 +579,12 @@ defmodule ExMujoco.Gen.Template do
     ### Not bound
 
     #{length(unbound)} of MuJoCo's #{length(functions)} functions take something a
-    NIF cannot honestly invent: a callback, a `void*`, an output array whose length
-    nothing states, or a variadic argument list. Binding one means deciding that
-    question, one function at a time, and that has not been done.
+    NIF cannot honestly invent — a callback, a `void*`, an output array whose
+    length nothing states, a variadic argument list — and binding one means
+    deciding that question, one function at a time. The other
+    #{length(functions) - length(unbound) - MapSet.size(bound) - MapSet.size(hand)}
+    are expressible and simply not bound yet: a name in `c_src/manifest.exs`, and
+    `mix ex_mujoco.gen`.
 
     #{notes(manifest)}
 
@@ -589,8 +592,8 @@ defmodule ExMujoco.Gen.Template do
 
     #{field_table(structs)}
 
-    `docs/fields.md` in MuJoCo's own documentation describes each of them; the
-    names and units are MuJoCo's.
+    MuJoCo's own API reference describes each of them; the names and the units are
+    MuJoCo's, and its documentation is the documentation for the field.
 
     ## Enums
 
