@@ -23,7 +23,7 @@ defmodule ExMujoco.Preload do
   end
 
   @doc """
-  Brings MuJoCo into the process from `directory`.
+  Brings MuJoCo into the process from the library that `directory` holds.
 
   Answers `:ok`, or `{:error, reason}` when the library that `directory` holds
   could not be loaded — which on Windows is the answer to "why is the NIF not

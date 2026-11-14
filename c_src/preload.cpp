@@ -56,16 +56,22 @@ std::wstring widen(const std::string &utf8) {
 // Answers with what went wrong, or with an empty string when MuJoCo is in the
 // process. A message rather than a raised exception, because this runs from
 // `@on_load`: raising there leaves the caller with no module and no reason.
-std::string load_mujoco(ErlNifEnv *env, std::string path) {
+//
+// The handle is deliberately not released: the point of the call is to leave
+// the library in the process, and a reference for the life of the process is
+// what does that.
+std::string load_mujoco(ErlNifEnv *env, std::string directory) {
   (void)env;
 
 #ifdef _WIN32
+  const std::string path = directory + "\\mujoco.dll";
+
   if (::LoadLibraryW(widen(path).c_str()) == nullptr) {
     return "could not load " + path + ": error " +
            std::to_string(::GetLastError());
   }
 #else
-  (void)path;
+  (void)directory;
 #endif
 
   return "";
