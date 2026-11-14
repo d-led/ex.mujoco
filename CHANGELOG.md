@@ -1,5 +1,10 @@
 # Changelog
 
+Every version below is a real change, but not every one reached Hex: 0.1.2,
+0.1.3, 0.1.5, 0.1.6 and 0.1.7 were staged for approval, superseded by the next
+patch, and expired. What Hex serves is 0.1.0, 0.1.1, 0.1.4 and 0.1.8, and 0.1.8
+contains everything these notes describe.
+
 ## 0.1.8
 
 "Can the package do this?" now has a list for an answer.
