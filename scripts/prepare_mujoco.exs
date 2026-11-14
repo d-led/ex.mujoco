@@ -344,8 +344,7 @@ defmodule PrepareMujoco do
       unless File.dir?(framework), do: raise("#{archive} holds no mujoco.framework")
 
       # `Versions/A` is the whole framework: the dylib, its Resources, its headers.
-      File.mkdir_p!(Path.join(dir, "framework"))
-      File.cp_r!(Path.join(framework, "Versions"), Path.join(dir, "framework/Versions"))
+      copy_tree!(Path.join(framework, "Versions"), Path.join(dir, "framework/Versions"))
 
       # `#include <mujoco/mjmodel.h>` has to resolve, and a framework keeps its
       # headers flat in `Versions/A/Headers`. One symlink serves both spellings.

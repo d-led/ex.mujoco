@@ -15,7 +15,10 @@ SCRIPT=$(EX_MUJOCO_PROJECT_DIR)\scripts\prepare_mujoco.exs
 
 # `/wd4100` is MSVC for `-Wno-unused-parameter`: a NIF that does not need
 # `env` is the common case, and the parameter is what Fine calls through.
-CPPFLAGS=/LD /std:c++17 /W4 /WX /EHsc /O2 /wd4100
+# `/wd4611` is the `setjmp` / destructor warning, and it is the one caveat this
+# design owns: MuJoCo's fatal error is caught by a longjmp, and the lambda the
+# call runs in owns nothing that needs unwinding. `c_src/mj_call.hpp` says so.
+CPPFLAGS=/LD /std:c++17 /W4 /WX /EHsc /O2 /wd4100 /wd4611
 CPPFLAGS=$(CPPFLAGS) /I"$(ERTS_INCLUDE_DIR)" /I"$(FINE_INCLUDE_DIR)"
 CPPFLAGS=$(CPPFLAGS) /I"$(MUJOCO_DIR)\include" /I"$(C_SRC)"
 
