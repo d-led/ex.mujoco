@@ -94,6 +94,12 @@ documentation is part of a release rather than something added afterwards.
   Earlier releases derived the heading from the name's prefix (`geom_size` → `geom`) once ten
   fields shared it. That left a third of both pages in one alphabetical heap — including the
   dimension counters and `qpos` — because MuJoCo's blocks are not always one prefix.
+- The bound functions are filed the same way, and for the same reason. `mujoco.h` writes a prose
+  comment above each `MJAPI` declaration and a `// ---- Main simulation ----` line above runs of
+  them; the declarations themselves are read with the comments stripped, so a second pass over
+  the same text keeps both, keyed by the name in the declaration (`annotations/1` in
+  `lib/ex_mujoco/gen/header.ex`). `ExMujoco.Api` then carries the sentence and the heading, and
+  so does the C++ — a NIF with MuJoCo's line above it is easier to review than one without.
 
 ## Releasing
 

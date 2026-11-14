@@ -442,6 +442,11 @@ defmodule ExMujoco.Gen.Template do
       block once and answers \`:ok\`, an \`ExMujoco.Tensor\`, or an
       \`ExMujoco.Error\`.
 
+      The sentence under each name is MuJoCo's own comment on the declaration,
+      and the functions are filed under the heading MuJoCo's header puts above
+      them — \`Main simulation\`, \`Sub components\`, \`Support\` — so the page
+      reads as MuJoCo's header does.
+
       What is *not* here is in \`docs/coverage.md\`, with the reason.
       \"\"\"
 
@@ -456,10 +461,26 @@ defmodule ExMujoco.Gen.Template do
     args = Enum.map(function.parameters, &safe_name(&1.name))
 
     """
-    @doc \"\"\"
-    `#{function.name}` — `#{c_signature(function)}`
-    \"\"\"
+    #{api_doc(function)}
     def #{function.name}(#{Enum.join(args, ", ")}), do: Native.#{function.name}(#{Enum.join(args, ", ")})
+    """
+  end
+
+  # MuJoCo writes a line of prose above each declaration and a `// ---- Section
+  # ----` line above runs of them. Both are copied, so the page says what the C
+  # says and files a function where MuJoCo files it.
+  defp api_doc(function) do
+    summary =
+      case one_line(function.doc) do
+        "" -> "`#{function.name}` — `#{c_signature(function)}`"
+        prose -> "`#{function.name}` — #{prose}\n\n`#{c_signature(function)}` in C."
+      end
+
+    """
+    @doc \"\"\"
+    #{summary}
+    \"\"\"
+    #{group(function)}
     """
   end
 

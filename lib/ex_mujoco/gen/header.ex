@@ -38,6 +38,7 @@ defmodule ExMujoco.Gen.Header do
           returns: ctype(),
           parameters: [parameter()],
           doc: String.t(),
+          section: String.t() | nil,
           variadic: boolean()
         }
 
@@ -128,11 +129,63 @@ defmodule ExMujoco.Gen.Header do
   """
   @spec functions_in(Path.t()) :: [function_decl()]
   def functions_in(path) do
-    path
-    |> File.read!()
+    text = File.read!(path)
+    notes = annotations(text)
+
+    text
     |> strip_comments()
     |> declarations()
     |> Enum.flat_map(&declaration!/1)
+    |> Enum.map(&Map.merge(&1, Map.get(notes, &1.name, %{doc: "", section: nil})))
+  end
+
+  # What MuJoCo says above a declaration, which the C itself does not carry:
+  # a prose comment per function, and `// ---- Forward dynamics ----` lines that
+  # open a run of them. The declarations are read without the comments, so this
+  # is a separate pass over the text, keyed by the name in the declaration.
+  defp annotations(text) do
+    {annotations, _pending} =
+      text
+      |> String.split("\n")
+      |> Enum.map(&String.trim/1)
+      |> Enum.reduce({%{}, %{section: nil, doc: []}}, fn line, {found, pending} ->
+        cond do
+          banner?(line) ->
+            {found, %{pending | section: heading(String.replace_prefix(line, "//", ""))}}
+
+          String.starts_with?(line, "//") ->
+            {found, %{pending | doc: [comment(line) | pending.doc]}}
+
+          String.contains?(line, "MJAPI") ->
+            case declared_name(line) do
+              nil -> {found, pending}
+              name -> {Map.put(found, name, note(pending)), %{pending | doc: []}}
+            end
+
+          true ->
+            {found, %{pending | doc: []}}
+        end
+      end)
+
+    annotations
+  end
+
+  defp note(pending) do
+    doc = pending.doc |> Enum.reverse() |> Enum.join(" ") |> String.trim()
+    %{doc: doc, section: pending.section}
+  end
+
+  defp banner?(line), do: String.match?(line, ~r/\A\/\/\s*[-=]{3,}/u)
+
+  defp comment(line), do: String.replace(line, ~r/\A\/\/\s?+/u, "")
+
+  # `MJAPI void mj_step(const mjModel* m, mjData* d);` — the name is the first
+  # identifier that opens a parameter list.
+  defp declared_name(line) do
+    case Regex.run(~r/\b([A-Za-z_][A-Za-z0-9_]*)\s*\(/u, line, capture: :all_but_first) do
+      [name] -> name
+      _ -> nil
+    end
   end
 
   # `MJAPI <declarator>;` — the declarator may wrap, and its parameter list may
@@ -175,6 +228,7 @@ defmodule ExMujoco.Gen.Header do
       returns: returned,
       parameters: params,
       doc: "",
+      section: nil,
       variadic: Enum.any?(params, &(&1.kind == :opaque and &1.name == "..."))
     }
   end

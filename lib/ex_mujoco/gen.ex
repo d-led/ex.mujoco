@@ -193,6 +193,7 @@ defmodule ExMujoco.Gen do
       returns: function.returns,
       parameters: function.parameters,
       doc: function.doc,
+      section: Map.get(function, :section),
       variadic: function.variadic
     }
   end

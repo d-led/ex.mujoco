@@ -11,133 +11,238 @@ defmodule ExMujoco.Api do
   block once and answers `:ok`, an `ExMujoco.Tensor`, or an
   `ExMujoco.Error`.
 
+  The sentence under each name is MuJoCo's own comment on the declaration,
+  and the functions are filed under the heading MuJoCo's header puts above
+  them — `Main simulation`, `Sub components`, `Support` — so the page
+  reads as MuJoCo's header does.
+
   What is *not* here is in `docs/coverage.md`, with the reason.
   """
 
   alias ExMujoco.Native
 
   @doc """
-  `mj_step1` — `void mj_step1(mjModel* m, mjData* d)`
+  `mj_step1` — Advance simulation in two steps: before external force and control is set by user.
+
+  `void mj_step1(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Main simulation"
+
   def mj_step1(m, d), do: Native.mj_step1(m, d)
 
   @doc """
-  `mj_step2` — `void mj_step2(mjModel* m, mjData* d)`
+  `mj_step2` — Advance simulation in two steps: after external force and control is set by user.
+
+  `void mj_step2(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Main simulation"
+
   def mj_step2(m, d), do: Native.mj_step2(m, d)
 
   @doc """
-  `mj_resetDataKeyframe` — `void mj_resetDataKeyframe(mjModel* m, mjData* d, int key)`
+  `mj_resetDataKeyframe` — Reset data. If 0 <= key < nkey, set fields from specified keyframe.
+
+  `void mj_resetDataKeyframe(mjModel* m, mjData* d, int key)` in C.
   """
+  @doc group: "Initialization"
+
   def mj_resetDataKeyframe(m, d, key), do: Native.mj_resetDataKeyframe(m, d, key)
 
   @doc """
-  `mj_sensorPos` — `void mj_sensorPos(mjModel* m, mjData* d)`
+  `mj_sensorPos` — Evaluate position-dependent sensors.
+
+  `void mj_sensorPos(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_sensorPos(m, d), do: Native.mj_sensorPos(m, d)
 
   @doc """
-  `mj_sensorVel` — `void mj_sensorVel(mjModel* m, mjData* d)`
+  `mj_sensorVel` — Evaluate velocity-dependent sensors.
+
+  `void mj_sensorVel(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_sensorVel(m, d), do: Native.mj_sensorVel(m, d)
 
   @doc """
-  `mj_sensorAcc` — `void mj_sensorAcc(mjModel* m, mjData* d)`
+  `mj_sensorAcc` — Evaluate acceleration and force-dependent sensors.
+
+  `void mj_sensorAcc(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_sensorAcc(m, d), do: Native.mj_sensorAcc(m, d)
 
   @doc """
-  `mj_energyPos` — `void mj_energyPos(mjModel* m, mjData* d)`
+  `mj_energyPos` — Evaluate position-dependent energy (potential).
+
+  `void mj_energyPos(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_energyPos(m, d), do: Native.mj_energyPos(m, d)
 
   @doc """
-  `mj_energyVel` — `void mj_energyVel(mjModel* m, mjData* d)`
+  `mj_energyVel` — Evaluate velocity-dependent energy (kinetic).
+
+  `void mj_energyVel(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_energyVel(m, d), do: Native.mj_energyVel(m, d)
 
   @doc """
-  `mj_kinematics` — `void mj_kinematics(mjModel* m, mjData* d)`
+  `mj_kinematics` — Run forward kinematics.
+
+  `void mj_kinematics(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_kinematics(m, d), do: Native.mj_kinematics(m, d)
 
   @doc """
-  `mj_comPos` — `void mj_comPos(mjModel* m, mjData* d)`
+  `mj_comPos` — Map inertias and motion dofs to global frame centered at CoM.
+
+  `void mj_comPos(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_comPos(m, d), do: Native.mj_comPos(m, d)
 
   @doc """
-  `mj_camlight` — `void mj_camlight(mjModel* m, mjData* d)`
+  `mj_camlight` — Compute camera and light positions and orientations.
+
+  `void mj_camlight(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_camlight(m, d), do: Native.mj_camlight(m, d)
 
   @doc """
-  `mj_flex` — `void mj_flex(mjModel* m, mjData* d)`
+  `mj_flex` — Compute flex-related quantities.
+
+  `void mj_flex(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_flex(m, d), do: Native.mj_flex(m, d)
 
   @doc """
-  `mj_tendon` — `void mj_tendon(mjModel* m, mjData* d)`
+  `mj_tendon` — Compute tendon lengths, velocities and moment arms.
+
+  `void mj_tendon(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_tendon(m, d), do: Native.mj_tendon(m, d)
 
   @doc """
-  `mj_transmission` — `void mj_transmission(mjModel* m, mjData* d)`
+  `mj_transmission` — Compute actuator transmission lengths and moments.
+
+  `void mj_transmission(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_transmission(m, d), do: Native.mj_transmission(m, d)
 
   @doc """
-  `mj_crb` — `void mj_crb(mjModel* m, mjData* d)`
+  `mj_crb` — Run composite rigid body inertia algorithm (CRB).
+
+  `void mj_crb(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_crb(m, d), do: Native.mj_crb(m, d)
 
   @doc """
-  `mj_collision` — `void mj_collision(mjModel* m, mjData* d)`
+  `mj_collision` — Run collision detection.
+
+  `void mj_collision(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_collision(m, d), do: Native.mj_collision(m, d)
 
   @doc """
-  `mj_makeConstraint` — `void mj_makeConstraint(mjModel* m, mjData* d)`
+  `mj_makeConstraint` — Construct constraints.
+
+  `void mj_makeConstraint(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_makeConstraint(m, d), do: Native.mj_makeConstraint(m, d)
 
   @doc """
-  `mj_projectConstraint` — `void mj_projectConstraint(mjModel* m, mjData* d)`
+  `mj_projectConstraint` — Compute inverse constraint inertia efc_AR.
+
+  `void mj_projectConstraint(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_projectConstraint(m, d), do: Native.mj_projectConstraint(m, d)
 
   @doc """
-  `mj_referenceConstraint` — `void mj_referenceConstraint(mjModel* m, mjData* d)`
+  `mj_referenceConstraint` — Compute efc_vel, efc_aref.
+
+  `void mj_referenceConstraint(mjModel* m, mjData* d)` in C.
   """
+  @doc group: "Sub components"
+
   def mj_referenceConstraint(m, d), do: Native.mj_referenceConstraint(m, d)
 
   @doc """
-  `mj_isSparse` — `int mj_isSparse(mjModel* m)`
+  `mj_isSparse` — Determine type of constraint Jacobian.
+
+  `int mj_isSparse(mjModel* m)` in C.
   """
+  @doc group: "Support"
+
   def mj_isSparse(m), do: Native.mj_isSparse(m)
 
   @doc """
-  `mj_isDual` — `int mj_isDual(mjModel* m)`
+  `mj_isDual` — Determine type of solver (PGS is dual, CG and Newton are primal).
+
+  `int mj_isDual(mjModel* m)` in C.
   """
+  @doc group: "Support"
+
   def mj_isDual(m), do: Native.mj_isDual(m)
 
   @doc """
-  `mj_name2id` — `int mj_name2id(mjModel* m, int type, char* name)`
+  `mj_name2id` — Get id of object with the specified mjtObj type and name; return -1 if id not found.
+
+  `int mj_name2id(mjModel* m, int type, char* name)` in C.
   """
+  @doc group: "Support"
+
   def mj_name2id(m, type, name), do: Native.mj_name2id(m, type, name)
 
   @doc """
-  `mj_id2name` — `char* mj_id2name(mjModel* m, int type, int id)`
+  `mj_id2name` — Get name of object with the specified mjtObj type and id; return NULL if name not found.
+
+  `char* mj_id2name(mjModel* m, int type, int id)` in C.
   """
+  @doc group: "Support"
+
   def mj_id2name(m, type, id), do: Native.mj_id2name(m, type, id)
 
   @doc """
-  `mj_getTotalmass` — `mjtNum mj_getTotalmass(mjModel* m)`
+  `mj_getTotalmass` — Sum all body masses.
+
+  `mjtNum mj_getTotalmass(mjModel* m)` in C.
   """
+  @doc group: "Support"
+
   def mj_getTotalmass(m), do: Native.mj_getTotalmass(m)
 
   @doc """
-  `mj_versionString` — `char* mj_versionString()`
+  `mj_versionString` — Return the current version of MuJoCo as a null-terminated string.
+
+  `char* mj_versionString()` in C.
   """
+  @doc group: "Support"
+
   def mj_versionString(), do: Native.mj_versionString()
 end

@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.6
+
+The raw API page says what the functions do.
+
+- `ExMujoco.Api` — MuJoCo's functions bound one for one — documented each one with its C
+  signature and nothing else: `mj_kinematics` was `void mj_kinematics(mjModel* m, mjData* d)` and
+  a reader had to go to MuJoCo's header to learn it runs forward kinematics. MuJoCo writes that
+  sentence above each declaration, so the parser now keeps it, and the page carries it: "Run
+  forward kinematics.", "Sum all body masses.", "Advance simulation in two steps: before external
+  force and control is set by user."
+- Those functions are filed under the heading MuJoCo's header puts above a run of declarations —
+  `Main simulation`, `Initialization`, `Sub components`, `Support` — the same rule the field
+  pages follow, so there is one rule for the whole reference.
+- The generated C++ says it too: each NIF in `c_src/generated/functions.inc` now has MuJoCo's
+  sentence above it instead of an empty comment.
+
 ## 0.1.5
 
 Every field's heading is MuJoCo's, and every field has one.

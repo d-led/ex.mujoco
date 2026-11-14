@@ -3,158 +3,158 @@
 // One NIF per bound function, and every body is one call. `exmujoco::call`
 // turns MuJoCo's fatal error — which would otherwise abort the VM — into an
 // Elixir exception.
-// 
+// Advance simulation in two steps: before external force and control is set by user.
 fine::Atom mj_step1(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_step1(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_step1, 0);
 
-// 
+// Advance simulation in two steps: after external force and control is set by user.
 fine::Atom mj_step2(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_step2(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_step2, 0);
 
-// 
+// Reset data. If 0 <= key < nkey, set fields from specified keyframe.
 fine::Atom mj_resetDataKeyframe(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d, int64_t key) {
   exmujoco::call([&] { ::mj_resetDataKeyframe(m->model, d->data, static_cast<int>(key)); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_resetDataKeyframe, 0);
 
-// 
+// Evaluate position-dependent sensors.
 fine::Atom mj_sensorPos(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_sensorPos(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_sensorPos, 0);
 
-// 
+// Evaluate velocity-dependent sensors.
 fine::Atom mj_sensorVel(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_sensorVel(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_sensorVel, 0);
 
-// 
+// Evaluate acceleration and force-dependent sensors.
 fine::Atom mj_sensorAcc(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_sensorAcc(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_sensorAcc, 0);
 
-// 
+// Evaluate position-dependent energy (potential).
 fine::Atom mj_energyPos(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_energyPos(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_energyPos, 0);
 
-// 
+// Evaluate velocity-dependent energy (kinetic).
 fine::Atom mj_energyVel(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_energyVel(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_energyVel, 0);
 
-// 
+// Run forward kinematics.
 fine::Atom mj_kinematics(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_kinematics(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_kinematics, 0);
 
-// 
+// Map inertias and motion dofs to global frame centered at CoM.
 fine::Atom mj_comPos(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_comPos(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_comPos, 0);
 
-// 
+// Compute camera and light positions and orientations.
 fine::Atom mj_camlight(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_camlight(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_camlight, 0);
 
-// 
+// Compute flex-related quantities.
 fine::Atom mj_flex(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_flex(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_flex, 0);
 
-// 
+// Compute tendon lengths, velocities and moment arms.
 fine::Atom mj_tendon(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_tendon(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_tendon, 0);
 
-// 
+// Compute actuator transmission lengths and moments.
 fine::Atom mj_transmission(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_transmission(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_transmission, 0);
 
-// 
+// Run composite rigid body inertia algorithm (CRB).
 fine::Atom mj_crb(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_crb(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_crb, 0);
 
-// 
+// Run collision detection.
 fine::Atom mj_collision(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_collision(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_collision, 0);
 
-// 
+// Construct constraints.
 fine::Atom mj_makeConstraint(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_makeConstraint(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_makeConstraint, 0);
 
-// 
+// Compute inverse constraint inertia efc_AR.
 fine::Atom mj_projectConstraint(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_projectConstraint(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_projectConstraint, 0);
 
-// 
+// Compute efc_vel, efc_aref.
 fine::Atom mj_referenceConstraint(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_referenceConstraint(m->model, d->data); });
   return exmujoco::ok();
 }
 FINE_NIF(mj_referenceConstraint, 0);
 
-// 
+// Determine type of constraint Jacobian.
 int64_t mj_isSparse(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m) {
   return exmujoco::call([&] { return ::mj_isSparse(m->model); });
 }
 FINE_NIF(mj_isSparse, 0);
 
-// 
+// Determine type of solver (PGS is dual, CG and Newton are primal).
 int64_t mj_isDual(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m) {
   return exmujoco::call([&] { return ::mj_isDual(m->model); });
 }
 FINE_NIF(mj_isDual, 0);
 
-// 
+// Get id of object with the specified mjtObj type and name; return -1 if id not found.
 int64_t mj_name2id(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, int64_t type, std::string name) {
   return exmujoco::call([&] { return ::mj_name2id(m->model, static_cast<int>(type), name.c_str()); });
 }
 FINE_NIF(mj_name2id, 0);
 
-// 
+// Get name of object with the specified mjtObj type and id; return NULL if name not found.
 std::optional<std::string> mj_id2name(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, int64_t type, int64_t id) {
   const char *answer = exmujoco::call([&] { return ::mj_id2name(m->model, static_cast<int>(type), static_cast<int>(id)); });
   if (answer == nullptr) return std::nullopt;
@@ -162,13 +162,13 @@ std::optional<std::string> mj_id2name(ErlNifEnv *env, fine::ResourcePtr<exmujoco
 }
 FINE_NIF(mj_id2name, 0);
 
-// 
+// Sum all body masses.
 double mj_getTotalmass(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m) {
   return exmujoco::call([&] { return ::mj_getTotalmass(m->model); });
 }
 FINE_NIF(mj_getTotalmass, 0);
 
-// 
+// Return the current version of MuJoCo as a null-terminated string.
 std::optional<std::string> mj_versionString(ErlNifEnv *env) {
   const char *answer = exmujoco::call([&] { return ::mj_versionString(); });
   if (answer == nullptr) return std::nullopt;
