@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.1.5
+
+Every field's heading is MuJoCo's, and every field has one.
+
+- `ExMujoco.Model` (585 fields) and `ExMujoco.Data` (218) are now filed under the heading
+  MuJoCo's header gives the block a field is declared in: `bodies`, `geoms`, `sizes needed at
+mjModel construction`, `state`, `control`, and — for the fields a pass writes —
+  `computed by mj_fwdPosition/mj_kinematics`, `computed by mj_makeConstraint` and the rest. The
+  words are MuJoCo's own.
+- This replaces the prefix rule of 0.1.4, which named a section after the field's prefix once ten
+  fields shared it and left 193 fields of `Model` and 157 of `Data` in one alphabetical list. The
+  flat list held the dimension counters (`nq`, `ngeom`, `ntendon`) and, in `Data`, `time`,
+  `qpos`, `qvel`, `ctrl`, `xpos` and `sensordata` — the names a caller types first.
+- The parser keeps the heading it found each declaration under instead of discarding comment
+  lines, and the generator writes it as `@doc group:`. There is no threshold left to tune: the
+  heading is whatever MuJoCo wrote above the field.
+
 ## 0.1.4
 
 A field reference you can navigate.

@@ -182,6 +182,7 @@ defmodule ExMujoco.Gen do
       c_type: member.type.name <> String.duplicate("*", member.type.pointers),
       pointers: member.type.pointers,
       doc: member.doc,
+      section: Map.get(member, :section),
       reason: Map.get(member, :reason)
     }
   end

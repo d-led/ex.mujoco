@@ -45,7 +45,8 @@ defmodule ExMujoco.Gen.Header do
           name: String.t(),
           type: ctype(),
           array: String.t() | nil,
-          doc: String.t()
+          doc: String.t(),
+          section: String.t() | nil
         }
 
   @type enum :: %{
@@ -415,29 +416,55 @@ defmodule ExMujoco.Gen.Header do
 
   # Declarations are one per line in MuJoCo's headers, and a doc comment may run
   # over onto the next line. A member ends at its semicolon.
+  #
+  # MuJoCo's struct is a run of headings and the declarations under them —
+  # `// bodies`, then the `body_` pointers; `// computed by
+  # mj_fwdPosition/mj_kinematics`, then what that pass writes. The heading is
+  # MuJoCo's own word for what the fields below it are, so each declaration is
+  # returned with the heading it was found under.
   defp member_lines(body) do
     body
     |> String.split("\n")
     |> Enum.map(&String.trim/1)
-    |> Enum.reject(&(&1 == "" or String.starts_with?(&1, "//")))
-    |> join_continuations([])
+    |> Enum.reject(&(&1 == ""))
+    |> Enum.map(&heading_or_declaration/1)
+    |> join_continuations(nil, [])
     |> Enum.reverse()
   end
 
-  defp join_continuations([], acc), do: acc
+  defp heading_or_declaration("//" <> comment), do: {:heading, heading(comment)}
+  defp heading_or_declaration(line), do: {:declaration, line}
 
-  defp join_continuations([line | rest], acc) do
+  # `// ---- sizes ----` and `// bodies` are the same kind of thing: a title.
+  # The rule of dashes is decoration, so it goes, along with the spaces either
+  # side of it — `String.trim/2` stops at the first character outside its set,
+  # which leaves the dashes behind a leading space.
+  defp heading(comment) do
+    comment
+    |> String.replace(~r/\A[\s\-=]+/u, "")
+    |> String.replace(~r/[\s\-=]+\z/u, "")
+  end
+
+  defp join_continuations([], _section, acc), do: acc
+
+  defp join_continuations([{:heading, heading} | rest], _section, acc),
+    do: join_continuations(rest, heading, acc)
+
+  defp join_continuations([{:declaration, line} | rest], section, acc) do
     if String.contains?(line, ";") do
-      join_continuations(rest, [line | acc])
+      join_continuations(rest, section, [{section, line} | acc])
     else
       case rest do
-        [next | tail] -> join_continuations([line <> " " <> next | tail], acc)
-        [] -> join_continuations([], [line | acc])
+        [{:declaration, next} | tail] ->
+          join_continuations([{:declaration, line <> " " <> next} | tail], section, acc)
+
+        _ ->
+          join_continuations(rest, section, [{section, line} | acc])
       end
     end
   end
 
-  defp member(line) do
+  defp member({section, line}) do
     pattern =
       ~r/^(?<type>[A-Za-z_][A-Za-z0-9_]*)\s*(?<stars>\*+)?\s*(?<name>[A-Za-z_][A-Za-z0-9_]*)\s*(?:\[(?<dims>[^\]]+)\])?\s*;(?:\s*\/\/\s*(?<doc>.*))?$/u
 
@@ -454,6 +481,7 @@ defmodule ExMujoco.Gen.Header do
           type: %{type | pointers: type.pointers + stars},
           array: blank_to_nil(captures["dims"]),
           doc: String.trim(captures["doc"] || ""),
+          section: section,
           # Filled in by classify_member/2, once the dimensions are known.
           kind: nil,
           dims: nil,

@@ -13,6 +13,11 @@ defmodule ExMujoco.Data do
     * a field MuJoCo gives no extent to is not here at all, and
       `docs/coverage.md` says which, and why.
 
+  The functions are grouped under the heading MuJoCo's header gives the
+  block they are declared in — `bodies`, `geoms`,
+  `computed by mj_fwdPosition/mj_kinematics` — so the page reads in the
+  order MuJoCo writes it, and the words are MuJoCo's.
+
   The names are MuJoCo's own — `geom_pos`, `qpos`, `efc_force` — so the
   documentation for a field is MuJoCo's documentation for that field.
   """
@@ -27,6 +32,7 @@ defmodule ExMujoco.Data do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "constant sizes"
 
   @spec narena(t()) :: integer()
   def narena(data), do: Native.data_narena(data)
@@ -36,6 +42,7 @@ defmodule ExMujoco.Data do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "constant sizes"
 
   @spec nbuffer(t()) :: integer()
   def nbuffer(data), do: Native.data_nbuffer(data)
@@ -45,6 +52,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "constant sizes"
 
   @spec nplugin(t()) :: integer()
   def nplugin(data), do: Native.data_nplugin(data)
@@ -54,6 +62,7 @@ defmodule ExMujoco.Data do
 
   `size_t` in C, read as an integer.
   """
+  @doc group: "stack pointer"
 
   @spec pstack(t()) :: integer()
   def pstack(data), do: Native.data_pstack(data)
@@ -63,6 +72,7 @@ defmodule ExMujoco.Data do
 
   `size_t` in C, read as an integer.
   """
+  @doc group: "stack pointer"
 
   @spec pbase(t()) :: integer()
   def pbase(data), do: Native.data_pbase(data)
@@ -72,6 +82,7 @@ defmodule ExMujoco.Data do
 
   `size_t` in C, read as an integer.
   """
+  @doc group: "arena pointer"
 
   @spec parena(t()) :: integer()
   def parena(data), do: Native.data_parena(data)
@@ -81,6 +92,7 @@ defmodule ExMujoco.Data do
 
   `uintptr_t` in C, read as an integer.
   """
+  @doc group: "threading"
 
   @spec threadpool(t()) :: integer()
   def threadpool(data), do: Native.data_threadpool(data)
@@ -90,6 +102,7 @@ defmodule ExMujoco.Data do
 
   `mjtBool` in C, read as an integer.
   """
+  @doc group: "threading"
 
   @spec threadlock(t()) :: integer()
   def threadlock(data), do: Native.data_threadlock(data)
@@ -99,6 +112,7 @@ defmodule ExMujoco.Data do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "memory utilization statistics"
 
   @spec maxuse_stack(t()) :: integer()
   def maxuse_stack(data), do: Native.data_maxuse_stack(data)
@@ -108,6 +122,7 @@ defmodule ExMujoco.Data do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "memory utilization statistics"
 
   @spec maxuse_arena(t()) :: integer()
   def maxuse_arena(data), do: Native.data_maxuse_arena(data)
@@ -117,6 +132,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "memory utilization statistics"
 
   @spec maxuse_con(t()) :: integer()
   def maxuse_con(data), do: Native.data_maxuse_con(data)
@@ -126,6 +142,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "memory utilization statistics"
 
   @spec maxuse_efc(t()) :: integer()
   def maxuse_efc(data), do: Native.data_maxuse_efc(data)
@@ -135,6 +152,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, `mjNISLAND` × `1`.
   """
+  @doc group: "solver statistics"
 
   @spec solver_niter(t()) :: ExMujoco.Tensor.t()
   def solver_niter(data) do
@@ -147,6 +165,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, `mjNISLAND` × `1`.
   """
+  @doc group: "solver statistics"
 
   @spec solver_nnz(t()) :: ExMujoco.Tensor.t()
   def solver_nnz(data) do
@@ -159,6 +178,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum` in C, `2` × `1`.
   """
+  @doc group: "solver statistics"
 
   @spec solver_fwdinv(t()) :: ExMujoco.Tensor.t()
   def solver_fwdinv(data) do
@@ -171,6 +191,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes"
 
   @spec ncon(t()) :: integer()
   def ncon(data), do: Native.data_ncon(data)
@@ -180,6 +201,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes"
 
   @spec ne(t()) :: integer()
   def ne(data), do: Native.data_ne(data)
@@ -189,6 +211,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes"
 
   @spec nf(t()) :: integer()
   def nf(data), do: Native.data_nf(data)
@@ -198,6 +221,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes"
 
   @spec nl(t()) :: integer()
   def nl(data), do: Native.data_nl(data)
@@ -207,6 +231,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes"
 
   @spec nefc(t()) :: integer()
   def nefc(data), do: Native.data_nefc(data)
@@ -216,6 +241,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes"
 
   @spec nJ(t()) :: integer()
   def nJ(data), do: Native.data_nJ(data)
@@ -225,7 +251,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
-  @doc group: "efm"
+  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
 
   @spec efm_active(t()) :: integer()
   def efm_active(data), do: Native.data_efm_active(data)
@@ -235,6 +261,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
 
   @spec nefmK(t()) :: integer()
   def nefmK(data), do: Native.data_nefmK(data)
@@ -244,6 +271,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
 
   @spec nefmcon(t()) :: integer()
   def nefmcon(data), do: Native.data_nefmcon(data)
@@ -253,6 +281,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
 
   @spec nefmT(t()) :: integer()
   def nefmT(data), do: Native.data_nefmT(data)
@@ -262,6 +291,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
 
   @spec nefmA(t()) :: integer()
   def nefmA(data), do: Native.data_nefmA(data)
@@ -271,6 +301,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
 
   @spec nefmdof(t()) :: integer()
   def nefmdof(data), do: Native.data_nefmdof(data)
@@ -280,6 +311,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
 
   @spec nefmL(t()) :: integer()
   def nefmL(data), do: Native.data_nefmL(data)
@@ -289,6 +321,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes, continued"
 
   @spec nY(t()) :: integer()
   def nY(data), do: Native.data_nY(data)
@@ -298,6 +331,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes, continued"
 
   @spec nA(t()) :: integer()
   def nA(data), do: Native.data_nA(data)
@@ -307,6 +341,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes, continued"
 
   @spec nisland(t()) :: integer()
   def nisland(data), do: Native.data_nisland(data)
@@ -316,6 +351,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes, continued"
 
   @spec nidof(t()) :: integer()
   def nidof(data), do: Native.data_nidof(data)
@@ -325,6 +361,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes, continued"
 
   @spec ntree_awake(t()) :: integer()
   def ntree_awake(data), do: Native.data_ntree_awake(data)
@@ -334,6 +371,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes, continued"
 
   @spec nbody_awake(t()) :: integer()
   def nbody_awake(data), do: Native.data_nbody_awake(data)
@@ -343,6 +381,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes, continued"
 
   @spec nparent_awake(t()) :: integer()
   def nparent_awake(data), do: Native.data_nparent_awake(data)
@@ -352,6 +391,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
+  @doc group: "variable sizes, continued"
 
   @spec nv_awake(t()) :: integer()
   def nv_awake(data), do: Native.data_nv_awake(data)
@@ -361,6 +401,7 @@ defmodule ExMujoco.Data do
 
   `mjtBool` in C, read as an integer.
   """
+  @doc group: "flags marking lazily evaluated stages"
 
   @spec flg_energypos(t()) :: integer()
   def flg_energypos(data), do: Native.data_flg_energypos(data)
@@ -370,6 +411,7 @@ defmodule ExMujoco.Data do
 
   `mjtBool` in C, read as an integer.
   """
+  @doc group: "flags marking lazily evaluated stages"
 
   @spec flg_energyvel(t()) :: integer()
   def flg_energyvel(data), do: Native.data_flg_energyvel(data)
@@ -379,6 +421,7 @@ defmodule ExMujoco.Data do
 
   `mjtBool` in C, read as an integer.
   """
+  @doc group: "flags marking lazily evaluated stages"
 
   @spec flg_subtreevel(t()) :: integer()
   def flg_subtreevel(data), do: Native.data_flg_subtreevel(data)
@@ -388,6 +431,7 @@ defmodule ExMujoco.Data do
 
   `mjtBool` in C, read as an integer.
   """
+  @doc group: "flags marking lazily evaluated stages"
 
   @spec flg_rnepost(t()) :: integer()
   def flg_rnepost(data), do: Native.data_flg_rnepost(data)
@@ -397,6 +441,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum` in C, read as a float.
   """
+  @doc group: "global properties"
 
   @spec time(t()) :: float()
   def time(data), do: Native.data_time(data)
@@ -406,6 +451,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum` in C, `2` × `1`.
   """
+  @doc group: "global properties"
 
   @spec energy(t()) :: ExMujoco.Tensor.t()
   def energy(data) do
@@ -418,6 +464,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nq` × `1`.
   """
+  @doc group: "state"
 
   @spec qpos(t()) :: ExMujoco.Tensor.t()
   def qpos(data) do
@@ -430,6 +477,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
+  @doc group: "state"
 
   @spec qvel(t()) :: ExMujoco.Tensor.t()
   def qvel(data) do
@@ -442,6 +490,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `na` × `1`.
   """
+  @doc group: "state"
 
   @spec act(t()) :: ExMujoco.Tensor.t()
   def act(data) do
@@ -454,6 +503,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nhistory` × `1`.
   """
+  @doc group: "state"
 
   @spec history(t()) :: ExMujoco.Tensor.t()
   def history(data) do
@@ -466,6 +516,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nplastic` × `1`.
   """
+  @doc group: "state"
 
   @spec plastic(t()) :: ExMujoco.Tensor.t()
   def plastic(data) do
@@ -478,6 +529,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
+  @doc group: "state"
 
   @spec qacc_warmstart(t()) :: ExMujoco.Tensor.t()
   def qacc_warmstart(data) do
@@ -490,6 +542,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `npluginstate` × `1`.
   """
+  @doc group: "state"
 
   @spec plugin_state(t()) :: ExMujoco.Tensor.t()
   def plugin_state(data) do
@@ -502,6 +555,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nu` × `1`.
   """
+  @doc group: "control"
 
   @spec ctrl(t()) :: ExMujoco.Tensor.t()
   def ctrl(data) do
@@ -514,7 +568,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "control"
 
   @spec qfrc_applied(t()) :: ExMujoco.Tensor.t()
   def qfrc_applied(data) do
@@ -527,6 +581,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `6`.
   """
+  @doc group: "control"
 
   @spec xfrc_applied(t()) :: ExMujoco.Tensor.t()
   def xfrc_applied(data) do
@@ -539,6 +594,7 @@ defmodule ExMujoco.Data do
 
   `mjtBool*` in C, `neq` × `1`.
   """
+  @doc group: "control"
 
   @spec eq_active(t()) :: ExMujoco.Tensor.t()
   def eq_active(data) do
@@ -551,6 +607,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nmocap` × `3`.
   """
+  @doc group: "mocap data"
 
   @spec mocap_pos(t()) :: ExMujoco.Tensor.t()
   def mocap_pos(data) do
@@ -563,6 +620,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nmocap` × `4`.
   """
+  @doc group: "mocap data"
 
   @spec mocap_quat(t()) :: ExMujoco.Tensor.t()
   def mocap_quat(data) do
@@ -575,6 +633,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
+  @doc group: "dynamics"
 
   @spec qacc(t()) :: ExMujoco.Tensor.t()
   def qacc(data) do
@@ -587,6 +646,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `na` × `1`.
   """
+  @doc group: "dynamics"
 
   @spec act_dot(t()) :: ExMujoco.Tensor.t()
   def act_dot(data) do
@@ -599,6 +659,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nuserdata` × `1`.
   """
+  @doc group: "user data"
 
   @spec userdata(t()) :: ExMujoco.Tensor.t()
   def userdata(data) do
@@ -611,6 +672,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nsensordata` × `1`.
   """
+  @doc group: "sensors"
 
   @spec sensordata(t()) :: ExMujoco.Tensor.t()
   def sensordata(data) do
@@ -623,6 +685,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `ntree` × `1`.
   """
+  @doc group: "sleep state"
 
   @spec tree_asleep(t()) :: ExMujoco.Tensor.t()
   def tree_asleep(data) do
@@ -635,6 +698,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nplugin` × `1`.
   """
+  @doc group: "plugins"
 
   @spec plugin(t()) :: ExMujoco.Tensor.t()
   def plugin(data) do
@@ -647,6 +711,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec xpos(t()) :: ExMujoco.Tensor.t()
   def xpos(data) do
@@ -659,6 +724,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `4`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec xquat(t()) :: ExMujoco.Tensor.t()
   def xquat(data) do
@@ -671,6 +737,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `9`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec xmat(t()) :: ExMujoco.Tensor.t()
   def xmat(data) do
@@ -683,6 +750,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec xipos(t()) :: ExMujoco.Tensor.t()
   def xipos(data) do
@@ -695,6 +763,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `4`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec xiquat(t()) :: ExMujoco.Tensor.t()
   def xiquat(data) do
@@ -707,6 +776,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `9`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec ximat(t()) :: ExMujoco.Tensor.t()
   def ximat(data) do
@@ -719,6 +789,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `njnt` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec xanchor(t()) :: ExMujoco.Tensor.t()
   def xanchor(data) do
@@ -731,6 +802,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `njnt` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec xaxis(t()) :: ExMujoco.Tensor.t()
   def xaxis(data) do
@@ -743,6 +815,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `ngeom` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec geom_xpos(t()) :: ExMujoco.Tensor.t()
   def geom_xpos(data) do
@@ -755,6 +828,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `ngeom` × `4`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec geom_xquat(t()) :: ExMujoco.Tensor.t()
   def geom_xquat(data) do
@@ -767,6 +841,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `ngeom` × `9`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec geom_xmat(t()) :: ExMujoco.Tensor.t()
   def geom_xmat(data) do
@@ -779,6 +854,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nsite` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec site_xpos(t()) :: ExMujoco.Tensor.t()
   def site_xpos(data) do
@@ -791,6 +867,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nsite` × `4`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec site_xquat(t()) :: ExMujoco.Tensor.t()
   def site_xquat(data) do
@@ -803,6 +880,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nsite` × `9`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec site_xmat(t()) :: ExMujoco.Tensor.t()
   def site_xmat(data) do
@@ -815,6 +893,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `ncam` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec cam_xpos(t()) :: ExMujoco.Tensor.t()
   def cam_xpos(data) do
@@ -827,6 +906,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `ncam` × `9`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec cam_xmat(t()) :: ExMujoco.Tensor.t()
   def cam_xmat(data) do
@@ -839,6 +919,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nlight` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec light_xpos(t()) :: ExMujoco.Tensor.t()
   def light_xpos(data) do
@@ -851,6 +932,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nlight` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_kinematics"
 
   @spec light_xdir(t()) :: ExMujoco.Tensor.t()
   def light_xdir(data) do
@@ -863,6 +945,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_comPos"
 
   @spec subtree_com(t()) :: ExMujoco.Tensor.t()
   def subtree_com(data) do
@@ -875,6 +958,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `6`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_comPos"
 
   @spec cdof(t()) :: ExMujoco.Tensor.t()
   def cdof(data) do
@@ -887,6 +971,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `10`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_comPos"
 
   @spec cinert(t()) :: ExMujoco.Tensor.t()
   def cinert(data) do
@@ -899,6 +984,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nflexvert` × `3`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
 
   @spec flexvert_xpos(t()) :: ExMujoco.Tensor.t()
   def flexvert_xpos(data) do
@@ -911,6 +997,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nflexelem` × `6`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
 
   @spec flexelem_aabb(t()) :: ExMujoco.Tensor.t()
   def flexelem_aabb(data) do
@@ -923,6 +1010,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nflexstiffness` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
 
   @spec flexelem_krot(t()) :: ExMujoco.Tensor.t()
   def flexelem_krot(data) do
@@ -935,6 +1023,7 @@ defmodule ExMujoco.Data do
 
   `mjtBool*` in C, `nflex` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
 
   @spec flex_hessian_valid(t()) :: ExMujoco.Tensor.t()
   def flex_hessian_valid(data) do
@@ -947,6 +1036,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nflexvert` × `6`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
 
   @spec flexvert_hessian(t()) :: ExMujoco.Tensor.t()
   def flexvert_hessian(data) do
@@ -959,6 +1049,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nflexedge` × `9`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
 
   @spec flexedge_hessian(t()) :: ExMujoco.Tensor.t()
   def flexedge_hessian(data) do
@@ -971,6 +1062,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nJfe` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
 
   @spec flexedge_J(t()) :: ExMujoco.Tensor.t()
   def flexedge_J(data) do
@@ -983,6 +1075,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nflexedge` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
 
   @spec flexedge_length(t()) :: ExMujoco.Tensor.t()
   def flexedge_length(data) do
@@ -995,6 +1088,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbvhdynamic` × `6`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
 
   @spec bvh_aabb_dyn(t()) :: ExMujoco.Tensor.t()
   def bvh_aabb_dyn(data) do
@@ -1007,6 +1101,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nflexvert` × `1`.
   """
+  @doc group: "AL contact state carried across steps (flag ipc, not in mjtState)"
 
   @spec flexvert_lambda(t()) :: ExMujoco.Tensor.t()
   def flexvert_lambda(data) do
@@ -1019,6 +1114,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nflexvert` × `1`.
   """
+  @doc group: "AL contact state carried across steps (flag ipc, not in mjtState)"
 
   @spec flexvert_conage(t()) :: ExMujoco.Tensor.t()
   def flexvert_conage(data) do
@@ -1031,6 +1127,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `ntendon` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_tendon"
 
   @spec ten_wrapadr(t()) :: ExMujoco.Tensor.t()
   def ten_wrapadr(data) do
@@ -1043,6 +1140,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `ntendon` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_tendon"
 
   @spec ten_wrapnum(t()) :: ExMujoco.Tensor.t()
   def ten_wrapnum(data) do
@@ -1055,6 +1153,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nJten` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_tendon"
 
   @spec ten_J(t()) :: ExMujoco.Tensor.t()
   def ten_J(data) do
@@ -1067,6 +1166,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_tendon"
 
   @spec ten_length(t()) :: ExMujoco.Tensor.t()
   def ten_length(data) do
@@ -1079,6 +1179,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nwrap` × `2`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_tendon"
 
   @spec wrap_obj(t()) :: ExMujoco.Tensor.t()
   def wrap_obj(data) do
@@ -1091,6 +1192,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nwrap` × `6`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_tendon"
 
   @spec wrap_xpos(t()) :: ExMujoco.Tensor.t()
   def wrap_xpos(data) do
@@ -1103,6 +1205,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nout` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_transmission"
 
   @spec actuator_length(t()) :: ExMujoco.Tensor.t()
   def actuator_length(data) do
@@ -1115,6 +1218,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nout` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_transmission"
 
   @spec moment_rownnz(t()) :: ExMujoco.Tensor.t()
   def moment_rownnz(data) do
@@ -1127,6 +1231,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nout` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_transmission"
 
   @spec moment_rowadr(t()) :: ExMujoco.Tensor.t()
   def moment_rowadr(data) do
@@ -1139,6 +1244,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nJmom` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_transmission"
 
   @spec moment_colind(t()) :: ExMujoco.Tensor.t()
   def moment_colind(data) do
@@ -1151,6 +1257,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nJmom` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_transmission"
 
   @spec actuator_moment(t()) :: ExMujoco.Tensor.t()
   def actuator_moment(data) do
@@ -1163,6 +1270,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `10`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_makeM"
 
   @spec crb(t()) :: ExMujoco.Tensor.t()
   def crb(data) do
@@ -1175,6 +1283,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nC` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_makeM"
 
   @spec m(t()) :: ExMujoco.Tensor.t()
   def m(data) do
@@ -1187,6 +1296,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nC` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_factorM"
 
   @spec qLD(t()) :: ExMujoco.Tensor.t()
   def qLD(data) do
@@ -1199,6 +1309,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
+  @doc group: "computed by mj_fwdPosition/mj_factorM"
 
   @spec qLDiagInv(t()) :: ExMujoco.Tensor.t()
   def qLDiagInv(data) do
@@ -1211,6 +1322,7 @@ defmodule ExMujoco.Data do
 
   `mjtBool*` in C, `nbvh` × `1`.
   """
+  @doc group: "computed by mj_collision/mj_collideTree"
 
   @spec bvh_active(t()) :: ExMujoco.Tensor.t()
   def bvh_active(data) do
@@ -1223,6 +1335,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `ntree` × `1`.
   """
+  @doc group: "computed by mj_updateSleep"
 
   @spec tree_awake(t()) :: ExMujoco.Tensor.t()
   def tree_awake(data) do
@@ -1235,6 +1348,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nbody` × `1`.
   """
+  @doc group: "computed by mj_updateSleep"
 
   @spec body_awake(t()) :: ExMujoco.Tensor.t()
   def body_awake(data) do
@@ -1247,6 +1361,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nbody` × `1`.
   """
+  @doc group: "computed by mj_updateSleep"
 
   @spec body_awake_ind(t()) :: ExMujoco.Tensor.t()
   def body_awake_ind(data) do
@@ -1259,6 +1374,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nbody` × `1`.
   """
+  @doc group: "computed by mj_updateSleep"
 
   @spec parent_awake_ind(t()) :: ExMujoco.Tensor.t()
   def parent_awake_ind(data) do
@@ -1271,6 +1387,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nv` × `1`.
   """
+  @doc group: "computed by mj_updateSleep"
 
   @spec dof_awake_ind(t()) :: ExMujoco.Tensor.t()
   def dof_awake_ind(data) do
@@ -1283,6 +1400,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nflexedge` × `1`.
   """
+  @doc group: "computed by mj_fwdVelocity"
 
   @spec flexedge_velocity(t()) :: ExMujoco.Tensor.t()
   def flexedge_velocity(data) do
@@ -1295,6 +1413,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
+  @doc group: "computed by mj_fwdVelocity"
 
   @spec ten_velocity(t()) :: ExMujoco.Tensor.t()
   def ten_velocity(data) do
@@ -1307,6 +1426,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nout` × `1`.
   """
+  @doc group: "computed by mj_fwdVelocity"
 
   @spec actuator_velocity(t()) :: ExMujoco.Tensor.t()
   def actuator_velocity(data) do
@@ -1319,6 +1439,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `6`.
   """
+  @doc group: "computed by mj_fwdVelocity/mj_comVel"
 
   @spec cvel(t()) :: ExMujoco.Tensor.t()
   def cvel(data) do
@@ -1331,6 +1452,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `6`.
   """
+  @doc group: "computed by mj_fwdVelocity/mj_comVel"
 
   @spec cdof_dot(t()) :: ExMujoco.Tensor.t()
   def cdof_dot(data) do
@@ -1343,7 +1465,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdVelocity/mj_rne (without acceleration)"
 
   @spec qfrc_bias(t()) :: ExMujoco.Tensor.t()
   def qfrc_bias(data) do
@@ -1356,7 +1478,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdVelocity/mj_passive"
 
   @spec qfrc_spring(t()) :: ExMujoco.Tensor.t()
   def qfrc_spring(data) do
@@ -1369,7 +1491,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdVelocity/mj_passive"
 
   @spec qfrc_damper(t()) :: ExMujoco.Tensor.t()
   def qfrc_damper(data) do
@@ -1382,7 +1504,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdVelocity/mj_passive"
 
   @spec qfrc_gravcomp(t()) :: ExMujoco.Tensor.t()
   def qfrc_gravcomp(data) do
@@ -1395,7 +1517,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdVelocity/mj_passive"
 
   @spec qfrc_fluid(t()) :: ExMujoco.Tensor.t()
   def qfrc_fluid(data) do
@@ -1408,7 +1530,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdVelocity/mj_passive"
 
   @spec qfrc_adhesion(t()) :: ExMujoco.Tensor.t()
   def qfrc_adhesion(data) do
@@ -1421,7 +1543,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdVelocity/mj_passive"
 
   @spec qfrc_passive(t()) :: ExMujoco.Tensor.t()
   def qfrc_passive(data) do
@@ -1434,6 +1556,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `3`.
   """
+  @doc group: "computed by mj_sensorVel/mj_subtreeVel if needed"
 
   @spec subtree_linvel(t()) :: ExMujoco.Tensor.t()
   def subtree_linvel(data) do
@@ -1446,6 +1569,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `3`.
   """
+  @doc group: "computed by mj_sensorVel/mj_subtreeVel if needed"
 
   @spec subtree_angmom(t()) :: ExMujoco.Tensor.t()
   def subtree_angmom(data) do
@@ -1458,6 +1582,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nC` × `1`.
   """
+  @doc group: "computed by mj_Euler or mj_implicit"
 
   @spec qH(t()) :: ExMujoco.Tensor.t()
   def qH(data) do
@@ -1470,6 +1595,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
+  @doc group: "computed by mj_Euler or mj_implicit"
 
   @spec qHDiagInv(t()) :: ExMujoco.Tensor.t()
   def qHDiagInv(data) do
@@ -1482,6 +1608,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nD` × `1`.
   """
+  @doc group: "computed by mj_implicit/mj_derivative"
 
   @spec qDeriv(t()) :: ExMujoco.Tensor.t()
   def qDeriv(data) do
@@ -1494,6 +1621,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nD` × `1`.
   """
+  @doc group: "computed by mj_implicit/mju_factorLUSparse"
 
   @spec qLU(t()) :: ExMujoco.Tensor.t()
   def qLU(data) do
@@ -1506,6 +1634,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nout` × `1`.
   """
+  @doc group: "computed by mj_fwdActuation"
 
   @spec actuator_force(t()) :: ExMujoco.Tensor.t()
   def actuator_force(data) do
@@ -1518,7 +1647,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdActuation"
 
   @spec qfrc_actuator(t()) :: ExMujoco.Tensor.t()
   def qfrc_actuator(data) do
@@ -1531,7 +1660,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdAcceleration"
 
   @spec qfrc_smooth(t()) :: ExMujoco.Tensor.t()
   def qfrc_smooth(data) do
@@ -1544,6 +1673,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
+  @doc group: "computed by mj_fwdAcceleration"
 
   @spec qacc_smooth(t()) :: ExMujoco.Tensor.t()
   def qacc_smooth(data) do
@@ -1556,7 +1686,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_fwdConstraint/mj_inverse"
 
   @spec qfrc_constraint(t()) :: ExMujoco.Tensor.t()
   def qfrc_constraint(data) do
@@ -1569,7 +1699,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "qfrc"
+  @doc group: "computed by mj_inverse"
 
   @spec qfrc_inverse(t()) :: ExMujoco.Tensor.t()
   def qfrc_inverse(data) do
@@ -1582,6 +1712,8 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `6`.
   """
+  @doc group:
+         "computed by mj_sensorAcc/mj_rnePostConstraint if needed; rotation:translation format"
 
   @spec cacc(t()) :: ExMujoco.Tensor.t()
   def cacc(data) do
@@ -1594,6 +1726,8 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `6`.
   """
+  @doc group:
+         "computed by mj_sensorAcc/mj_rnePostConstraint if needed; rotation:translation format"
 
   @spec cfrc_int(t()) :: ExMujoco.Tensor.t()
   def cfrc_int(data) do
@@ -1606,6 +1740,8 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nbody` × `6`.
   """
+  @doc group:
+         "computed by mj_sensorAcc/mj_rnePostConstraint if needed; rotation:translation format"
 
   @spec cfrc_ext(t()) :: ExMujoco.Tensor.t()
   def cfrc_ext(data) do
@@ -1618,7 +1754,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_type(t()) :: ExMujoco.Tensor.t()
   def efc_type(data) do
@@ -1631,7 +1767,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_id(t()) :: ExMujoco.Tensor.t()
   def efc_id(data) do
@@ -1644,7 +1780,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_J_rownnz(t()) :: ExMujoco.Tensor.t()
   def efc_J_rownnz(data) do
@@ -1657,7 +1793,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_J_rowadr(t()) :: ExMujoco.Tensor.t()
   def efc_J_rowadr(data) do
@@ -1670,7 +1806,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_J_rowsuper(t()) :: ExMujoco.Tensor.t()
   def efc_J_rowsuper(data) do
@@ -1683,7 +1819,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nJ@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_J_colind(t()) :: ExMujoco.Tensor.t()
   def efc_J_colind(data) do
@@ -1696,7 +1832,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nJ@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_J(t()) :: ExMujoco.Tensor.t()
   def efc_J(data) do
@@ -1709,7 +1845,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_pos(t()) :: ExMujoco.Tensor.t()
   def efc_pos(data) do
@@ -1722,7 +1858,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_margin(t()) :: ExMujoco.Tensor.t()
   def efc_margin(data) do
@@ -1735,7 +1871,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_frictionloss(t()) :: ExMujoco.Tensor.t()
   def efc_frictionloss(data) do
@@ -1748,7 +1884,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_diagA(t()) :: ExMujoco.Tensor.t()
   def efc_diagA(data) do
@@ -1761,7 +1897,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `4`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_KBIP(t()) :: ExMujoco.Tensor.t()
   def efc_KBIP(data) do
@@ -1774,7 +1910,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_D(t()) :: ExMujoco.Tensor.t()
   def efc_D(data) do
@@ -1787,7 +1923,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_makeConstraint"
 
   @spec efc_R(t()) :: ExMujoco.Tensor.t()
   def efc_R(data) do
@@ -1800,6 +1936,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `ntendon@model` × `1`.
   """
+  @doc group: "computed by mj_makeConstraint"
 
   @spec tendon_efcadr(t()) :: ExMujoco.Tensor.t()
   def tendon_efcadr(data) do
@@ -1812,6 +1949,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `ntree@model` × `1`.
   """
+  @doc group: "computed by mj_island (island tree structure)"
 
   @spec tree_island(t()) :: ExMujoco.Tensor.t()
   def tree_island(data) do
@@ -1824,6 +1962,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nisland@data` × `1`.
   """
+  @doc group: "computed by mj_island (island tree structure)"
 
   @spec island_ntree(t()) :: ExMujoco.Tensor.t()
   def island_ntree(data) do
@@ -1836,6 +1975,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nisland@data` × `1`.
   """
+  @doc group: "computed by mj_island (island tree structure)"
 
   @spec island_itreeadr(t()) :: ExMujoco.Tensor.t()
   def island_itreeadr(data) do
@@ -1848,6 +1988,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `ntree@model` × `1`.
   """
+  @doc group: "computed by mj_island (island tree structure)"
 
   @spec map_itree2tree(t()) :: ExMujoco.Tensor.t()
   def map_itree2tree(data) do
@@ -1860,6 +2001,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nv@model` × `1`.
   """
+  @doc group: "computed by mj_island (island dof structure)"
 
   @spec dof_island(t()) :: ExMujoco.Tensor.t()
   def dof_island(data) do
@@ -1872,6 +2014,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nisland@data` × `1`.
   """
+  @doc group: "computed by mj_island (island dof structure)"
 
   @spec island_nv(t()) :: ExMujoco.Tensor.t()
   def island_nv(data) do
@@ -1884,6 +2027,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nisland@data` × `1`.
   """
+  @doc group: "computed by mj_island (island dof structure)"
 
   @spec island_idofadr(t()) :: ExMujoco.Tensor.t()
   def island_idofadr(data) do
@@ -1896,6 +2040,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nisland@data` × `1`.
   """
+  @doc group: "computed by mj_island (island dof structure)"
 
   @spec island_dofadr(t()) :: ExMujoco.Tensor.t()
   def island_dofadr(data) do
@@ -1908,6 +2053,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nv@model` × `1`.
   """
+  @doc group: "computed by mj_island (island dof structure)"
 
   @spec map_dof2idof(t()) :: ExMujoco.Tensor.t()
   def map_dof2idof(data) do
@@ -1920,6 +2066,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nv@model` × `1`.
   """
+  @doc group: "computed by mj_island (island dof structure)"
 
   @spec map_idof2dof(t()) :: ExMujoco.Tensor.t()
   def map_idof2dof(data) do
@@ -1932,6 +2079,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nidof@data` × `1`.
   """
+  @doc group: "computed by mj_island (dofs sorted by island)"
 
   @spec ifrc_smooth(t()) :: ExMujoco.Tensor.t()
   def ifrc_smooth(data) do
@@ -1944,6 +2092,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nidof@data` × `1`.
   """
+  @doc group: "computed by mj_island (dofs sorted by island)"
 
   @spec iacc_smooth(t()) :: ExMujoco.Tensor.t()
   def iacc_smooth(data) do
@@ -1956,6 +2105,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nidof@data` × `1`.
   """
+  @doc group: "computed by mj_island (dofs sorted by island)"
 
   @spec iacc(t()) :: ExMujoco.Tensor.t()
   def iacc(data) do
@@ -1968,7 +2118,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_island (island constraint structure)"
 
   @spec efc_island(t()) :: ExMujoco.Tensor.t()
   def efc_island(data) do
@@ -1981,6 +2131,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nisland@data` × `1`.
   """
+  @doc group: "computed by mj_island (island constraint structure)"
 
   @spec island_ne(t()) :: ExMujoco.Tensor.t()
   def island_ne(data) do
@@ -1993,6 +2144,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nisland@data` × `1`.
   """
+  @doc group: "computed by mj_island (island constraint structure)"
 
   @spec island_nf(t()) :: ExMujoco.Tensor.t()
   def island_nf(data) do
@@ -2005,6 +2157,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nisland@data` × `1`.
   """
+  @doc group: "computed by mj_island (island constraint structure)"
 
   @spec island_nefc(t()) :: ExMujoco.Tensor.t()
   def island_nefc(data) do
@@ -2017,6 +2170,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nisland@data` × `1`.
   """
+  @doc group: "computed by mj_island (island constraint structure)"
 
   @spec island_iefcadr(t()) :: ExMujoco.Tensor.t()
   def island_iefcadr(data) do
@@ -2029,6 +2183,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_island (island constraint structure)"
 
   @spec map_efc2iefc(t()) :: ExMujoco.Tensor.t()
   def map_efc2iefc(data) do
@@ -2041,6 +2196,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_island (island constraint structure)"
 
   @spec map_iefc2efc(t()) :: ExMujoco.Tensor.t()
   def map_iefc2efc(data) do
@@ -2053,6 +2209,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_island (constraints sorted by island)"
 
   @spec iefc_type(t()) :: ExMujoco.Tensor.t()
   def iefc_type(data) do
@@ -2065,6 +2222,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_island (constraints sorted by island)"
 
   @spec iefc_id(t()) :: ExMujoco.Tensor.t()
   def iefc_id(data) do
@@ -2077,6 +2235,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_island (constraints sorted by island)"
 
   @spec iefc_frictionloss(t()) :: ExMujoco.Tensor.t()
   def iefc_frictionloss(data) do
@@ -2089,6 +2248,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_island (constraints sorted by island)"
 
   @spec iefc_D(t()) :: ExMujoco.Tensor.t()
   def iefc_D(data) do
@@ -2101,6 +2261,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_island (constraints sorted by island)"
 
   @spec iefc_R(t()) :: ExMujoco.Tensor.t()
   def iefc_R(data) do
@@ -2113,7 +2274,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_projectConstraint (PGS solver)"
 
   @spec efc_Y_rownnz(t()) :: ExMujoco.Tensor.t()
   def efc_Y_rownnz(data) do
@@ -2126,7 +2287,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_projectConstraint (PGS solver)"
 
   @spec efc_Y_rowadr(t()) :: ExMujoco.Tensor.t()
   def efc_Y_rowadr(data) do
@@ -2139,7 +2300,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nY@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_projectConstraint (PGS solver)"
 
   @spec efc_Y_colind(t()) :: ExMujoco.Tensor.t()
   def efc_Y_colind(data) do
@@ -2152,7 +2313,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nY@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_projectConstraint (PGS solver)"
 
   @spec efc_Y(t()) :: ExMujoco.Tensor.t()
   def efc_Y(data) do
@@ -2165,7 +2326,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_projectConstraint (PGS solver)"
 
   @spec efc_AR_rownnz(t()) :: ExMujoco.Tensor.t()
   def efc_AR_rownnz(data) do
@@ -2178,7 +2339,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_projectConstraint (PGS solver)"
 
   @spec efc_AR_rowadr(t()) :: ExMujoco.Tensor.t()
   def efc_AR_rowadr(data) do
@@ -2191,7 +2352,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nA@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_projectConstraint (PGS solver)"
 
   @spec efc_AR_colind(t()) :: ExMujoco.Tensor.t()
   def efc_AR_colind(data) do
@@ -2204,7 +2365,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nA@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_projectConstraint (PGS solver)"
 
   @spec efc_AR(t()) :: ExMujoco.Tensor.t()
   def efc_AR(data) do
@@ -2217,7 +2378,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_fwdVelocity/mj_referenceConstraint"
 
   @spec efc_vel(t()) :: ExMujoco.Tensor.t()
   def efc_vel(data) do
@@ -2230,7 +2391,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_fwdVelocity/mj_referenceConstraint"
 
   @spec efc_aref(t()) :: ExMujoco.Tensor.t()
   def efc_aref(data) do
@@ -2243,7 +2404,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_c(t()) :: ExMujoco.Tensor.t()
   def efm_c(data) do
@@ -2256,7 +2417,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_diag(t()) :: ExMujoco.Tensor.t()
   def efm_diag(data) do
@@ -2269,7 +2430,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_ck(t()) :: ExMujoco.Tensor.t()
   def efm_ck(data) do
@@ -2282,7 +2443,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_sdiag(t()) :: ExMujoco.Tensor.t()
   def efm_sdiag(data) do
@@ -2295,7 +2456,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nC@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_fluid(t()) :: ExMujoco.Tensor.t()
   def efm_fluid(data) do
@@ -2308,7 +2469,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `ntendon@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_tid(t()) :: ExMujoco.Tensor.t()
   def efm_tid(data) do
@@ -2321,7 +2482,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `ntendon@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_ts(t()) :: ExMujoco.Tensor.t()
   def efm_ts(data) do
@@ -2334,7 +2495,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `ntendon@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_tk(t()) :: ExMujoco.Tensor.t()
   def efm_tk(data) do
@@ -2347,7 +2508,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nactuator@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_aid(t()) :: ExMujoco.Tensor.t()
   def efm_aid(data) do
@@ -2360,7 +2521,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nactuator@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_as(t()) :: ExMujoco.Tensor.t()
   def efm_as(data) do
@@ -2373,7 +2534,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nactuator@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_ak(t()) :: ExMujoco.Tensor.t()
   def efm_ak(data) do
@@ -2386,7 +2547,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nv@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_ca(t()) :: ExMujoco.Tensor.t()
   def efm_ca(data) do
@@ -2399,7 +2560,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nv@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_K_rownnz(t()) :: ExMujoco.Tensor.t()
   def efm_K_rownnz(data) do
@@ -2412,7 +2573,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nv@model` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_K_rowadr(t()) :: ExMujoco.Tensor.t()
   def efm_K_rowadr(data) do
@@ -2425,7 +2586,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefmK@data` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_K_colind(t()) :: ExMujoco.Tensor.t()
   def efm_K_colind(data) do
@@ -2438,7 +2599,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefmK@data` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_K_val(t()) :: ExMujoco.Tensor.t()
   def efm_K_val(data) do
@@ -2451,7 +2612,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefmdof@data` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_dofid(t()) :: ExMujoco.Tensor.t()
   def efm_dofid(data) do
@@ -2464,7 +2625,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefmcon@data` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_con_ind(t()) :: ExMujoco.Tensor.t()
   def efm_con_ind(data) do
@@ -2477,7 +2638,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefmcon@data` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_con_val(t()) :: ExMujoco.Tensor.t()
   def efm_con_val(data) do
@@ -2490,7 +2651,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefmL@data` × `1`.
   """
-  @doc group: "efm"
+  @doc group: "computed when the implicit effective metric M+K is active"
 
   @spec efm_L(t()) :: ExMujoco.Tensor.t()
   def efm_L(data) do
@@ -2503,7 +2664,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_fwdConstraint/mj_inverse"
 
   @spec efc_b(t()) :: ExMujoco.Tensor.t()
   def efc_b(data) do
@@ -2516,6 +2677,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_fwdConstraint/mj_inverse"
 
   @spec iefc_aref(t()) :: ExMujoco.Tensor.t()
   def iefc_aref(data) do
@@ -2528,6 +2690,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_fwdConstraint/mj_inverse"
 
   @spec iefc_state(t()) :: ExMujoco.Tensor.t()
   def iefc_state(data) do
@@ -2540,6 +2703,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
+  @doc group: "computed by mj_fwdConstraint/mj_inverse"
 
   @spec iefc_force(t()) :: ExMujoco.Tensor.t()
   def iefc_force(data) do
@@ -2552,7 +2716,7 @@ defmodule ExMujoco.Data do
 
   `int*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_fwdConstraint/mj_inverse"
 
   @spec efc_state(t()) :: ExMujoco.Tensor.t()
   def efc_state(data) do
@@ -2565,7 +2729,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nefc@data` × `1`.
   """
-  @doc group: "efc"
+  @doc group: "computed by mj_fwdConstraint/mj_inverse"
 
   @spec efc_force(t()) :: ExMujoco.Tensor.t()
   def efc_force(data) do
@@ -2578,6 +2742,7 @@ defmodule ExMujoco.Data do
 
   `mjtNum*` in C, `nidof@data` × `1`.
   """
+  @doc group: "computed by mj_fwdConstraint/mj_inverse"
 
   @spec ifrc_constraint(t()) :: ExMujoco.Tensor.t()
   def ifrc_constraint(data) do

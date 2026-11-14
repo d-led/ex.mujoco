@@ -83,11 +83,17 @@ documentation is part of a release rather than something added afterwards.
 - The generated field functions carry the generator's description of the field, taken from
   MuJoCo's own header comments, so `ExMujoco.Model.geom_size/1` is documented with MuJoCo's
   documentation for `geom_size`.
-- A field belongs to a family named by MuJoCo's own prefix — `geom_size`, `geom_pos`,
-  `geom_rbound` are `geom` — and the generator puts `@doc group: "geom"` on the function once ten
-  fields share it. Fewer than ten stay in the plain function list: a heading over two functions
-  is worse than no heading. The rule lives in `@family_size` in `lib/ex_mujoco/gen/template.ex`,
-  so it is changed in one place and `mix ex_mujoco.gen` decides the rest.
+- A field is filed under the heading MuJoCo's header gives its block: `// bodies` and the
+  `body_` pointers under it, `// computed by mj_fwdPosition/mj_kinematics` and what that pass
+  writes. The parser keeps the heading it found each declaration under and the generator writes
+  it as `@doc group:`; the words are MuJoCo's, none is invented, and every field has one. So
+  `geom_pos` is under `geoms`, `qpos` under `state`, `xpos` under
+  `computed by mj_fwdPosition/mj_kinematics`. A heading is a title in a C comment and lands in
+  an Elixir string literal, so `escape/1` in `lib/ex_mujoco/gen/template.ex` comes first.
+
+  Earlier releases derived the heading from the name's prefix (`geom_size` → `geom`) once ten
+  fields shared it. That left a third of both pages in one alphabetical heap — including the
+  dimension counters and `qpos` — because MuJoCo's blocks are not always one prefix.
 
 ## Releasing
 

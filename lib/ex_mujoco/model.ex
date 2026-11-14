@@ -13,6 +13,11 @@ defmodule ExMujoco.Model do
     * a field MuJoCo gives no extent to is not here at all, and
       `docs/coverage.md` says which, and why.
 
+  The functions are grouped under the heading MuJoCo's header gives the
+  block they are declared in — `bodies`, `geoms`,
+  `computed by mj_fwdPosition/mj_kinematics` — so the page reads in the
+  order MuJoCo writes it, and the words are MuJoCo's.
+
   The names are MuJoCo's own — `geom_pos`, `qpos`, `efc_force` — so the
   documentation for a field is MuJoCo's documentation for that field.
   """
@@ -27,6 +32,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nq(t()) :: integer()
   def nq(model), do: Native.model_nq(model)
@@ -36,6 +42,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nv(t()) :: integer()
   def nv(model), do: Native.model_nv(model)
@@ -45,6 +52,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nu(t()) :: integer()
   def nu(model), do: Native.model_nu(model)
@@ -54,6 +62,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nactuator(t()) :: integer()
   def nactuator(model), do: Native.model_nactuator(model)
@@ -63,6 +72,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nout(t()) :: integer()
   def nout(model), do: Native.model_nout(model)
@@ -72,6 +82,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec na(t()) :: integer()
   def na(model), do: Native.model_na(model)
@@ -81,6 +92,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nbody(t()) :: integer()
   def nbody(model), do: Native.model_nbody(model)
@@ -90,6 +102,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nbvh(t()) :: integer()
   def nbvh(model), do: Native.model_nbvh(model)
@@ -99,6 +112,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nbvhstatic(t()) :: integer()
   def nbvhstatic(model), do: Native.model_nbvhstatic(model)
@@ -108,6 +122,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nbvhdynamic(t()) :: integer()
   def nbvhdynamic(model), do: Native.model_nbvhdynamic(model)
@@ -117,6 +132,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec noct(t()) :: integer()
   def noct(model), do: Native.model_noct(model)
@@ -126,6 +142,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec njnt(t()) :: integer()
   def njnt(model), do: Native.model_njnt(model)
@@ -135,6 +152,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ntree(t()) :: integer()
   def ntree(model), do: Native.model_ntree(model)
@@ -144,6 +162,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nM(t()) :: integer()
   def nM(model), do: Native.model_nM(model)
@@ -153,6 +172,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nB(t()) :: integer()
   def nB(model), do: Native.model_nB(model)
@@ -162,6 +182,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nC(t()) :: integer()
   def nC(model), do: Native.model_nC(model)
@@ -171,6 +192,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nD(t()) :: integer()
   def nD(model), do: Native.model_nD(model)
@@ -180,6 +202,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ngeom(t()) :: integer()
   def ngeom(model), do: Native.model_ngeom(model)
@@ -189,6 +212,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nsite(t()) :: integer()
   def nsite(model), do: Native.model_nsite(model)
@@ -198,6 +222,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ncam(t()) :: integer()
   def ncam(model), do: Native.model_ncam(model)
@@ -207,6 +232,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nlight(t()) :: integer()
   def nlight(model), do: Native.model_nlight(model)
@@ -216,6 +242,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflex(t()) :: integer()
   def nflex(model), do: Native.model_nflex(model)
@@ -225,6 +252,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflexnode(t()) :: integer()
   def nflexnode(model), do: Native.model_nflexnode(model)
@@ -234,6 +262,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflexvert(t()) :: integer()
   def nflexvert(model), do: Native.model_nflexvert(model)
@@ -243,6 +272,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflexedge(t()) :: integer()
   def nflexedge(model), do: Native.model_nflexedge(model)
@@ -252,6 +282,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflexelem(t()) :: integer()
   def nflexelem(model), do: Native.model_nflexelem(model)
@@ -261,6 +292,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflexelemdata(t()) :: integer()
   def nflexelemdata(model), do: Native.model_nflexelemdata(model)
@@ -270,6 +302,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflexstiffness(t()) :: integer()
   def nflexstiffness(model), do: Native.model_nflexstiffness(model)
@@ -279,6 +312,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflexbending(t()) :: integer()
   def nflexbending(model), do: Native.model_nflexbending(model)
@@ -288,6 +322,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nefm0dof(t()) :: integer()
   def nefm0dof(model), do: Native.model_nefm0dof(model)
@@ -297,6 +332,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nefm0L(t()) :: integer()
   def nefm0L(model), do: Native.model_nefm0L(model)
@@ -306,6 +342,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nefmCvert(t()) :: integer()
   def nefmCvert(model), do: Native.model_nefmCvert(model)
@@ -315,6 +352,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflexelemedge(t()) :: integer()
   def nflexelemedge(model), do: Native.model_nflexelemedge(model)
@@ -324,6 +362,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflexshelldata(t()) :: integer()
   def nflexshelldata(model), do: Native.model_nflexshelldata(model)
@@ -333,6 +372,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nflextexcoord(t()) :: integer()
   def nflextexcoord(model), do: Native.model_nflextexcoord(model)
@@ -342,6 +382,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nJfe(t()) :: integer()
   def nJfe(model), do: Native.model_nJfe(model)
@@ -351,6 +392,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmesh(t()) :: integer()
   def nmesh(model), do: Native.model_nmesh(model)
@@ -360,6 +402,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmeshvert(t()) :: integer()
   def nmeshvert(model), do: Native.model_nmeshvert(model)
@@ -369,6 +412,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmeshnormal(t()) :: integer()
   def nmeshnormal(model), do: Native.model_nmeshnormal(model)
@@ -378,6 +422,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmeshtexcoord(t()) :: integer()
   def nmeshtexcoord(model), do: Native.model_nmeshtexcoord(model)
@@ -387,6 +432,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmeshface(t()) :: integer()
   def nmeshface(model), do: Native.model_nmeshface(model)
@@ -396,6 +442,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmeshgraph(t()) :: integer()
   def nmeshgraph(model), do: Native.model_nmeshgraph(model)
@@ -405,6 +452,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmeshpoly(t()) :: integer()
   def nmeshpoly(model), do: Native.model_nmeshpoly(model)
@@ -414,6 +462,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmeshpolyvert(t()) :: integer()
   def nmeshpolyvert(model), do: Native.model_nmeshpolyvert(model)
@@ -423,6 +472,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmeshpolymap(t()) :: integer()
   def nmeshpolymap(model), do: Native.model_nmeshpolymap(model)
@@ -432,6 +482,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nskin(t()) :: integer()
   def nskin(model), do: Native.model_nskin(model)
@@ -441,6 +492,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nskinvert(t()) :: integer()
   def nskinvert(model), do: Native.model_nskinvert(model)
@@ -450,6 +502,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nskintexvert(t()) :: integer()
   def nskintexvert(model), do: Native.model_nskintexvert(model)
@@ -459,6 +512,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nskinface(t()) :: integer()
   def nskinface(model), do: Native.model_nskinface(model)
@@ -468,6 +522,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nskinbone(t()) :: integer()
   def nskinbone(model), do: Native.model_nskinbone(model)
@@ -477,6 +532,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nskinbonevert(t()) :: integer()
   def nskinbonevert(model), do: Native.model_nskinbonevert(model)
@@ -486,6 +542,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nhfield(t()) :: integer()
   def nhfield(model), do: Native.model_nhfield(model)
@@ -495,6 +552,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nhfielddata(t()) :: integer()
   def nhfielddata(model), do: Native.model_nhfielddata(model)
@@ -504,6 +562,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ntex(t()) :: integer()
   def ntex(model), do: Native.model_ntex(model)
@@ -513,6 +572,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ntexdata(t()) :: integer()
   def ntexdata(model), do: Native.model_ntexdata(model)
@@ -522,6 +582,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmat(t()) :: integer()
   def nmat(model), do: Native.model_nmat(model)
@@ -531,6 +592,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec npair(t()) :: integer()
   def npair(model), do: Native.model_npair(model)
@@ -540,6 +602,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nexclude(t()) :: integer()
   def nexclude(model), do: Native.model_nexclude(model)
@@ -549,6 +612,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec neq(t()) :: integer()
   def neq(model), do: Native.model_neq(model)
@@ -558,6 +622,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ntendon(t()) :: integer()
   def ntendon(model), do: Native.model_ntendon(model)
@@ -567,6 +632,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nJten(t()) :: integer()
   def nJten(model), do: Native.model_nJten(model)
@@ -576,6 +642,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nwrap(t()) :: integer()
   def nwrap(model), do: Native.model_nwrap(model)
@@ -585,6 +652,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nsensor(t()) :: integer()
   def nsensor(model), do: Native.model_nsensor(model)
@@ -594,6 +662,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nnumeric(t()) :: integer()
   def nnumeric(model), do: Native.model_nnumeric(model)
@@ -603,6 +672,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nnumericdata(t()) :: integer()
   def nnumericdata(model), do: Native.model_nnumericdata(model)
@@ -612,6 +682,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ntext(t()) :: integer()
   def ntext(model), do: Native.model_ntext(model)
@@ -621,6 +692,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ntextdata(t()) :: integer()
   def ntextdata(model), do: Native.model_ntextdata(model)
@@ -630,6 +702,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ntuple(t()) :: integer()
   def ntuple(model), do: Native.model_ntuple(model)
@@ -639,6 +712,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec ntupledata(t()) :: integer()
   def ntupledata(model), do: Native.model_ntupledata(model)
@@ -648,6 +722,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nkey(t()) :: integer()
   def nkey(model), do: Native.model_nkey(model)
@@ -657,6 +732,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nmocap(t()) :: integer()
   def nmocap(model), do: Native.model_nmocap(model)
@@ -666,6 +742,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nplugin(t()) :: integer()
   def nplugin(model), do: Native.model_nplugin(model)
@@ -675,6 +752,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec npluginattr(t()) :: integer()
   def npluginattr(model), do: Native.model_npluginattr(model)
@@ -684,6 +762,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nuser_body(t()) :: integer()
   def nuser_body(model), do: Native.model_nuser_body(model)
@@ -693,6 +772,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nuser_jnt(t()) :: integer()
   def nuser_jnt(model), do: Native.model_nuser_jnt(model)
@@ -702,6 +782,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nuser_geom(t()) :: integer()
   def nuser_geom(model), do: Native.model_nuser_geom(model)
@@ -711,6 +792,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nuser_site(t()) :: integer()
   def nuser_site(model), do: Native.model_nuser_site(model)
@@ -720,6 +802,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nuser_cam(t()) :: integer()
   def nuser_cam(model), do: Native.model_nuser_cam(model)
@@ -729,6 +812,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nuser_tendon(t()) :: integer()
   def nuser_tendon(model), do: Native.model_nuser_tendon(model)
@@ -738,6 +822,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nuser_actuator(t()) :: integer()
   def nuser_actuator(model), do: Native.model_nuser_actuator(model)
@@ -747,6 +832,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nuser_sensor(t()) :: integer()
   def nuser_sensor(model), do: Native.model_nuser_sensor(model)
@@ -756,6 +842,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nnames(t()) :: integer()
   def nnames(model), do: Native.model_nnames(model)
@@ -765,6 +852,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec npaths(t()) :: integer()
   def npaths(model), do: Native.model_npaths(model)
@@ -774,6 +862,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes needed at mjModel construction"
 
   @spec nplastic(t()) :: integer()
   def nplastic(model), do: Native.model_nplastic(model)
@@ -783,6 +872,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec nnames_map(t()) :: integer()
   def nnames_map(model), do: Native.model_nnames_map(model)
@@ -792,6 +882,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec nJmom(t()) :: integer()
   def nJmom(model), do: Native.model_nJmom(model)
@@ -801,6 +892,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec ngravcomp(t()) :: integer()
   def ngravcomp(model), do: Native.model_ngravcomp(model)
@@ -810,6 +902,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec nemax(t()) :: integer()
   def nemax(model), do: Native.model_nemax(model)
@@ -819,6 +912,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec njmax(t()) :: integer()
   def njmax(model), do: Native.model_njmax(model)
@@ -828,6 +922,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec nconmax(t()) :: integer()
   def nconmax(model), do: Native.model_nconmax(model)
@@ -837,6 +932,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec npolygonmax(t()) :: integer()
   def npolygonmax(model), do: Native.model_npolygonmax(model)
@@ -846,6 +942,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec nmeshdegmax(t()) :: integer()
   def nmeshdegmax(model), do: Native.model_nmeshdegmax(model)
@@ -855,6 +952,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec nuserdata(t()) :: integer()
   def nuserdata(model), do: Native.model_nuserdata(model)
@@ -864,6 +962,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec nsensordata(t()) :: integer()
   def nsensordata(model), do: Native.model_nsensordata(model)
@@ -873,6 +972,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec npluginstate(t()) :: integer()
   def npluginstate(model), do: Native.model_npluginstate(model)
@@ -882,6 +982,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "sizes set after mjModel construction"
 
   @spec nhistory(t()) :: integer()
   def nhistory(model), do: Native.model_nhistory(model)
@@ -891,6 +992,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "buffer sizes"
 
   @spec narena(t()) :: integer()
   def narena(model), do: Native.model_narena(model)
@@ -900,6 +1002,7 @@ defmodule ExMujoco.Model do
 
   `mjtSize` in C, read as an integer.
   """
+  @doc group: "buffer sizes"
 
   @spec nbuffer(t()) :: integer()
   def nbuffer(model), do: Native.model_nbuffer(model)
@@ -909,6 +1012,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool` in C, read as an integer.
   """
+  @doc group: "flags"
 
   @spec flg_gravcomp(t()) :: integer()
   def flg_gravcomp(model), do: Native.model_flg_gravcomp(model)
@@ -918,6 +1022,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool` in C, read as an integer.
   """
+  @doc group: "flags"
 
   @spec flg_surfacevel(t()) :: integer()
   def flg_surfacevel(model), do: Native.model_flg_surfacevel(model)
@@ -927,6 +1032,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool` in C, read as an integer.
   """
+  @doc group: "flags"
 
   @spec flg_adhesion(t()) :: integer()
   def flg_adhesion(model), do: Native.model_flg_adhesion(model)
@@ -936,6 +1042,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nq` × `1`.
   """
+  @doc group: "default generalized coordinates"
 
   @spec qpos0(t()) :: ExMujoco.Tensor.t()
   def qpos0(model) do
@@ -948,6 +1055,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nq` × `1`.
   """
+  @doc group: "default generalized coordinates"
 
   @spec qpos_spring(t()) :: ExMujoco.Tensor.t()
   def qpos_spring(model) do
@@ -960,7 +1068,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_parentid(t()) :: ExMujoco.Tensor.t()
   def body_parentid(model) do
@@ -973,7 +1081,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_rootid(t()) :: ExMujoco.Tensor.t()
   def body_rootid(model) do
@@ -986,7 +1094,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_weldid(t()) :: ExMujoco.Tensor.t()
   def body_weldid(model) do
@@ -999,7 +1107,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_mocapid(t()) :: ExMujoco.Tensor.t()
   def body_mocapid(model) do
@@ -1012,7 +1120,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_jntnum(t()) :: ExMujoco.Tensor.t()
   def body_jntnum(model) do
@@ -1025,7 +1133,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_jntadr(t()) :: ExMujoco.Tensor.t()
   def body_jntadr(model) do
@@ -1038,7 +1146,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_dofnum(t()) :: ExMujoco.Tensor.t()
   def body_dofnum(model) do
@@ -1051,7 +1159,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_dofadr(t()) :: ExMujoco.Tensor.t()
   def body_dofadr(model) do
@@ -1064,7 +1172,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_treeid(t()) :: ExMujoco.Tensor.t()
   def body_treeid(model) do
@@ -1077,7 +1185,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_geomnum(t()) :: ExMujoco.Tensor.t()
   def body_geomnum(model) do
@@ -1090,7 +1198,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_geomadr(t()) :: ExMujoco.Tensor.t()
   def body_geomadr(model) do
@@ -1103,7 +1211,7 @@ defmodule ExMujoco.Model do
 
   `mjtByte*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_simple(t()) :: ExMujoco.Tensor.t()
   def body_simple(model) do
@@ -1116,7 +1224,7 @@ defmodule ExMujoco.Model do
 
   `mjtByte*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_sameframe(t()) :: ExMujoco.Tensor.t()
   def body_sameframe(model) do
@@ -1129,7 +1237,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `3`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_pos(t()) :: ExMujoco.Tensor.t()
   def body_pos(model) do
@@ -1142,7 +1250,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `4`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_quat(t()) :: ExMujoco.Tensor.t()
   def body_quat(model) do
@@ -1155,7 +1263,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `3`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_ipos(t()) :: ExMujoco.Tensor.t()
   def body_ipos(model) do
@@ -1168,7 +1276,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `4`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_iquat(t()) :: ExMujoco.Tensor.t()
   def body_iquat(model) do
@@ -1181,7 +1289,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_mass(t()) :: ExMujoco.Tensor.t()
   def body_mass(model) do
@@ -1194,7 +1302,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_subtreemass(t()) :: ExMujoco.Tensor.t()
   def body_subtreemass(model) do
@@ -1207,7 +1315,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `3`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_inertia(t()) :: ExMujoco.Tensor.t()
   def body_inertia(model) do
@@ -1220,7 +1328,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `2`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_invweight0(t()) :: ExMujoco.Tensor.t()
   def body_invweight0(model) do
@@ -1233,7 +1341,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_gravcomp(t()) :: ExMujoco.Tensor.t()
   def body_gravcomp(model) do
@@ -1246,7 +1354,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_margin(t()) :: ExMujoco.Tensor.t()
   def body_margin(model) do
@@ -1259,7 +1367,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbody` × `nuser_body@model`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_user(t()) :: ExMujoco.Tensor.t()
   def body_user(model) do
@@ -1272,7 +1380,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_plugin(t()) :: ExMujoco.Tensor.t()
   def body_plugin(model) do
@@ -1285,7 +1393,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_contype(t()) :: ExMujoco.Tensor.t()
   def body_contype(model) do
@@ -1298,7 +1406,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_conaffinity(t()) :: ExMujoco.Tensor.t()
   def body_conaffinity(model) do
@@ -1311,7 +1419,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_bvhadr(t()) :: ExMujoco.Tensor.t()
   def body_bvhadr(model) do
@@ -1324,7 +1432,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "body"
+  @doc group: "bodies"
 
   @spec body_bvhnum(t()) :: ExMujoco.Tensor.t()
   def body_bvhnum(model) do
@@ -1337,6 +1445,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbvh` × `1`.
   """
+  @doc group: "bounding volume hierarchy"
 
   @spec bvh_depth(t()) :: ExMujoco.Tensor.t()
   def bvh_depth(model) do
@@ -1349,6 +1458,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbvh` × `2`.
   """
+  @doc group: "bounding volume hierarchy"
 
   @spec bvh_child(t()) :: ExMujoco.Tensor.t()
   def bvh_child(model) do
@@ -1361,6 +1471,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbvh` × `1`.
   """
+  @doc group: "bounding volume hierarchy"
 
   @spec bvh_nodeid(t()) :: ExMujoco.Tensor.t()
   def bvh_nodeid(model) do
@@ -1373,6 +1484,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nbvhstatic` × `6`.
   """
+  @doc group: "bounding volume hierarchy"
 
   @spec bvh_aabb(t()) :: ExMujoco.Tensor.t()
   def bvh_aabb(model) do
@@ -1385,6 +1497,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `noct` × `1`.
   """
+  @doc group: "octree spatial partitioning"
 
   @spec oct_depth(t()) :: ExMujoco.Tensor.t()
   def oct_depth(model) do
@@ -1397,6 +1510,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `noct` × `8`.
   """
+  @doc group: "octree spatial partitioning"
 
   @spec oct_child(t()) :: ExMujoco.Tensor.t()
   def oct_child(model) do
@@ -1409,6 +1523,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `noct` × `6`.
   """
+  @doc group: "octree spatial partitioning"
 
   @spec oct_aabb(t()) :: ExMujoco.Tensor.t()
   def oct_aabb(model) do
@@ -1421,6 +1536,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `noct` × `8`.
   """
+  @doc group: "octree spatial partitioning"
 
   @spec oct_coeff(t()) :: ExMujoco.Tensor.t()
   def oct_coeff(model) do
@@ -1433,7 +1549,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_type(t()) :: ExMujoco.Tensor.t()
   def jnt_type(model) do
@@ -1446,7 +1562,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_qposadr(t()) :: ExMujoco.Tensor.t()
   def jnt_qposadr(model) do
@@ -1459,7 +1575,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_dofadr(t()) :: ExMujoco.Tensor.t()
   def jnt_dofadr(model) do
@@ -1472,7 +1588,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_bodyid(t()) :: ExMujoco.Tensor.t()
   def jnt_bodyid(model) do
@@ -1485,7 +1601,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_actuatorid(t()) :: ExMujoco.Tensor.t()
   def jnt_actuatorid(model) do
@@ -1498,7 +1614,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_group(t()) :: ExMujoco.Tensor.t()
   def jnt_group(model) do
@@ -1511,7 +1627,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_plasticadr(t()) :: ExMujoco.Tensor.t()
   def jnt_plasticadr(model) do
@@ -1524,7 +1640,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_limited(t()) :: ExMujoco.Tensor.t()
   def jnt_limited(model) do
@@ -1537,7 +1653,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_actfrclimited(t()) :: ExMujoco.Tensor.t()
   def jnt_actfrclimited(model) do
@@ -1550,7 +1666,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_actgravcomp(t()) :: ExMujoco.Tensor.t()
   def jnt_actgravcomp(model) do
@@ -1563,7 +1679,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `mjNREF`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_solref(t()) :: ExMujoco.Tensor.t()
   def jnt_solref(model) do
@@ -1576,7 +1692,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `mjNIMP`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_solimp(t()) :: ExMujoco.Tensor.t()
   def jnt_solimp(model) do
@@ -1589,7 +1705,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `3`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_pos(t()) :: ExMujoco.Tensor.t()
   def jnt_pos(model) do
@@ -1602,7 +1718,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `3`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_axis(t()) :: ExMujoco.Tensor.t()
   def jnt_axis(model) do
@@ -1615,7 +1731,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_stiffness(t()) :: ExMujoco.Tensor.t()
   def jnt_stiffness(model) do
@@ -1628,7 +1744,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `mjNPOLY`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_stiffnesspoly(t()) :: ExMujoco.Tensor.t()
   def jnt_stiffnesspoly(model) do
@@ -1641,7 +1757,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_springyield(t()) :: ExMujoco.Tensor.t()
   def jnt_springyield(model) do
@@ -1654,7 +1770,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `2`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_range(t()) :: ExMujoco.Tensor.t()
   def jnt_range(model) do
@@ -1667,7 +1783,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `2`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_actfrcrange(t()) :: ExMujoco.Tensor.t()
   def jnt_actfrcrange(model) do
@@ -1680,7 +1796,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `1`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_margin(t()) :: ExMujoco.Tensor.t()
   def jnt_margin(model) do
@@ -1693,7 +1809,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `njnt` × `nuser_jnt@model`.
   """
-  @doc group: "jnt"
+  @doc group: "joints"
 
   @spec jnt_user(t()) :: ExMujoco.Tensor.t()
   def jnt_user(model) do
@@ -1706,7 +1822,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_bodyid(t()) :: ExMujoco.Tensor.t()
   def dof_bodyid(model) do
@@ -1719,7 +1835,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_jntid(t()) :: ExMujoco.Tensor.t()
   def dof_jntid(model) do
@@ -1732,7 +1848,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_parentid(t()) :: ExMujoco.Tensor.t()
   def dof_parentid(model) do
@@ -1745,7 +1861,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_treeid(t()) :: ExMujoco.Tensor.t()
   def dof_treeid(model) do
@@ -1758,7 +1874,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_Madr(t()) :: ExMujoco.Tensor.t()
   def dof_Madr(model) do
@@ -1771,7 +1887,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_simplenum(t()) :: ExMujoco.Tensor.t()
   def dof_simplenum(model) do
@@ -1784,7 +1900,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nv` × `mjNREF`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_solref(t()) :: ExMujoco.Tensor.t()
   def dof_solref(model) do
@@ -1797,7 +1913,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nv` × `mjNIMP`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_solimp(t()) :: ExMujoco.Tensor.t()
   def dof_solimp(model) do
@@ -1810,7 +1926,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_frictionloss(t()) :: ExMujoco.Tensor.t()
   def dof_frictionloss(model) do
@@ -1823,7 +1939,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_armature(t()) :: ExMujoco.Tensor.t()
   def dof_armature(model) do
@@ -1836,7 +1952,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_damping(t()) :: ExMujoco.Tensor.t()
   def dof_damping(model) do
@@ -1849,7 +1965,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nv` × `mjNPOLY`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_dampingpoly(t()) :: ExMujoco.Tensor.t()
   def dof_dampingpoly(model) do
@@ -1862,7 +1978,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_invweight0(t()) :: ExMujoco.Tensor.t()
   def dof_invweight0(model) do
@@ -1875,7 +1991,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_M0(t()) :: ExMujoco.Tensor.t()
   def dof_M0(model) do
@@ -1888,7 +2004,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nv` × `1`.
   """
-  @doc group: "dof"
+  @doc group: "dofs"
 
   @spec dof_length(t()) :: ExMujoco.Tensor.t()
   def dof_length(model) do
@@ -1901,6 +2017,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntree` × `1`.
   """
+  @doc group: "trees"
 
   @spec tree_bodyadr(t()) :: ExMujoco.Tensor.t()
   def tree_bodyadr(model) do
@@ -1913,6 +2030,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntree` × `1`.
   """
+  @doc group: "trees"
 
   @spec tree_bodynum(t()) :: ExMujoco.Tensor.t()
   def tree_bodynum(model) do
@@ -1925,6 +2043,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntree` × `1`.
   """
+  @doc group: "trees"
 
   @spec tree_dofadr(t()) :: ExMujoco.Tensor.t()
   def tree_dofadr(model) do
@@ -1937,6 +2056,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntree` × `1`.
   """
+  @doc group: "trees"
 
   @spec tree_dofnum(t()) :: ExMujoco.Tensor.t()
   def tree_dofnum(model) do
@@ -1949,6 +2069,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntree` × `1`.
   """
+  @doc group: "trees"
 
   @spec tree_sleep_policy(t()) :: ExMujoco.Tensor.t()
   def tree_sleep_policy(model) do
@@ -1961,7 +2082,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_type(t()) :: ExMujoco.Tensor.t()
   def geom_type(model) do
@@ -1974,7 +2095,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_contype(t()) :: ExMujoco.Tensor.t()
   def geom_contype(model) do
@@ -1987,7 +2108,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_conaffinity(t()) :: ExMujoco.Tensor.t()
   def geom_conaffinity(model) do
@@ -2000,7 +2121,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_condim(t()) :: ExMujoco.Tensor.t()
   def geom_condim(model) do
@@ -2013,7 +2134,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_bodyid(t()) :: ExMujoco.Tensor.t()
   def geom_bodyid(model) do
@@ -2026,7 +2147,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_dataid(t()) :: ExMujoco.Tensor.t()
   def geom_dataid(model) do
@@ -2039,7 +2160,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_matid(t()) :: ExMujoco.Tensor.t()
   def geom_matid(model) do
@@ -2052,7 +2173,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_group(t()) :: ExMujoco.Tensor.t()
   def geom_group(model) do
@@ -2065,7 +2186,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_priority(t()) :: ExMujoco.Tensor.t()
   def geom_priority(model) do
@@ -2078,7 +2199,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_plugin(t()) :: ExMujoco.Tensor.t()
   def geom_plugin(model) do
@@ -2091,7 +2212,7 @@ defmodule ExMujoco.Model do
 
   `mjtByte*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_sameframe(t()) :: ExMujoco.Tensor.t()
   def geom_sameframe(model) do
@@ -2104,7 +2225,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_castshadow(t()) :: ExMujoco.Tensor.t()
   def geom_castshadow(model) do
@@ -2117,7 +2238,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_solmix(t()) :: ExMujoco.Tensor.t()
   def geom_solmix(model) do
@@ -2130,7 +2251,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `mjNREF`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_solref(t()) :: ExMujoco.Tensor.t()
   def geom_solref(model) do
@@ -2143,7 +2264,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `mjNIMP`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_solimp(t()) :: ExMujoco.Tensor.t()
   def geom_solimp(model) do
@@ -2156,7 +2277,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `3`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_size(t()) :: ExMujoco.Tensor.t()
   def geom_size(model) do
@@ -2169,7 +2290,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `6`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_aabb(t()) :: ExMujoco.Tensor.t()
   def geom_aabb(model) do
@@ -2182,7 +2303,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_rbound(t()) :: ExMujoco.Tensor.t()
   def geom_rbound(model) do
@@ -2195,7 +2316,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `3`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_pos(t()) :: ExMujoco.Tensor.t()
   def geom_pos(model) do
@@ -2208,7 +2329,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `4`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_quat(t()) :: ExMujoco.Tensor.t()
   def geom_quat(model) do
@@ -2221,7 +2342,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `3`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_friction(t()) :: ExMujoco.Tensor.t()
   def geom_friction(model) do
@@ -2234,7 +2355,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_margin(t()) :: ExMujoco.Tensor.t()
   def geom_margin(model) do
@@ -2247,7 +2368,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_gap(t()) :: ExMujoco.Tensor.t()
   def geom_gap(model) do
@@ -2260,7 +2381,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `6`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_surfacevel(t()) :: ExMujoco.Tensor.t()
   def geom_surfacevel(model) do
@@ -2273,7 +2394,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `1`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_adhesion(t()) :: ExMujoco.Tensor.t()
   def geom_adhesion(model) do
@@ -2286,7 +2407,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `mjNFLUID`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_fluid(t()) :: ExMujoco.Tensor.t()
   def geom_fluid(model) do
@@ -2299,7 +2420,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ngeom` × `nuser_geom@model`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_user(t()) :: ExMujoco.Tensor.t()
   def geom_user(model) do
@@ -2312,7 +2433,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `ngeom` × `4`.
   """
-  @doc group: "geom"
+  @doc group: "geoms"
 
   @spec geom_rgba(t()) :: ExMujoco.Tensor.t()
   def geom_rgba(model) do
@@ -2325,7 +2446,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsite` × `1`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_type(t()) :: ExMujoco.Tensor.t()
   def site_type(model) do
@@ -2338,7 +2459,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsite` × `1`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_bodyid(t()) :: ExMujoco.Tensor.t()
   def site_bodyid(model) do
@@ -2351,7 +2472,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsite` × `1`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_dataid(t()) :: ExMujoco.Tensor.t()
   def site_dataid(model) do
@@ -2364,7 +2485,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsite` × `1`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_matid(t()) :: ExMujoco.Tensor.t()
   def site_matid(model) do
@@ -2377,7 +2498,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsite` × `1`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_group(t()) :: ExMujoco.Tensor.t()
   def site_group(model) do
@@ -2390,7 +2511,7 @@ defmodule ExMujoco.Model do
 
   `mjtByte*` in C, `nsite` × `1`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_sameframe(t()) :: ExMujoco.Tensor.t()
   def site_sameframe(model) do
@@ -2403,7 +2524,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nsite` × `3`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_size(t()) :: ExMujoco.Tensor.t()
   def site_size(model) do
@@ -2416,7 +2537,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nsite` × `3`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_pos(t()) :: ExMujoco.Tensor.t()
   def site_pos(model) do
@@ -2429,7 +2550,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nsite` × `4`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_quat(t()) :: ExMujoco.Tensor.t()
   def site_quat(model) do
@@ -2442,7 +2563,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nsite` × `nuser_site@model`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_user(t()) :: ExMujoco.Tensor.t()
   def site_user(model) do
@@ -2455,7 +2576,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nsite` × `4`.
   """
-  @doc group: "site"
+  @doc group: "sites"
 
   @spec site_rgba(t()) :: ExMujoco.Tensor.t()
   def site_rgba(model) do
@@ -2468,7 +2589,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ncam` × `1`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_mode(t()) :: ExMujoco.Tensor.t()
   def cam_mode(model) do
@@ -2481,7 +2602,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ncam` × `1`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_bodyid(t()) :: ExMujoco.Tensor.t()
   def cam_bodyid(model) do
@@ -2494,7 +2615,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ncam` × `1`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_targetbodyid(t()) :: ExMujoco.Tensor.t()
   def cam_targetbodyid(model) do
@@ -2507,7 +2628,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ncam` × `3`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_pos(t()) :: ExMujoco.Tensor.t()
   def cam_pos(model) do
@@ -2520,7 +2641,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ncam` × `4`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_quat(t()) :: ExMujoco.Tensor.t()
   def cam_quat(model) do
@@ -2533,7 +2654,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ncam` × `3`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_poscom0(t()) :: ExMujoco.Tensor.t()
   def cam_poscom0(model) do
@@ -2546,7 +2667,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ncam` × `3`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_pos0(t()) :: ExMujoco.Tensor.t()
   def cam_pos0(model) do
@@ -2559,7 +2680,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ncam` × `9`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_mat0(t()) :: ExMujoco.Tensor.t()
   def cam_mat0(model) do
@@ -2572,7 +2693,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ncam` × `1`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_projection(t()) :: ExMujoco.Tensor.t()
   def cam_projection(model) do
@@ -2585,7 +2706,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ncam` × `1`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_fovy(t()) :: ExMujoco.Tensor.t()
   def cam_fovy(model) do
@@ -2598,7 +2719,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ncam` × `1`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_ipd(t()) :: ExMujoco.Tensor.t()
   def cam_ipd(model) do
@@ -2611,7 +2732,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ncam` × `2`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_resolution(t()) :: ExMujoco.Tensor.t()
   def cam_resolution(model) do
@@ -2624,7 +2745,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ncam` × `1`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_output(t()) :: ExMujoco.Tensor.t()
   def cam_output(model) do
@@ -2637,7 +2758,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `ncam` × `2`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_sensorsize(t()) :: ExMujoco.Tensor.t()
   def cam_sensorsize(model) do
@@ -2650,7 +2771,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `ncam` × `4`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_intrinsic(t()) :: ExMujoco.Tensor.t()
   def cam_intrinsic(model) do
@@ -2663,7 +2784,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ncam` × `nuser_cam@model`.
   """
-  @doc group: "cam"
+  @doc group: "cameras"
 
   @spec cam_user(t()) :: ExMujoco.Tensor.t()
   def cam_user(model) do
@@ -2676,7 +2797,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_mode(t()) :: ExMujoco.Tensor.t()
   def light_mode(model) do
@@ -2689,7 +2810,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_bodyid(t()) :: ExMujoco.Tensor.t()
   def light_bodyid(model) do
@@ -2702,7 +2823,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_targetbodyid(t()) :: ExMujoco.Tensor.t()
   def light_targetbodyid(model) do
@@ -2715,7 +2836,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_type(t()) :: ExMujoco.Tensor.t()
   def light_type(model) do
@@ -2728,7 +2849,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_texid(t()) :: ExMujoco.Tensor.t()
   def light_texid(model) do
@@ -2741,7 +2862,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_castshadow(t()) :: ExMujoco.Tensor.t()
   def light_castshadow(model) do
@@ -2754,7 +2875,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_bulbradius(t()) :: ExMujoco.Tensor.t()
   def light_bulbradius(model) do
@@ -2767,7 +2888,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_intensity(t()) :: ExMujoco.Tensor.t()
   def light_intensity(model) do
@@ -2780,7 +2901,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_range(t()) :: ExMujoco.Tensor.t()
   def light_range(model) do
@@ -2793,7 +2914,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_active(t()) :: ExMujoco.Tensor.t()
   def light_active(model) do
@@ -2806,7 +2927,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nlight` × `3`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_pos(t()) :: ExMujoco.Tensor.t()
   def light_pos(model) do
@@ -2819,7 +2940,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nlight` × `3`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_dir(t()) :: ExMujoco.Tensor.t()
   def light_dir(model) do
@@ -2832,7 +2953,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nlight` × `3`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_poscom0(t()) :: ExMujoco.Tensor.t()
   def light_poscom0(model) do
@@ -2845,7 +2966,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nlight` × `3`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_pos0(t()) :: ExMujoco.Tensor.t()
   def light_pos0(model) do
@@ -2858,7 +2979,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nlight` × `3`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_dir0(t()) :: ExMujoco.Tensor.t()
   def light_dir0(model) do
@@ -2871,7 +2992,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `3`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_attenuation(t()) :: ExMujoco.Tensor.t()
   def light_attenuation(model) do
@@ -2884,7 +3005,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_cutoff(t()) :: ExMujoco.Tensor.t()
   def light_cutoff(model) do
@@ -2897,7 +3018,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_softness(t()) :: ExMujoco.Tensor.t()
   def light_softness(model) do
@@ -2910,7 +3031,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `1`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_exponent(t()) :: ExMujoco.Tensor.t()
   def light_exponent(model) do
@@ -2923,7 +3044,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `3`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_ambient(t()) :: ExMujoco.Tensor.t()
   def light_ambient(model) do
@@ -2936,7 +3057,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `3`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_diffuse(t()) :: ExMujoco.Tensor.t()
   def light_diffuse(model) do
@@ -2949,7 +3070,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nlight` × `3`.
   """
-  @doc group: "light"
+  @doc group: "lights"
 
   @spec light_specular(t()) :: ExMujoco.Tensor.t()
   def light_specular(model) do
@@ -2962,7 +3083,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_contype(t()) :: ExMujoco.Tensor.t()
   def flex_contype(model) do
@@ -2975,7 +3096,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_conaffinity(t()) :: ExMujoco.Tensor.t()
   def flex_conaffinity(model) do
@@ -2988,7 +3109,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_condim(t()) :: ExMujoco.Tensor.t()
   def flex_condim(model) do
@@ -3001,7 +3122,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_priority(t()) :: ExMujoco.Tensor.t()
   def flex_priority(model) do
@@ -3014,7 +3135,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_solmix(t()) :: ExMujoco.Tensor.t()
   def flex_solmix(model) do
@@ -3027,7 +3148,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `mjNREF`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_solref(t()) :: ExMujoco.Tensor.t()
   def flex_solref(model) do
@@ -3040,7 +3161,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `mjNIMP`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_solimp(t()) :: ExMujoco.Tensor.t()
   def flex_solimp(model) do
@@ -3053,7 +3174,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `3`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_friction(t()) :: ExMujoco.Tensor.t()
   def flex_friction(model) do
@@ -3066,7 +3187,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_margin(t()) :: ExMujoco.Tensor.t()
   def flex_margin(model) do
@@ -3079,7 +3200,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_gap(t()) :: ExMujoco.Tensor.t()
   def flex_gap(model) do
@@ -3092,7 +3213,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_selfcollide(t()) :: ExMujoco.Tensor.t()
   def flex_selfcollide(model) do
@@ -3105,7 +3226,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_activelayers(t()) :: ExMujoco.Tensor.t()
   def flex_activelayers(model) do
@@ -3118,7 +3239,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: contact properties"
 
   @spec flex_passive(t()) :: ExMujoco.Tensor.t()
   def flex_passive(model) do
@@ -3131,7 +3252,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_dim(t()) :: ExMujoco.Tensor.t()
   def flex_dim(model) do
@@ -3144,7 +3265,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexelem` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_matid(t()) :: ExMujoco.Tensor.t()
   def flex_matid(model) do
@@ -3157,7 +3278,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_group(t()) :: ExMujoco.Tensor.t()
   def flex_group(model) do
@@ -3170,7 +3291,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_interp(t()) :: ExMujoco.Tensor.t()
   def flex_interp(model) do
@@ -3183,7 +3304,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `3`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_cellnum(t()) :: ExMujoco.Tensor.t()
   def flex_cellnum(model) do
@@ -3196,7 +3317,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_nodeadr(t()) :: ExMujoco.Tensor.t()
   def flex_nodeadr(model) do
@@ -3209,7 +3330,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_nodenum(t()) :: ExMujoco.Tensor.t()
   def flex_nodenum(model) do
@@ -3222,7 +3343,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_vertadr(t()) :: ExMujoco.Tensor.t()
   def flex_vertadr(model) do
@@ -3235,7 +3356,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_vertnum(t()) :: ExMujoco.Tensor.t()
   def flex_vertnum(model) do
@@ -3248,7 +3369,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_edgeadr(t()) :: ExMujoco.Tensor.t()
   def flex_edgeadr(model) do
@@ -3261,7 +3382,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_edgenum(t()) :: ExMujoco.Tensor.t()
   def flex_edgenum(model) do
@@ -3274,7 +3395,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_elemadr(t()) :: ExMujoco.Tensor.t()
   def flex_elemadr(model) do
@@ -3287,7 +3408,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_elemnum(t()) :: ExMujoco.Tensor.t()
   def flex_elemnum(model) do
@@ -3300,7 +3421,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_elemdataadr(t()) :: ExMujoco.Tensor.t()
   def flex_elemdataadr(model) do
@@ -3313,7 +3434,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_stiffnessadr(t()) :: ExMujoco.Tensor.t()
   def flex_stiffnessadr(model) do
@@ -3326,7 +3447,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_elemedgeadr(t()) :: ExMujoco.Tensor.t()
   def flex_elemedgeadr(model) do
@@ -3339,7 +3460,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_bendingadr(t()) :: ExMujoco.Tensor.t()
   def flex_bendingadr(model) do
@@ -3352,7 +3473,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_plasticadr(t()) :: ExMujoco.Tensor.t()
   def flex_plasticadr(model) do
@@ -3365,7 +3486,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_plasticmode(t()) :: ExMujoco.Tensor.t()
   def flex_plasticmode(model) do
@@ -3378,7 +3499,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_shellnum(t()) :: ExMujoco.Tensor.t()
   def flex_shellnum(model) do
@@ -3391,7 +3512,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_shelldataadr(t()) :: ExMujoco.Tensor.t()
   def flex_shelldataadr(model) do
@@ -3404,7 +3525,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_texcoordadr(t()) :: ExMujoco.Tensor.t()
   def flex_texcoordadr(model) do
@@ -3417,7 +3538,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexnode` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_nodebodyid(t()) :: ExMujoco.Tensor.t()
   def flex_nodebodyid(model) do
@@ -3430,7 +3551,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexvert` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_vertbodyid(t()) :: ExMujoco.Tensor.t()
   def flex_vertbodyid(model) do
@@ -3443,7 +3564,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexvert` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_vertcell(t()) :: ExMujoco.Tensor.t()
   def flex_vertcell(model) do
@@ -3456,7 +3577,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexedge` × `2`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_edge(t()) :: ExMujoco.Tensor.t()
   def flex_edge(model) do
@@ -3469,7 +3590,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexedge` × `2`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_edgeflap(t()) :: ExMujoco.Tensor.t()
   def flex_edgeflap(model) do
@@ -3482,7 +3603,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexelemdata` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_elem(t()) :: ExMujoco.Tensor.t()
   def flex_elem(model) do
@@ -3495,7 +3616,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexelemdata` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_elemtexcoord(t()) :: ExMujoco.Tensor.t()
   def flex_elemtexcoord(model) do
@@ -3508,7 +3629,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexelemedge` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_elemedge(t()) :: ExMujoco.Tensor.t()
   def flex_elemedge(model) do
@@ -3521,7 +3642,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexelem` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_elemlayer(t()) :: ExMujoco.Tensor.t()
   def flex_elemlayer(model) do
@@ -3534,7 +3655,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexshelldata` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_shell(t()) :: ExMujoco.Tensor.t()
   def flex_shell(model) do
@@ -3547,7 +3668,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflexvert` × `3`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_vert(t()) :: ExMujoco.Tensor.t()
   def flex_vert(model) do
@@ -3560,7 +3681,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflexvert` × `3`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_vert0(t()) :: ExMujoco.Tensor.t()
   def flex_vert0(model) do
@@ -3573,7 +3694,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflexnode` × `3`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_node(t()) :: ExMujoco.Tensor.t()
   def flex_node(model) do
@@ -3586,7 +3707,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflexnode` × `3`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_node0(t()) :: ExMujoco.Tensor.t()
   def flex_node0(model) do
@@ -3599,6 +3720,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflexedge` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec flexedge_length0(t()) :: ExMujoco.Tensor.t()
   def flexedge_length0(model) do
@@ -3611,6 +3733,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflexedge` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec flexedge_invweight0(t()) :: ExMujoco.Tensor.t()
   def flexedge_invweight0(model) do
@@ -3623,7 +3746,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_radius(t()) :: ExMujoco.Tensor.t()
   def flex_radius(model) do
@@ -3636,7 +3759,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `3`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_size(t()) :: ExMujoco.Tensor.t()
   def flex_size(model) do
@@ -3649,7 +3772,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflexstiffness` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_stiffness(t()) :: ExMujoco.Tensor.t()
   def flex_stiffness(model) do
@@ -3662,7 +3785,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflexbending` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_bending(t()) :: ExMujoco.Tensor.t()
   def flex_bending(model) do
@@ -3675,6 +3798,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nefm0dof` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec efm0_dofid(t()) :: ExMujoco.Tensor.t()
   def efm0_dofid(model) do
@@ -3687,6 +3811,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nefm0dof` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec efm0_L_rownnz(t()) :: ExMujoco.Tensor.t()
   def efm0_L_rownnz(model) do
@@ -3699,6 +3824,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nefm0dof` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec efm0_L_rowadr(t()) :: ExMujoco.Tensor.t()
   def efm0_L_rowadr(model) do
@@ -3711,6 +3837,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nefm0L` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec efm0_L_colind(t()) :: ExMujoco.Tensor.t()
   def efm0_L_colind(model) do
@@ -3723,6 +3850,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nefm0L` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec efm0_L(t()) :: ExMujoco.Tensor.t()
   def efm0_L(model) do
@@ -3735,6 +3863,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nefmCvert` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec efmC_perm(t()) :: ExMujoco.Tensor.t()
   def efmC_perm(model) do
@@ -3747,7 +3876,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_damping(t()) :: ExMujoco.Tensor.t()
   def flex_damping(model) do
@@ -3760,7 +3889,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `2`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_yield(t()) :: ExMujoco.Tensor.t()
   def flex_yield(model) do
@@ -3773,7 +3902,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_edgestiffness(t()) :: ExMujoco.Tensor.t()
   def flex_edgestiffness(model) do
@@ -3786,7 +3915,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_edgedamping(t()) :: ExMujoco.Tensor.t()
   def flex_edgedamping(model) do
@@ -3799,7 +3928,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_edgeequality(t()) :: ExMujoco.Tensor.t()
   def flex_edgeequality(model) do
@@ -3812,7 +3941,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_rigid(t()) :: ExMujoco.Tensor.t()
   def flex_rigid(model) do
@@ -3825,6 +3954,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nflexedge` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec flexedge_rigid(t()) :: ExMujoco.Tensor.t()
   def flexedge_rigid(model) do
@@ -3837,7 +3967,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_centered(t()) :: ExMujoco.Tensor.t()
   def flex_centered(model) do
@@ -3850,7 +3980,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_flatskin(t()) :: ExMujoco.Tensor.t()
   def flex_flatskin(model) do
@@ -3863,7 +3993,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_bvhadr(t()) :: ExMujoco.Tensor.t()
   def flex_bvhadr(model) do
@@ -3876,7 +4006,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_bvhnum(t()) :: ExMujoco.Tensor.t()
   def flex_bvhnum(model) do
@@ -3889,6 +4019,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexedge` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec flexedge_J_rownnz(t()) :: ExMujoco.Tensor.t()
   def flexedge_J_rownnz(model) do
@@ -3901,6 +4032,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflexedge` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec flexedge_J_rowadr(t()) :: ExMujoco.Tensor.t()
   def flexedge_J_rowadr(model) do
@@ -3913,6 +4045,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nJfe` × `1`.
   """
+  @doc group: "flexes: other properties"
 
   @spec flexedge_J_colind(t()) :: ExMujoco.Tensor.t()
   def flexedge_J_colind(model) do
@@ -3925,7 +4058,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nflex` × `4`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_rgba(t()) :: ExMujoco.Tensor.t()
   def flex_rgba(model) do
@@ -3938,7 +4071,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nflextexcoord` × `2`.
   """
-  @doc group: "flex"
+  @doc group: "flexes: other properties"
 
   @spec flex_texcoord(t()) :: ExMujoco.Tensor.t()
   def flex_texcoord(model) do
@@ -3951,7 +4084,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_vertadr(t()) :: ExMujoco.Tensor.t()
   def mesh_vertadr(model) do
@@ -3964,7 +4097,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_vertnum(t()) :: ExMujoco.Tensor.t()
   def mesh_vertnum(model) do
@@ -3977,7 +4110,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_faceadr(t()) :: ExMujoco.Tensor.t()
   def mesh_faceadr(model) do
@@ -3990,7 +4123,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_facenum(t()) :: ExMujoco.Tensor.t()
   def mesh_facenum(model) do
@@ -4003,7 +4136,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_bvhadr(t()) :: ExMujoco.Tensor.t()
   def mesh_bvhadr(model) do
@@ -4016,7 +4149,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_bvhnum(t()) :: ExMujoco.Tensor.t()
   def mesh_bvhnum(model) do
@@ -4029,7 +4162,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_octadr(t()) :: ExMujoco.Tensor.t()
   def mesh_octadr(model) do
@@ -4042,7 +4175,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_octnum(t()) :: ExMujoco.Tensor.t()
   def mesh_octnum(model) do
@@ -4055,7 +4188,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_normaladr(t()) :: ExMujoco.Tensor.t()
   def mesh_normaladr(model) do
@@ -4068,7 +4201,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_normalnum(t()) :: ExMujoco.Tensor.t()
   def mesh_normalnum(model) do
@@ -4081,7 +4214,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_texcoordadr(t()) :: ExMujoco.Tensor.t()
   def mesh_texcoordadr(model) do
@@ -4094,7 +4227,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_texcoordnum(t()) :: ExMujoco.Tensor.t()
   def mesh_texcoordnum(model) do
@@ -4107,7 +4240,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_graphadr(t()) :: ExMujoco.Tensor.t()
   def mesh_graphadr(model) do
@@ -4120,7 +4253,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `27`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_extrema(t()) :: ExMujoco.Tensor.t()
   def mesh_extrema(model) do
@@ -4133,7 +4266,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmeshvert` × `3`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_vert(t()) :: ExMujoco.Tensor.t()
   def mesh_vert(model) do
@@ -4146,7 +4279,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmeshnormal` × `3`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_normal(t()) :: ExMujoco.Tensor.t()
   def mesh_normal(model) do
@@ -4159,7 +4292,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmeshtexcoord` × `2`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_texcoord(t()) :: ExMujoco.Tensor.t()
   def mesh_texcoord(model) do
@@ -4172,7 +4305,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshface` × `3`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_face(t()) :: ExMujoco.Tensor.t()
   def mesh_face(model) do
@@ -4185,7 +4318,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshface` × `3`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_facenormal(t()) :: ExMujoco.Tensor.t()
   def mesh_facenormal(model) do
@@ -4198,7 +4331,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshface` × `3`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_facetexcoord(t()) :: ExMujoco.Tensor.t()
   def mesh_facetexcoord(model) do
@@ -4211,7 +4344,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshgraph` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_graph(t()) :: ExMujoco.Tensor.t()
   def mesh_graph(model) do
@@ -4224,7 +4357,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nmesh` × `3`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_scale(t()) :: ExMujoco.Tensor.t()
   def mesh_scale(model) do
@@ -4237,7 +4370,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nmesh` × `3`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_pos(t()) :: ExMujoco.Tensor.t()
   def mesh_pos(model) do
@@ -4250,7 +4383,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nmesh` × `4`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_quat(t()) :: ExMujoco.Tensor.t()
   def mesh_quat(model) do
@@ -4263,7 +4396,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_pathadr(t()) :: ExMujoco.Tensor.t()
   def mesh_pathadr(model) do
@@ -4276,7 +4409,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_polynum(t()) :: ExMujoco.Tensor.t()
   def mesh_polynum(model) do
@@ -4289,7 +4422,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_polyadr(t()) :: ExMujoco.Tensor.t()
   def mesh_polyadr(model) do
@@ -4302,7 +4435,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nmeshpoly` × `3`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_polynormal(t()) :: ExMujoco.Tensor.t()
   def mesh_polynormal(model) do
@@ -4315,7 +4448,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshpoly` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_polyvertadr(t()) :: ExMujoco.Tensor.t()
   def mesh_polyvertadr(model) do
@@ -4328,7 +4461,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshpoly` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_polyvertnum(t()) :: ExMujoco.Tensor.t()
   def mesh_polyvertnum(model) do
@@ -4341,7 +4474,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshpolyvert` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_polyvert(t()) :: ExMujoco.Tensor.t()
   def mesh_polyvert(model) do
@@ -4354,7 +4487,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshvert` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_polymapadr(t()) :: ExMujoco.Tensor.t()
   def mesh_polymapadr(model) do
@@ -4367,7 +4500,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshvert` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_polymapnum(t()) :: ExMujoco.Tensor.t()
   def mesh_polymapnum(model) do
@@ -4380,7 +4513,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmeshpolymap` × `1`.
   """
-  @doc group: "mesh"
+  @doc group: "meshes"
 
   @spec mesh_polymap(t()) :: ExMujoco.Tensor.t()
   def mesh_polymap(model) do
@@ -4393,7 +4526,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_matid(t()) :: ExMujoco.Tensor.t()
   def skin_matid(model) do
@@ -4406,7 +4539,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_group(t()) :: ExMujoco.Tensor.t()
   def skin_group(model) do
@@ -4419,7 +4552,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nskin` × `4`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_rgba(t()) :: ExMujoco.Tensor.t()
   def skin_rgba(model) do
@@ -4432,7 +4565,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_inflate(t()) :: ExMujoco.Tensor.t()
   def skin_inflate(model) do
@@ -4445,7 +4578,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_vertadr(t()) :: ExMujoco.Tensor.t()
   def skin_vertadr(model) do
@@ -4458,7 +4591,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_vertnum(t()) :: ExMujoco.Tensor.t()
   def skin_vertnum(model) do
@@ -4471,7 +4604,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_texcoordadr(t()) :: ExMujoco.Tensor.t()
   def skin_texcoordadr(model) do
@@ -4484,7 +4617,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_faceadr(t()) :: ExMujoco.Tensor.t()
   def skin_faceadr(model) do
@@ -4497,7 +4630,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_facenum(t()) :: ExMujoco.Tensor.t()
   def skin_facenum(model) do
@@ -4510,7 +4643,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_boneadr(t()) :: ExMujoco.Tensor.t()
   def skin_boneadr(model) do
@@ -4523,7 +4656,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_bonenum(t()) :: ExMujoco.Tensor.t()
   def skin_bonenum(model) do
@@ -4536,7 +4669,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nskinvert` × `3`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_vert(t()) :: ExMujoco.Tensor.t()
   def skin_vert(model) do
@@ -4549,7 +4682,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nskintexvert` × `2`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_texcoord(t()) :: ExMujoco.Tensor.t()
   def skin_texcoord(model) do
@@ -4562,7 +4695,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskinface` × `3`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_face(t()) :: ExMujoco.Tensor.t()
   def skin_face(model) do
@@ -4575,7 +4708,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskinbone` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_bonevertadr(t()) :: ExMujoco.Tensor.t()
   def skin_bonevertadr(model) do
@@ -4588,7 +4721,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskinbone` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_bonevertnum(t()) :: ExMujoco.Tensor.t()
   def skin_bonevertnum(model) do
@@ -4601,7 +4734,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nskinbone` × `3`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_bonebindpos(t()) :: ExMujoco.Tensor.t()
   def skin_bonebindpos(model) do
@@ -4614,7 +4747,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nskinbone` × `4`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_bonebindquat(t()) :: ExMujoco.Tensor.t()
   def skin_bonebindquat(model) do
@@ -4627,7 +4760,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskinbone` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_bonebodyid(t()) :: ExMujoco.Tensor.t()
   def skin_bonebodyid(model) do
@@ -4640,7 +4773,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskinbonevert` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_bonevertid(t()) :: ExMujoco.Tensor.t()
   def skin_bonevertid(model) do
@@ -4653,7 +4786,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nskinbonevert` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_bonevertweight(t()) :: ExMujoco.Tensor.t()
   def skin_bonevertweight(model) do
@@ -4666,7 +4799,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "skin"
+  @doc group: "skins"
 
   @spec skin_pathadr(t()) :: ExMujoco.Tensor.t()
   def skin_pathadr(model) do
@@ -4679,6 +4812,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nhfield` × `4`.
   """
+  @doc group: "height fields"
 
   @spec hfield_size(t()) :: ExMujoco.Tensor.t()
   def hfield_size(model) do
@@ -4691,6 +4825,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nhfield` × `1`.
   """
+  @doc group: "height fields"
 
   @spec hfield_nrow(t()) :: ExMujoco.Tensor.t()
   def hfield_nrow(model) do
@@ -4703,6 +4838,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nhfield` × `1`.
   """
+  @doc group: "height fields"
 
   @spec hfield_ncol(t()) :: ExMujoco.Tensor.t()
   def hfield_ncol(model) do
@@ -4715,6 +4851,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nhfield` × `1`.
   """
+  @doc group: "height fields"
 
   @spec hfield_adr(t()) :: ExMujoco.Tensor.t()
   def hfield_adr(model) do
@@ -4727,6 +4864,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nhfielddata` × `1`.
   """
+  @doc group: "height fields"
 
   @spec hfield_data(t()) :: ExMujoco.Tensor.t()
   def hfield_data(model) do
@@ -4739,6 +4877,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nhfield` × `1`.
   """
+  @doc group: "height fields"
 
   @spec hfield_pathadr(t()) :: ExMujoco.Tensor.t()
   def hfield_pathadr(model) do
@@ -4751,6 +4890,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntex` × `1`.
   """
+  @doc group: "textures"
 
   @spec tex_type(t()) :: ExMujoco.Tensor.t()
   def tex_type(model) do
@@ -4763,6 +4903,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntex` × `1`.
   """
+  @doc group: "textures"
 
   @spec tex_colorspace(t()) :: ExMujoco.Tensor.t()
   def tex_colorspace(model) do
@@ -4775,6 +4916,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntex` × `1`.
   """
+  @doc group: "textures"
 
   @spec tex_height(t()) :: ExMujoco.Tensor.t()
   def tex_height(model) do
@@ -4787,6 +4929,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntex` × `1`.
   """
+  @doc group: "textures"
 
   @spec tex_width(t()) :: ExMujoco.Tensor.t()
   def tex_width(model) do
@@ -4799,6 +4942,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntex` × `1`.
   """
+  @doc group: "textures"
 
   @spec tex_nchannel(t()) :: ExMujoco.Tensor.t()
   def tex_nchannel(model) do
@@ -4811,6 +4955,7 @@ defmodule ExMujoco.Model do
 
   `mjtByte*` in C, `ntexdata` × `1`.
   """
+  @doc group: "textures"
 
   @spec tex_data(t()) :: ExMujoco.Tensor.t()
   def tex_data(model) do
@@ -4823,6 +4968,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntex` × `1`.
   """
+  @doc group: "textures"
 
   @spec tex_pathadr(t()) :: ExMujoco.Tensor.t()
   def tex_pathadr(model) do
@@ -4835,6 +4981,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntex` × `1`.
   """
+  @doc group: "textures"
 
   @spec tex_contenttypeadr(t()) :: ExMujoco.Tensor.t()
   def tex_contenttypeadr(model) do
@@ -4847,7 +4994,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmat` × `mjNTEXROLE`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_texid(t()) :: ExMujoco.Tensor.t()
   def mat_texid(model) do
@@ -4860,7 +5007,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nmat` × `1`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_texuniform(t()) :: ExMujoco.Tensor.t()
   def mat_texuniform(model) do
@@ -4873,7 +5020,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmat` × `2`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_texrepeat(t()) :: ExMujoco.Tensor.t()
   def mat_texrepeat(model) do
@@ -4886,7 +5033,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmat` × `1`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_emission(t()) :: ExMujoco.Tensor.t()
   def mat_emission(model) do
@@ -4899,7 +5046,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmat` × `1`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_specular(t()) :: ExMujoco.Tensor.t()
   def mat_specular(model) do
@@ -4912,7 +5059,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmat` × `1`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_shininess(t()) :: ExMujoco.Tensor.t()
   def mat_shininess(model) do
@@ -4925,7 +5072,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmat` × `1`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_reflectance(t()) :: ExMujoco.Tensor.t()
   def mat_reflectance(model) do
@@ -4938,7 +5085,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmat` × `1`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_metallic(t()) :: ExMujoco.Tensor.t()
   def mat_metallic(model) do
@@ -4951,7 +5098,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmat` × `1`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_roughness(t()) :: ExMujoco.Tensor.t()
   def mat_roughness(model) do
@@ -4964,7 +5111,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `nmat` × `4`.
   """
-  @doc group: "mat"
+  @doc group: "materials"
 
   @spec mat_rgba(t()) :: ExMujoco.Tensor.t()
   def mat_rgba(model) do
@@ -4977,7 +5124,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `npair` × `1`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_dim(t()) :: ExMujoco.Tensor.t()
   def pair_dim(model) do
@@ -4990,7 +5137,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `npair` × `1`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_geom1(t()) :: ExMujoco.Tensor.t()
   def pair_geom1(model) do
@@ -5003,7 +5150,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `npair` × `1`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_geom2(t()) :: ExMujoco.Tensor.t()
   def pair_geom2(model) do
@@ -5016,7 +5163,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `npair` × `1`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_signature(t()) :: ExMujoco.Tensor.t()
   def pair_signature(model) do
@@ -5029,7 +5176,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `npair` × `mjNREF`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_solref(t()) :: ExMujoco.Tensor.t()
   def pair_solref(model) do
@@ -5042,7 +5189,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `npair` × `mjNREF`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_solreffriction(t()) :: ExMujoco.Tensor.t()
   def pair_solreffriction(model) do
@@ -5055,7 +5202,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `npair` × `mjNIMP`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_solimp(t()) :: ExMujoco.Tensor.t()
   def pair_solimp(model) do
@@ -5068,7 +5215,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `npair` × `1`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_margin(t()) :: ExMujoco.Tensor.t()
   def pair_margin(model) do
@@ -5081,7 +5228,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `npair` × `1`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_gap(t()) :: ExMujoco.Tensor.t()
   def pair_gap(model) do
@@ -5094,7 +5241,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `npair` × `1`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_adhesion(t()) :: ExMujoco.Tensor.t()
   def pair_adhesion(model) do
@@ -5107,7 +5254,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `npair` × `5`.
   """
-  @doc group: "pair"
+  @doc group: "predefined geom pairs for collision detection; has precedence over exclude"
 
   @spec pair_friction(t()) :: ExMujoco.Tensor.t()
   def pair_friction(model) do
@@ -5120,6 +5267,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nexclude` × `1`.
   """
+  @doc group: "excluded body pairs for collision detection"
 
   @spec exclude_signature(t()) :: ExMujoco.Tensor.t()
   def exclude_signature(model) do
@@ -5132,6 +5280,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `neq` × `1`.
   """
+  @doc group: "equality constraints"
 
   @spec eq_type(t()) :: ExMujoco.Tensor.t()
   def eq_type(model) do
@@ -5144,6 +5293,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `neq` × `1`.
   """
+  @doc group: "equality constraints"
 
   @spec eq_obj1id(t()) :: ExMujoco.Tensor.t()
   def eq_obj1id(model) do
@@ -5156,6 +5306,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `neq` × `1`.
   """
+  @doc group: "equality constraints"
 
   @spec eq_obj2id(t()) :: ExMujoco.Tensor.t()
   def eq_obj2id(model) do
@@ -5168,6 +5319,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `neq` × `1`.
   """
+  @doc group: "equality constraints"
 
   @spec eq_objtype(t()) :: ExMujoco.Tensor.t()
   def eq_objtype(model) do
@@ -5180,6 +5332,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `neq` × `1`.
   """
+  @doc group: "equality constraints"
 
   @spec eq_active0(t()) :: ExMujoco.Tensor.t()
   def eq_active0(model) do
@@ -5192,6 +5345,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `neq` × `mjNREF`.
   """
+  @doc group: "equality constraints"
 
   @spec eq_solref(t()) :: ExMujoco.Tensor.t()
   def eq_solref(model) do
@@ -5204,6 +5358,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `neq` × `mjNIMP`.
   """
+  @doc group: "equality constraints"
 
   @spec eq_solimp(t()) :: ExMujoco.Tensor.t()
   def eq_solimp(model) do
@@ -5216,6 +5371,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `neq` × `mjNEQDATA`.
   """
+  @doc group: "equality constraints"
 
   @spec eq_data(t()) :: ExMujoco.Tensor.t()
   def eq_data(model) do
@@ -5228,7 +5384,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_type(t()) :: ExMujoco.Tensor.t()
   def tendon_type(model) do
@@ -5241,7 +5397,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_adr(t()) :: ExMujoco.Tensor.t()
   def tendon_adr(model) do
@@ -5254,7 +5410,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_num(t()) :: ExMujoco.Tensor.t()
   def tendon_num(model) do
@@ -5267,7 +5423,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_matid(t()) :: ExMujoco.Tensor.t()
   def tendon_matid(model) do
@@ -5280,7 +5436,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_actuatorid(t()) :: ExMujoco.Tensor.t()
   def tendon_actuatorid(model) do
@@ -5293,7 +5449,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_group(t()) :: ExMujoco.Tensor.t()
   def tendon_group(model) do
@@ -5306,7 +5462,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_plasticadr(t()) :: ExMujoco.Tensor.t()
   def tendon_plasticadr(model) do
@@ -5319,7 +5475,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_treenum(t()) :: ExMujoco.Tensor.t()
   def tendon_treenum(model) do
@@ -5332,7 +5488,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `2`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_treeid(t()) :: ExMujoco.Tensor.t()
   def tendon_treeid(model) do
@@ -5345,6 +5501,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
+  @doc group: "tendons"
 
   @spec ten_J_rownnz(t()) :: ExMujoco.Tensor.t()
   def ten_J_rownnz(model) do
@@ -5357,6 +5514,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
+  @doc group: "tendons"
 
   @spec ten_J_rowadr(t()) :: ExMujoco.Tensor.t()
   def ten_J_rowadr(model) do
@@ -5369,6 +5527,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nJten` × `1`.
   """
+  @doc group: "tendons"
 
   @spec ten_J_colind(t()) :: ExMujoco.Tensor.t()
   def ten_J_colind(model) do
@@ -5381,7 +5540,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_limited(t()) :: ExMujoco.Tensor.t()
   def tendon_limited(model) do
@@ -5394,7 +5553,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_actfrclimited(t()) :: ExMujoco.Tensor.t()
   def tendon_actfrclimited(model) do
@@ -5407,7 +5566,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_width(t()) :: ExMujoco.Tensor.t()
   def tendon_width(model) do
@@ -5420,7 +5579,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `mjNREF`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_solref_lim(t()) :: ExMujoco.Tensor.t()
   def tendon_solref_lim(model) do
@@ -5433,7 +5592,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `mjNIMP`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_solimp_lim(t()) :: ExMujoco.Tensor.t()
   def tendon_solimp_lim(model) do
@@ -5446,7 +5605,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `mjNREF`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_solref_fri(t()) :: ExMujoco.Tensor.t()
   def tendon_solref_fri(model) do
@@ -5459,7 +5618,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `mjNIMP`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_solimp_fri(t()) :: ExMujoco.Tensor.t()
   def tendon_solimp_fri(model) do
@@ -5472,7 +5631,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `2`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_range(t()) :: ExMujoco.Tensor.t()
   def tendon_range(model) do
@@ -5485,7 +5644,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `2`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_actfrcrange(t()) :: ExMujoco.Tensor.t()
   def tendon_actfrcrange(model) do
@@ -5498,7 +5657,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_margin(t()) :: ExMujoco.Tensor.t()
   def tendon_margin(model) do
@@ -5511,7 +5670,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_stiffness(t()) :: ExMujoco.Tensor.t()
   def tendon_stiffness(model) do
@@ -5524,7 +5683,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `mjNPOLY`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_stiffnesspoly(t()) :: ExMujoco.Tensor.t()
   def tendon_stiffnesspoly(model) do
@@ -5537,7 +5696,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_damping(t()) :: ExMujoco.Tensor.t()
   def tendon_damping(model) do
@@ -5550,7 +5709,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `mjNPOLY`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_dampingpoly(t()) :: ExMujoco.Tensor.t()
   def tendon_dampingpoly(model) do
@@ -5563,7 +5722,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_armature(t()) :: ExMujoco.Tensor.t()
   def tendon_armature(model) do
@@ -5576,7 +5735,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_frictionloss(t()) :: ExMujoco.Tensor.t()
   def tendon_frictionloss(model) do
@@ -5589,7 +5748,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `2`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_lengthspring(t()) :: ExMujoco.Tensor.t()
   def tendon_lengthspring(model) do
@@ -5602,7 +5761,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_springyield(t()) :: ExMujoco.Tensor.t()
   def tendon_springyield(model) do
@@ -5615,7 +5774,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_length0(t()) :: ExMujoco.Tensor.t()
   def tendon_length0(model) do
@@ -5628,7 +5787,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `1`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_invweight0(t()) :: ExMujoco.Tensor.t()
   def tendon_invweight0(model) do
@@ -5641,7 +5800,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntendon` × `nuser_tendon@model`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_user(t()) :: ExMujoco.Tensor.t()
   def tendon_user(model) do
@@ -5654,7 +5813,7 @@ defmodule ExMujoco.Model do
 
   `float*` in C, `ntendon` × `4`.
   """
-  @doc group: "tendon"
+  @doc group: "tendons"
 
   @spec tendon_rgba(t()) :: ExMujoco.Tensor.t()
   def tendon_rgba(model) do
@@ -5667,6 +5826,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nwrap` × `1`.
   """
+  @doc group: "list of all wrap objects in tendon paths"
 
   @spec wrap_type(t()) :: ExMujoco.Tensor.t()
   def wrap_type(model) do
@@ -5679,6 +5839,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nwrap` × `1`.
   """
+  @doc group: "list of all wrap objects in tendon paths"
 
   @spec wrap_objid(t()) :: ExMujoco.Tensor.t()
   def wrap_objid(model) do
@@ -5691,6 +5852,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nwrap` × `1`.
   """
+  @doc group: "list of all wrap objects in tendon paths"
 
   @spec wrap_prm(t()) :: ExMujoco.Tensor.t()
   def wrap_prm(model) do
@@ -5703,7 +5865,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_trntype(t()) :: ExMujoco.Tensor.t()
   def actuator_trntype(model) do
@@ -5716,7 +5878,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_dyntype(t()) :: ExMujoco.Tensor.t()
   def actuator_dyntype(model) do
@@ -5729,7 +5891,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_gaintype(t()) :: ExMujoco.Tensor.t()
   def actuator_gaintype(model) do
@@ -5742,7 +5904,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_biastype(t()) :: ExMujoco.Tensor.t()
   def actuator_biastype(model) do
@@ -5755,7 +5917,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_ctrladr(t()) :: ExMujoco.Tensor.t()
   def actuator_ctrladr(model) do
@@ -5768,7 +5930,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_ctrlnum(t()) :: ExMujoco.Tensor.t()
   def actuator_ctrlnum(model) do
@@ -5781,7 +5943,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_ctrlspec(t()) :: ExMujoco.Tensor.t()
   def actuator_ctrlspec(model) do
@@ -5794,7 +5956,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_outadr(t()) :: ExMujoco.Tensor.t()
   def actuator_outadr(model) do
@@ -5807,7 +5969,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_outnum(t()) :: ExMujoco.Tensor.t()
   def actuator_outnum(model) do
@@ -5820,7 +5982,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_actadr(t()) :: ExMujoco.Tensor.t()
   def actuator_actadr(model) do
@@ -5833,7 +5995,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_actnum(t()) :: ExMujoco.Tensor.t()
   def actuator_actnum(model) do
@@ -5846,7 +6008,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `2`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_trnid(t()) :: ExMujoco.Tensor.t()
   def actuator_trnid(model) do
@@ -5859,7 +6021,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_cranklength(t()) :: ExMujoco.Tensor.t()
   def actuator_cranklength(model) do
@@ -5872,7 +6034,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `mjNDYN`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_dynprm(t()) :: ExMujoco.Tensor.t()
   def actuator_dynprm(model) do
@@ -5885,7 +6047,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `mjNGAIN`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_gainprm(t()) :: ExMujoco.Tensor.t()
   def actuator_gainprm(model) do
@@ -5898,7 +6060,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `mjNBIAS`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_biasprm(t()) :: ExMujoco.Tensor.t()
   def actuator_biasprm(model) do
@@ -5911,7 +6073,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_actlimited(t()) :: ExMujoco.Tensor.t()
   def actuator_actlimited(model) do
@@ -5924,7 +6086,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `2`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_actrange(t()) :: ExMujoco.Tensor.t()
   def actuator_actrange(model) do
@@ -5937,7 +6099,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_actearly(t()) :: ExMujoco.Tensor.t()
   def actuator_actearly(model) do
@@ -5950,7 +6112,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `2`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_history(t()) :: ExMujoco.Tensor.t()
   def actuator_history(model) do
@@ -5963,7 +6125,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_historyadr(t()) :: ExMujoco.Tensor.t()
   def actuator_historyadr(model) do
@@ -5976,7 +6138,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_delay(t()) :: ExMujoco.Tensor.t()
   def actuator_delay(model) do
@@ -5989,7 +6151,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_damping(t()) :: ExMujoco.Tensor.t()
   def actuator_damping(model) do
@@ -6002,7 +6164,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `mjNPOLY`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_dampingpoly(t()) :: ExMujoco.Tensor.t()
   def actuator_dampingpoly(model) do
@@ -6015,7 +6177,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_armature(t()) :: ExMujoco.Tensor.t()
   def actuator_armature(model) do
@@ -6028,7 +6190,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_group(t()) :: ExMujoco.Tensor.t()
   def actuator_group(model) do
@@ -6041,7 +6203,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `nuser_actuator@model`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_user(t()) :: ExMujoco.Tensor.t()
   def actuator_user(model) do
@@ -6054,7 +6216,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_plugin(t()) :: ExMujoco.Tensor.t()
   def actuator_plugin(model) do
@@ -6067,7 +6229,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nactuator` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_forcelimited(t()) :: ExMujoco.Tensor.t()
   def actuator_forcelimited(model) do
@@ -6080,7 +6242,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nactuator` × `2`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_forcerange(t()) :: ExMujoco.Tensor.t()
   def actuator_forcerange(model) do
@@ -6093,7 +6255,7 @@ defmodule ExMujoco.Model do
 
   `mjtBool*` in C, `nu` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_ctrllimited(t()) :: ExMujoco.Tensor.t()
   def actuator_ctrllimited(model) do
@@ -6106,7 +6268,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nu` × `2`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_ctrlrange(t()) :: ExMujoco.Tensor.t()
   def actuator_ctrlrange(model) do
@@ -6119,7 +6281,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nout` × `6`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_gear(t()) :: ExMujoco.Tensor.t()
   def actuator_gear(model) do
@@ -6132,7 +6294,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nout` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_acc0(t()) :: ExMujoco.Tensor.t()
   def actuator_acc0(model) do
@@ -6145,7 +6307,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nout` × `1`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_length0(t()) :: ExMujoco.Tensor.t()
   def actuator_length0(model) do
@@ -6158,7 +6320,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nout` × `2`.
   """
-  @doc group: "actuator"
+  @doc group: "actuators"
 
   @spec actuator_lengthrange(t()) :: ExMujoco.Tensor.t()
   def actuator_lengthrange(model) do
@@ -6171,7 +6333,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_type(t()) :: ExMujoco.Tensor.t()
   def sensor_type(model) do
@@ -6184,7 +6346,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_datatype(t()) :: ExMujoco.Tensor.t()
   def sensor_datatype(model) do
@@ -6197,7 +6359,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_needstage(t()) :: ExMujoco.Tensor.t()
   def sensor_needstage(model) do
@@ -6210,7 +6372,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_objtype(t()) :: ExMujoco.Tensor.t()
   def sensor_objtype(model) do
@@ -6223,7 +6385,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_objid(t()) :: ExMujoco.Tensor.t()
   def sensor_objid(model) do
@@ -6236,7 +6398,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_reftype(t()) :: ExMujoco.Tensor.t()
   def sensor_reftype(model) do
@@ -6249,7 +6411,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_refid(t()) :: ExMujoco.Tensor.t()
   def sensor_refid(model) do
@@ -6262,7 +6424,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `mjNSENS`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_intprm(t()) :: ExMujoco.Tensor.t()
   def sensor_intprm(model) do
@@ -6275,7 +6437,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_dim(t()) :: ExMujoco.Tensor.t()
   def sensor_dim(model) do
@@ -6288,7 +6450,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_adr(t()) :: ExMujoco.Tensor.t()
   def sensor_adr(model) do
@@ -6301,7 +6463,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_cutoff(t()) :: ExMujoco.Tensor.t()
   def sensor_cutoff(model) do
@@ -6314,7 +6476,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_noise(t()) :: ExMujoco.Tensor.t()
   def sensor_noise(model) do
@@ -6327,7 +6489,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `2`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_history(t()) :: ExMujoco.Tensor.t()
   def sensor_history(model) do
@@ -6340,7 +6502,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_historyadr(t()) :: ExMujoco.Tensor.t()
   def sensor_historyadr(model) do
@@ -6353,7 +6515,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_delay(t()) :: ExMujoco.Tensor.t()
   def sensor_delay(model) do
@@ -6366,7 +6528,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nsensor` × `2`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_interval(t()) :: ExMujoco.Tensor.t()
   def sensor_interval(model) do
@@ -6379,7 +6541,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nsensor` × `nuser_sensor@model`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_user(t()) :: ExMujoco.Tensor.t()
   def sensor_user(model) do
@@ -6392,7 +6554,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "sensor"
+  @doc group: "sensors"
 
   @spec sensor_plugin(t()) :: ExMujoco.Tensor.t()
   def sensor_plugin(model) do
@@ -6405,6 +6567,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nplugin` × `1`.
   """
+  @doc group: "plugin instances"
 
   @spec plugin(t()) :: ExMujoco.Tensor.t()
   def plugin(model) do
@@ -6417,6 +6580,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nplugin` × `1`.
   """
+  @doc group: "plugin instances"
 
   @spec plugin_stateadr(t()) :: ExMujoco.Tensor.t()
   def plugin_stateadr(model) do
@@ -6429,6 +6593,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nplugin` × `1`.
   """
+  @doc group: "plugin instances"
 
   @spec plugin_statenum(t()) :: ExMujoco.Tensor.t()
   def plugin_statenum(model) do
@@ -6441,6 +6606,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nplugin` × `1`.
   """
+  @doc group: "plugin instances"
 
   @spec plugin_attradr(t()) :: ExMujoco.Tensor.t()
   def plugin_attradr(model) do
@@ -6453,6 +6619,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nnumeric` × `1`.
   """
+  @doc group: "custom numeric fields"
 
   @spec numeric_adr(t()) :: ExMujoco.Tensor.t()
   def numeric_adr(model) do
@@ -6465,6 +6632,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nnumeric` × `1`.
   """
+  @doc group: "custom numeric fields"
 
   @spec numeric_size(t()) :: ExMujoco.Tensor.t()
   def numeric_size(model) do
@@ -6477,6 +6645,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nnumericdata` × `1`.
   """
+  @doc group: "custom numeric fields"
 
   @spec numeric_data(t()) :: ExMujoco.Tensor.t()
   def numeric_data(model) do
@@ -6489,6 +6658,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntext` × `1`.
   """
+  @doc group: "custom text fields"
 
   @spec text_adr(t()) :: ExMujoco.Tensor.t()
   def text_adr(model) do
@@ -6501,6 +6671,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntext` × `1`.
   """
+  @doc group: "custom text fields"
 
   @spec text_size(t()) :: ExMujoco.Tensor.t()
   def text_size(model) do
@@ -6513,6 +6684,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntuple` × `1`.
   """
+  @doc group: "custom tuple fields"
 
   @spec tuple_adr(t()) :: ExMujoco.Tensor.t()
   def tuple_adr(model) do
@@ -6525,6 +6697,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntuple` × `1`.
   """
+  @doc group: "custom tuple fields"
 
   @spec tuple_size(t()) :: ExMujoco.Tensor.t()
   def tuple_size(model) do
@@ -6537,6 +6710,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntupledata` × `1`.
   """
+  @doc group: "custom tuple fields"
 
   @spec tuple_objtype(t()) :: ExMujoco.Tensor.t()
   def tuple_objtype(model) do
@@ -6549,6 +6723,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntupledata` × `1`.
   """
+  @doc group: "custom tuple fields"
 
   @spec tuple_objid(t()) :: ExMujoco.Tensor.t()
   def tuple_objid(model) do
@@ -6561,6 +6736,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `ntupledata` × `1`.
   """
+  @doc group: "custom tuple fields"
 
   @spec tuple_objprm(t()) :: ExMujoco.Tensor.t()
   def tuple_objprm(model) do
@@ -6573,6 +6749,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nkey` × `1`.
   """
+  @doc group: "keyframes"
 
   @spec key_time(t()) :: ExMujoco.Tensor.t()
   def key_time(model) do
@@ -6585,6 +6762,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nkey` × `nq@model`.
   """
+  @doc group: "keyframes"
 
   @spec key_qpos(t()) :: ExMujoco.Tensor.t()
   def key_qpos(model) do
@@ -6597,6 +6775,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nkey` × `nv@model`.
   """
+  @doc group: "keyframes"
 
   @spec key_qvel(t()) :: ExMujoco.Tensor.t()
   def key_qvel(model) do
@@ -6609,6 +6788,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nkey` × `na@model`.
   """
+  @doc group: "keyframes"
 
   @spec key_act(t()) :: ExMujoco.Tensor.t()
   def key_act(model) do
@@ -6621,6 +6801,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nkey` × `nmocap@model*3`.
   """
+  @doc group: "keyframes"
 
   @spec key_mpos(t()) :: ExMujoco.Tensor.t()
   def key_mpos(model) do
@@ -6633,6 +6814,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nkey` × `nmocap@model*4`.
   """
+  @doc group: "keyframes"
 
   @spec key_mquat(t()) :: ExMujoco.Tensor.t()
   def key_mquat(model) do
@@ -6645,6 +6827,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nkey` × `nu@model`.
   """
+  @doc group: "keyframes"
 
   @spec key_ctrl(t()) :: ExMujoco.Tensor.t()
   def key_ctrl(model) do
@@ -6657,6 +6840,7 @@ defmodule ExMujoco.Model do
 
   `mjtNum*` in C, `nkey` × `nplastic@model`.
   """
+  @doc group: "keyframes"
 
   @spec key_plastic(t()) :: ExMujoco.Tensor.t()
   def key_plastic(model) do
@@ -6669,7 +6853,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_bodyadr(t()) :: ExMujoco.Tensor.t()
   def name_bodyadr(model) do
@@ -6682,7 +6866,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `njnt` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_jntadr(t()) :: ExMujoco.Tensor.t()
   def name_jntadr(model) do
@@ -6695,7 +6879,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ngeom` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_geomadr(t()) :: ExMujoco.Tensor.t()
   def name_geomadr(model) do
@@ -6708,7 +6892,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsite` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_siteadr(t()) :: ExMujoco.Tensor.t()
   def name_siteadr(model) do
@@ -6721,7 +6905,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ncam` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_camadr(t()) :: ExMujoco.Tensor.t()
   def name_camadr(model) do
@@ -6734,7 +6918,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nlight` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_lightadr(t()) :: ExMujoco.Tensor.t()
   def name_lightadr(model) do
@@ -6747,7 +6931,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nflex` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_flexadr(t()) :: ExMujoco.Tensor.t()
   def name_flexadr(model) do
@@ -6760,7 +6944,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmesh` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_meshadr(t()) :: ExMujoco.Tensor.t()
   def name_meshadr(model) do
@@ -6773,7 +6957,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nskin` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_skinadr(t()) :: ExMujoco.Tensor.t()
   def name_skinadr(model) do
@@ -6786,7 +6970,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nhfield` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_hfieldadr(t()) :: ExMujoco.Tensor.t()
   def name_hfieldadr(model) do
@@ -6799,7 +6983,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntex` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_texadr(t()) :: ExMujoco.Tensor.t()
   def name_texadr(model) do
@@ -6812,7 +6996,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nmat` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_matadr(t()) :: ExMujoco.Tensor.t()
   def name_matadr(model) do
@@ -6825,7 +7009,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `npair` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_pairadr(t()) :: ExMujoco.Tensor.t()
   def name_pairadr(model) do
@@ -6838,7 +7022,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nexclude` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_excludeadr(t()) :: ExMujoco.Tensor.t()
   def name_excludeadr(model) do
@@ -6851,7 +7035,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `neq` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_eqadr(t()) :: ExMujoco.Tensor.t()
   def name_eqadr(model) do
@@ -6864,7 +7048,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntendon` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_tendonadr(t()) :: ExMujoco.Tensor.t()
   def name_tendonadr(model) do
@@ -6877,7 +7061,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nactuator` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_actuatoradr(t()) :: ExMujoco.Tensor.t()
   def name_actuatoradr(model) do
@@ -6890,7 +7074,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nsensor` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_sensoradr(t()) :: ExMujoco.Tensor.t()
   def name_sensoradr(model) do
@@ -6903,7 +7087,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nnumeric` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_numericadr(t()) :: ExMujoco.Tensor.t()
   def name_numericadr(model) do
@@ -6916,7 +7100,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntext` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_textadr(t()) :: ExMujoco.Tensor.t()
   def name_textadr(model) do
@@ -6929,7 +7113,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `ntuple` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_tupleadr(t()) :: ExMujoco.Tensor.t()
   def name_tupleadr(model) do
@@ -6942,7 +7126,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nkey` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_keyadr(t()) :: ExMujoco.Tensor.t()
   def name_keyadr(model) do
@@ -6955,7 +7139,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nplugin` × `1`.
   """
-  @doc group: "name"
+  @doc group: "names"
 
   @spec name_pluginadr(t()) :: ExMujoco.Tensor.t()
   def name_pluginadr(model) do
@@ -6968,6 +7152,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nnames_map` × `1`.
   """
+  @doc group: "names"
 
   @spec names_map(t()) :: ExMujoco.Tensor.t()
   def names_map(model) do
@@ -6980,6 +7165,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec b_rownnz(t()) :: ExMujoco.Tensor.t()
   def b_rownnz(model) do
@@ -6992,6 +7178,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nbody` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec b_rowadr(t()) :: ExMujoco.Tensor.t()
   def b_rowadr(model) do
@@ -7004,6 +7191,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nB` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec b_colind(t()) :: ExMujoco.Tensor.t()
   def b_colind(model) do
@@ -7016,6 +7204,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec m_rownnz(t()) :: ExMujoco.Tensor.t()
   def m_rownnz(model) do
@@ -7028,6 +7217,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec m_rowadr(t()) :: ExMujoco.Tensor.t()
   def m_rowadr(model) do
@@ -7040,6 +7230,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nC` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec m_colind(t()) :: ExMujoco.Tensor.t()
   def m_colind(model) do
@@ -7052,6 +7243,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nC` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec mapM2M(t()) :: ExMujoco.Tensor.t()
   def mapM2M(model) do
@@ -7064,6 +7256,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec d_rownnz(t()) :: ExMujoco.Tensor.t()
   def d_rownnz(model) do
@@ -7076,6 +7269,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec d_rowadr(t()) :: ExMujoco.Tensor.t()
   def d_rowadr(model) do
@@ -7088,6 +7282,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nv` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec d_diag(t()) :: ExMujoco.Tensor.t()
   def d_diag(model) do
@@ -7100,6 +7295,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nD` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec d_colind(t()) :: ExMujoco.Tensor.t()
   def d_colind(model) do
@@ -7112,6 +7308,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nD` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec mapM2D(t()) :: ExMujoco.Tensor.t()
   def mapM2D(model) do
@@ -7124,6 +7321,7 @@ defmodule ExMujoco.Model do
 
   `int*` in C, `nC` × `1`.
   """
+  @doc group: "sparse structures"
 
   @spec mapD2M(t()) :: ExMujoco.Tensor.t()
   def mapD2M(model) do
