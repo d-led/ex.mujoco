@@ -88,6 +88,16 @@ jobs:
       # the MSVC side of `Makefile.win` comes from.
       - if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
+      # The renderer's own cases are the half of this suite a machine without
+      # OpenGL skips, and `test (ubuntu-24.04)` skipped them for as long as it
+      # had none — long enough for a Linux EGL config that could not render to
+      # ship. Mesa's surfaceless EGL is the stack MuJoCo's own CI renders with:
+      # no display, no GPU.
+      - if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libegl1 libgl1 libglx-mesa0 libgl1-mesa-dri
       - uses: actions/cache@v4
         with:
           path: |

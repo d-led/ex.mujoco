@@ -120,10 +120,21 @@ constexpr EGLint kWidth = 0x3057;
 constexpr EGLint kHeight = 0x3056;
 constexpr EGLenum kOpenGLApi = 0x30A2;
 constexpr EGLint kPlatformSurfacelessMesa = 0x31DD;
+constexpr EGLint kRedSize = 0x3024;
+constexpr EGLint kGreenSize = 0x3023;
+constexpr EGLint kBlueSize = 0x3022;
+constexpr EGLint kAlphaSize = 0x3021;
+constexpr EGLint kDepthSize = 0x3025;
+constexpr EGLint kStencilSize = 0x3026;
+constexpr EGLint kColorBufferType = 0x303F;
+constexpr EGLint kRgbBuffer = 0x308E;
 
 struct Platform {
   void *library = nullptr;
   EGLDisplay display = nullptr;
+  EGLConfig config = nullptr;
+  // EGL_NO_SURFACE until a surfaceless context is refused, which is the only
+  // reason to make one: MuJoCo renders into its own framebuffer.
   EGLSurface surface = nullptr;
 
   EGLDisplay (*get_display)(void *) = nullptr;
@@ -201,9 +212,20 @@ struct Platform {
       return nullptr;
     }
 
-    const EGLint config_attributes[] = {kSurfaceType, kPbufferBit, kRenderableType, kOpenGLBit,
+    // The colour, depth and stencil buffers MuJoCo's renderer needs, asked for
+    // the way its own EGL bindings ask (`python/mujoco/egl/`). Without a depth
+    // buffer the default framebuffer is incomplete and `mjr_makeContext` refuses
+    // the model: "Default framebuffer is not complete".
+    const EGLint config_attributes[] = {kRedSize,    8,
+                                        kGreenSize,  8,
+                                        kBlueSize,   8,
+                                        kAlphaSize,  8,
+                                        kDepthSize,  24,
+                                        kStencilSize, 8,
+                                        kColorBufferType, kRgbBuffer,
+                                        kSurfaceType, kPbufferBit,
+                                        kRenderableType, kOpenGLBit,
                                         kNone};
-    EGLConfig config = nullptr;
     EGLint configs = 0;
 
     if (!choose_config(display, config_attributes, &config, 1, &configs) || configs == 0) {
@@ -218,20 +240,22 @@ struct Platform {
       return nullptr;
     }
 
-    // A context is made current against a surface; MuJoCo renders into its own
-    // framebuffer, so the smallest one that will hold it is enough.
-    const EGLint surface_attributes[] = {kWidth, 1, kHeight, 1, kNone};
-    surface = create_pbuffer(display, config, surface_attributes);
-
-    if (surface == nullptr) {
-      *reason = "EGL could not create an offscreen surface here";
-      return nullptr;
-    }
-
     return context;
   }
 
-  void current(EGLContext context) { make_current(display, surface, surface, context); }
+  // A render makes the context current, and a context needs a surface only where
+  // the implementation has no `EGL_KHR_surfaceless_context`: MuJoCo renders into
+  // an FBO of its own, so nothing is drawn into a default framebuffer and one is
+  // asked for only when the surfaceless call is refused.
+  void current(EGLContext context) {
+    if (make_current(display, surface, surface, context) || surface != nullptr) {
+      return;
+    }
+
+    const EGLint surface_attributes[] = {kWidth, 1, kHeight, 1, kNone};
+    surface = create_pbuffer(display, config, surface_attributes);
+    make_current(display, surface, surface, context);
+  }
 };
 
 #else

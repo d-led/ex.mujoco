@@ -1,7 +1,7 @@
 defmodule ExMujoco.MixProject do
   use Mix.Project
 
-  @version "0.2.2"
+  @version "0.2.3"
   @source_url "https://github.com/d-led/ex.mujoco"
 
   # The MuJoCo version this package is built against. The headers of exactly this
