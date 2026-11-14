@@ -100,23 +100,10 @@ jobs:
       - run: mix compile
       # What the module actually needs, when a Windows runner says it cannot find
       # something. Compile first so there is a module to ask about.
-      # `mujoco.dll` imports the Visual C++ runtime, which a runner has but does
-      # not have on PATH. Loading twice — as the library names its own directory,
-      # and then with the runtime on PATH as well — says which of the two a
-      # failure is about.
-      - name: Does the NIF load
-        if: runner.os == 'Windows'
-        shell: cmd
-        run: |
-          set PRIV=%CD%\_build\test\lib\ex_mujoco\priv
-          echo [nothing added]
-          call mix run -e "IO.puts ExMujoco.Native.version()" || echo FAILED-0
-          echo [priv on PATH]
-          set PATH=%PRIV%;%PATH%
-          call mix run -e "IO.puts ExMujoco.Native.version()" || echo FAILED-1
-          echo [priv and the C++ runtime on PATH]
-          set PATH=%PRIV%;%VCToolsRedistDir%x64\Microsoft.VC143.CRT;%PATH%
-          call mix run -e "IO.puts ExMujoco.Native.version()" || echo FAILED-2
+      # Three libraries have to resolve before the suite is worth running: the
+      # NIF, the preloader that puts MuJoCo in the process, and MuJoCo itself.
+      - name: The libraries load
+        run: mix run -e "IO.puts(ExMujoco.version())"
       - run: mix test
 
   gen:

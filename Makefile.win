@@ -4,11 +4,14 @@
 # `mix` runs this with MIX_APP_PATH, ERTS_INCLUDE_DIR and FINE_INCLUDE_DIR set,
 # and with MUJOCO_DIR pointing at a MuJoCo prepared by
 # scripts/prepare_mujoco.exs. The MuJoCo release ships `lib\mujoco.lib` to link
-# against and `bin\mujoco.dll` to load; the NIF and the DLL sit together in priv,
-# which is searched because OTP loads NIFs with LOAD_WITH_ALTERED_SEARCH_PATH.
+# against and `bin\mujoco.dll` to load. Both sit together in priv, which is not
+# enough: Windows resolves a library's imports against the modules already in
+# the process, and will not look beside the importing library. `preload.cpp`
+# loads MuJoCo first, from a library of its own that imports nothing.
 
 PRIV_DIR=$(MIX_APP_PATH)\priv
 NIF_PATH=$(PRIV_DIR)\ex_mujoco_nif.dll
+PRELOAD_PATH=$(PRIV_DIR)\ex_mujoco_preload.dll
 
 C_SRC=$(EX_MUJOCO_PROJECT_DIR)\c_src
 SCRIPT=$(EX_MUJOCO_PROJECT_DIR)\scripts\prepare_mujoco.exs
@@ -24,10 +27,11 @@ CPPFLAGS=$(CPPFLAGS) /I"$(MUJOCO_DIR)\include" /I"$(C_SRC)"
 
 LDFLAGS=/link /LIBPATH:"$(MUJOCO_DIR)\lib" mujoco.lib
 
-SOURCES=$(C_SRC)\*.cpp
+SOURCES=$(C_SRC)\ex_mujoco_nif.cpp
+PRELOAD_SOURCES=$(C_SRC)\preload.cpp
 FINE_HEADERS=$(FINE_INCLUDE_DIR)\*.hpp
 
-all: mujoco $(NIF_PATH)
+all: mujoco $(NIF_PATH) $(PRELOAD_PATH)
 
 mujoco:
 	@ elixir "$(SCRIPT)" --ensure --priv "$(PRIV_DIR)"
@@ -39,5 +43,11 @@ $(NIF_PATH): $(SOURCES) $(FINE_HEADERS)
 	@ if not exist "$(PRIV_DIR)" mkdir "$(PRIV_DIR)"
 	cl $(CPPFLAGS) $(SOURCES) /Fe"$(NIF_PATH)" $(LDFLAGS)
 
+# No `mujoco.lib`: this one is built to load MuJoCo, not to call it.
+$(PRELOAD_PATH): $(PRELOAD_SOURCES) $(FINE_HEADERS)
+	@ if not exist "$(PRIV_DIR)" mkdir "$(PRIV_DIR)"
+	cl $(CPPFLAGS) $(PRELOAD_SOURCES) /Fe"$(PRELOAD_PATH)" /link
+
 clean:
 	@ if exist "$(NIF_PATH)" del /q "$(NIF_PATH)"
+	@ if exist "$(PRELOAD_PATH)" del /q "$(PRELOAD_PATH)"

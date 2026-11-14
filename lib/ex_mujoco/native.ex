@@ -19,40 +19,24 @@ defmodule ExMujoco.Native do
   def load do
     priv = :code.priv_dir(:ex_mujoco) |> to_string()
 
-    # `mujoco.dll` sits beside the NIF, and Windows does not look beside a
-    # library for the libraries it imports: it walks `PATH`. Naming the
-    # directory here is what lets the pair find each other, without asking
-    # anyone to set `PATH` before starting the virtual machine — by then it
-    # is too late to ask.
-    if match?({:win32, _}, :os.type()), do: add_to_path(priv)
+    # Windows will not look beside a library for the libraries it imports,
+    # so MuJoCo has to be in the process before this one is loaded. On macOS
+    # and Linux this answers `:ok` and does nothing.
+    preload = ExMujoco.Preload.mujoco(priv)
 
     case :erlang.load_nif(:filename.join(priv, ~c"ex_mujoco_nif"), 0) do
-      :ok -> :ok
-      {:error, reason} -> {:error, "ex_mujoco: could not load the NIF: #{inspect(reason)}"}
+      :ok ->
+        :ok
+
+      {:error, reason} ->
+        {:error, "ex_mujoco: could not load the NIF: #{inspect(reason)}" <> and_preload(preload)}
     end
   end
 
-  defp add_to_path(directory) do
-    entries = "PATH" |> value_of() |> String.split(";", trim: true)
+  defp and_preload(:ok), do: ""
 
-    unless directory in entries,
-      do: :os.putenv(~c"PATH", String.to_charlist(Enum.join([directory | entries], ";")))
-
-    :ok
-  end
-
-  # `:os.getenv/0` answers with `NAME=value` strings, in whatever case this
-  # platform stores the name — Windows is case-insensitive and holds `Path`
-  # where a shell elsewhere holds `PATH`.
-  defp value_of(name) do
-    :os.getenv()
-    |> Enum.map(&to_string/1)
-    |> Enum.find_value("", fn entry ->
-      case String.split(entry, "=", parts: 2) do
-        [entry_name, value] -> if String.upcase(entry_name) == name, do: value
-        [_name_only] -> nil
-      end
-    end)
+  defp and_preload({:error, complaint}) do
+    ", and MuJoCo itself: #{complaint}"
   end
 
   def model_nq(_model), do: :erlang.nif_error(:nif_not_loaded)

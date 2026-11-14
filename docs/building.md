@@ -102,8 +102,19 @@ where the loader will look:
   kept: the file is copied to `priv/mujoco.framework/Versions/A/`, and `@loader_path` supplies
   the `@rpath`. A source build names itself `@rpath/libmujoco.<v>.dylib` and sits directly in
   `priv/`.
-* **Windows** — `priv/mujoco.dll`. OTP loads NIFs with `LOAD_WITH_ALTERED_SEARCH_PATH`, so the
-  NIF's own directory is searched for its dependencies.
+* **Windows** — `priv/mujoco.dll`, and being in `priv/` is not enough on its own. Windows
+  resolves a library's imports against the modules already in the process and against the
+  search path, never against the directory of the library doing the importing, so
+  `ex_mujoco_nif.dll` reported "the specified module could not be found" with `mujoco.dll`
+  sitting right beside it. `priv/ex_mujoco_preload.dll` is the answer: it imports nothing but
+  the C runtime, so it always loads, and `ExMujoco.Preload` calls it with the full path before
+  `ExMujoco.Native` asks for the NIF. Nothing has to be on `PATH`, and no environment variable
+  has to be set before the virtual machine starts.
+
+  `mujoco.dll` itself imports the Visual C++ runtime — `MSVCP140.dll`, `VCRUNTIME140.dll` and
+  the Universal CRT — which is MuJoCo's own requirement on Windows and ships with Visual Studio
+  and with the [Microsoft Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe).
+  A machine without it says so now, naming the DLL and the loader's error code.
 
 ## The version check
 

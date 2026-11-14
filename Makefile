@@ -10,6 +10,10 @@
 
 PRIV_DIR := $(MIX_APP_PATH)/priv
 NIF_PATH := $(PRIV_DIR)/ex_mujoco_nif.so
+# Loads MuJoCo itself, before the NIF that imports it. A separate library
+# because the importing one cannot be loaded first; on these platforms it is a
+# no-op and no more of an explanation is needed than that.
+PRELOAD_PATH := $(PRIV_DIR)/ex_mujoco_preload.so
 
 C_SRC := $(EX_MUJOCO_PROJECT_DIR)/c_src
 SCRIPT := $(EX_MUJOCO_PROJECT_DIR)/scripts/prepare_mujoco.exs
@@ -43,11 +47,12 @@ else
 	LDFLAGS += -Wl,-rpath,'$$ORIGIN'
 endif
 
-SOURCES := $(wildcard $(C_SRC)/*.cpp)
+PRELOAD_SOURCES := $(C_SRC)/preload.cpp
+SOURCES := $(filter-out $(PRELOAD_SOURCES),$(wildcard $(C_SRC)/*.cpp))
 GENERATED := $(wildcard $(C_SRC)/generated/*.inc)
 FINE_HEADERS := $(wildcard $(FINE_INCLUDE_DIR)/*.hpp)
 
-all: mujoco $(NIF_PATH)
+all: mujoco $(NIF_PATH) $(PRELOAD_PATH)
 	@ echo > /dev/null # nothing to be done, and nothing to say about it
 
 # Idempotent and quick once the cache is warm: it fetches, or builds, only when
@@ -60,8 +65,13 @@ $(NIF_PATH): $(SOURCES) $(GENERATED) $(FINE_HEADERS)
 	@ mkdir -p "$(PRIV_DIR)"
 	$(CXX) $(CPPFLAGS) $(SOURCES) $(LDFLAGS) -o $(NIF_PATH)
 
+# No `-lmujoco`: this one is built to load MuJoCo, not to call it.
+$(PRELOAD_PATH): $(PRELOAD_SOURCES) $(FINE_HEADERS)
+	@ mkdir -p "$(PRIV_DIR)"
+	$(CXX) $(CPPFLAGS) $(PRELOAD_SOURCES) -o $(PRELOAD_PATH)
+
 clean:
-	$(RM) $(NIF_PATH)
+	$(RM) $(NIF_PATH) $(PRELOAD_PATH)
 
 # `mujoco` has no file of its own — it is a verb. nmake has no .PHONY; for make,
 # this makes it explicit that the target above is not a directory.
