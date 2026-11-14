@@ -284,9 +284,14 @@ defmodule PrepareMujoco do
   end
 
   defp unpack_tarball!(archive, dir) do
-    root = archive_root(archive |> Path.dirname() |> Path.join("unpack"))
+    unpack = archive |> Path.dirname() |> Path.join("unpack")
+    File.rm_rf!(unpack)
+    File.mkdir_p!(unpack)
+    run!("tar", ["xf", archive, "-C", unpack])
+    root = archive_root(unpack)
     copy_tree!(Path.join(root, "include"), Path.join(dir, "include"))
     copy_tree!(Path.join(root, "lib"), Path.join(dir, "lib"))
+    File.rm_rf!(unpack)
   end
 
   # An archive may hold one directory, or its contents directly: MuJoCo's
@@ -301,14 +306,6 @@ defmodule PrepareMujoco do
       _several ->
         into
     end
-  end
-
-  defp extract_tarball!(archive) do
-    into = archive |> Path.dirname() |> Path.join("unpack")
-    File.rm_rf!(into)
-    File.mkdir_p!(into)
-    run!("tar", ["xf", archive, "-C", into])
-    Path.join(into, hd(File.ls!(into)))
   end
 
   defp unzip!(archive, into) do
