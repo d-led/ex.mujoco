@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.2
+
+Which MuJoCo is in front of you, answerable from code.
+
+- `ExMujoco.mujoco_version/0` answers the pin as MuJoCo spells it (`"4.0.1"`), compiled in from
+  `mujoco.version`, so it answers inside a dependency. `version/0` and `header_version/0` are
+  what the library and the headers say; the module doc names all three, and a test holds the pin
+  to the library — a build against `main` now disagrees instead of stepping physics it cannot
+  name.
+- The prepared MuJoCo's `.provider` records the artifact and its checksum, not only the version:
+  for a binary nobody here built, the checksum names the bytes where a commit would only name
+  source.
+
 ## 0.1.1
 
 The patch that makes the pin enforced rather than merely intended.
