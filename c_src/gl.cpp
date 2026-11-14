@@ -97,6 +97,11 @@ struct Platform {
   }
 
   void current(CGLContextObj context) { set_current(context); }
+
+  // CGL gives a current context a default framebuffer of its own, so there is
+  // nothing left to ask: the check is for a platform whose context can be
+  // current and still have none.
+  bool usable(void *, std::string *) { return true; }
 };
 
 #elif defined(__linux__)
@@ -262,6 +267,62 @@ struct Platform {
       make_current(display, nullptr, nullptr, context);
     }
   }
+
+  // Whether this context is one MuJoCo will take. MuJoCo binds framebuffer 0 and
+  // reads its status before it makes a context of its own — COMPLETE means a
+  // window is usable, UNDEFINED means there is none and it draws offscreen, and
+  // anything else is a refusal. The calls are asked of EGL, which is the only
+  // dispatcher this file has: `eglGetProcAddress` answers the ones the current
+  // context was made for.
+  bool usable(void *context, std::string *reason) {
+    if (make_current(display, surface, surface, context) == 0 &&
+        make_current(display, nullptr, nullptr, context) == 0) {
+      *reason = "the OpenGL context could not be made current";
+      return false;
+    }
+
+    auto bind_framebuffer =
+        reinterpret_cast<void (*)(unsigned, unsigned)>(get_proc_address("glBindFramebuffer"));
+    auto check_status =
+        reinterpret_cast<unsigned (*)(unsigned)>(get_proc_address("glCheckFramebufferStatus"));
+    auto get_string =
+        reinterpret_cast<const unsigned char *(*)(unsigned)>(get_proc_address("glGetString"));
+
+    if (bind_framebuffer == nullptr || check_status == nullptr) {
+      *reason = "this context has no framebuffer calls";
+      return false;
+    }
+
+    constexpr unsigned kFramebuffer = 0x8D40;
+    constexpr unsigned kComplete = 0x8CD5;
+    constexpr unsigned kUndefined = 0x8219;
+
+    bind_framebuffer(kFramebuffer, 0);
+    const unsigned status = check_status(kFramebuffer);
+
+    if (status != kComplete && status != kUndefined) {
+      const char *vendor =
+          get_string == nullptr ? "" : reinterpret_cast<const char *>(get_string(0x1F00));
+
+      *reason = "this context has no usable default framebuffer (status 0x" +
+                hex(status) + ", GL vendor \"" + vendor + "\")";
+      return false;
+    }
+
+    return true;
+  }
+
+ private:
+  static std::string hex(unsigned value) {
+    const char *digits = "0123456789abcdef";
+    std::string text;
+
+    for (int shift = 28; shift >= 0; shift -= 4) {
+      text += digits[(value >> shift) & 0xf];
+    }
+
+    return text;
+  }
 };
 
 #else
@@ -284,6 +345,11 @@ struct Platform {
   }
 
   void current(void *) {}
+
+  bool usable(void *, std::string *reason) {
+    *reason = kNoPlatform;
+    return false;
+  }
 };
 
 #endif
@@ -356,7 +422,7 @@ bool available(std::string *reason) {
 
     if (one.platform.open(&one.reason)) {
       one.context = one.platform.make(&one.reason);
-      one.ok = one.context != nullptr;
+      one.ok = one.context != nullptr && one.platform.usable(one.context, &one.reason);
     }
   }
 
