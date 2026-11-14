@@ -4,10 +4,15 @@
 
 #include "gl.hpp"
 
-#include <dlfcn.h>
-
 #include <mutex>
 #include <stdexcept>
+
+// `dlopen` and `dlsym` find the library at run time. Guarded rather than plain,
+// because the one platform that does not reach either branch below — Windows,
+// whose `LoadLibrary` is a different call — has no `<dlfcn.h>` to include.
+#if defined(__APPLE__) || defined(__linux__)
+#include <dlfcn.h>
+#endif
 
 namespace exmujoco {
 namespace gl {
@@ -230,14 +235,20 @@ struct Platform {
 
 #else
 
+// Windows, and anything else: no context, and a sentence that says so rather
+// than a build that fails. MuJoCo does render there — WGL carries it — but a WGL
+// context needs a window to be created against, which is a piece of work with no
+// way to be tested from here, so it is not written on spec.
+constexpr const char *kNoPlatform = "offscreen rendering on this platform has no implementation yet";
+
 struct Platform {
   bool open(std::string *reason) {
-    *reason = "offscreen rendering is carried on macOS and Linux, not on this platform";
+    *reason = kNoPlatform;
     return false;
   }
 
   void *make(std::string *reason) {
-    *reason = "offscreen rendering is carried on macOS and Linux, not on this platform";
+    *reason = kNoPlatform;
     return nullptr;
   }
 

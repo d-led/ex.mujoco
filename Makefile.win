@@ -27,7 +27,12 @@ CPPFLAGS=$(CPPFLAGS) /I"$(MUJOCO_DIR)\include" /I"$(C_SRC)"
 
 LDFLAGS=/link /LIBPATH:"$(MUJOCO_DIR)\lib" mujoco.lib
 
-SOURCES=$(C_SRC)\ex_mujoco_nif.cpp
+# Every translation unit of the NIF. Windows has no `wildcard`, so this list is
+# written out: a new `.cpp` beside the NIF belongs here too, or the linker reports
+# its symbols as missing rather than the build reporting the omission. `preload.cpp`
+# is deliberately absent — it is a library of its own, and a second `DllMain` in
+# this one would be one too many.
+SOURCES=$(C_SRC)\ex_mujoco_nif.cpp $(C_SRC)\gl.cpp $(C_SRC)\renderer.cpp
 PRELOAD_SOURCES=$(C_SRC)\preload.cpp
 FINE_HEADERS=$(FINE_INCLUDE_DIR)\*.hpp
 

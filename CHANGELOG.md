@@ -5,6 +5,18 @@ Every version below is a real change, but not every one reached Hex: 0.1.2,
 patch, and expired. What Hex serves is 0.1.0, 0.1.1, 0.1.4 and 0.1.8, and 0.1.8
 contains everything these notes describe.
 
+## 0.2.2
+
+The Windows build links again. `Makefile.win` names its translation units one by
+one, and 0.2.0 added two — `gl.cpp` and `renderer.cpp` — that the macOS and Linux
+builds pick up with a wildcard and Windows did not, so the NIF came out with
+`gl::available` and `exmujoco::Renderer::{Renderer,~Renderer,render}` unresolved.
+`gl.cpp` also included `<dlfcn.h>` unconditionally, which MSVC does not have; the
+include is now guarded, and the Windows branch — which reaches none of the CGL or
+EGL code — compiles to a refusal with a sentence: `ExMujoco.Renderer.available?/0`
+is `false` there, WGL having no implementation yet, and the renderer cases skip
+rather than fail.
+
 ## 0.2.1
 
 `fine` is required as `>= 0.1.6 and < 0.3.0` rather than `~> 0.2.0`. Nothing this

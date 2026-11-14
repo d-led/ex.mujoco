@@ -65,6 +65,12 @@ are easy to get wrong, and are pinned by `test/ex_mujoco/renderer_test.exs`:
 - **The image may not be larger than the model's offscreen buffer** (`<visual><global
 offwidth=… offheight=…/>`), and asking for more is refused by name rather than rendered
   black.
+- **A new `.cpp` in `c_src/` also belongs in `Makefile.win`.** The Unix `Makefile` globs
+  `c_src/*.cpp`; Windows has no `wildcard`, so its list is written out, and 0.2.0's two new
+  units were missed there until the Windows link failed on four unresolved symbols — with a
+  CI job on `windows-2022` as the only thing that would have noticed. Anything platform
+  specific in a shared unit has to compile where it is not implemented, too: `<dlfcn.h>` is
+  included under `__APPLE__ || __linux__` for that reason.
 
 ## Tests
 
