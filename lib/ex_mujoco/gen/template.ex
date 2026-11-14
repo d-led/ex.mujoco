@@ -43,12 +43,34 @@ defmodule ExMujoco.Gen.Template do
       # module while it is still loading, which Erlang does not allow.
       @doc false
       def load do
-        path = :filename.join(:code.priv_dir(:ex_mujoco), ~c"ex_mujoco_nif")
+        priv = :code.priv_dir(:ex_mujoco) |> to_string()
 
-        case :erlang.load_nif(path, 0) do
+        # `mujoco.dll` sits beside the NIF, and Windows does not look beside a
+        # library for the libraries it imports: it walks `PATH`. Naming the
+        # directory here is what lets the pair find each other, without asking
+        # anyone to set `PATH` before starting the virtual machine — by then it
+        # is too late to ask.
+        if match?({:win32, _}, :os.type()), do: add_to_path(priv)
+
+        case :erlang.load_nif(:filename.join(priv, ~c"ex_mujoco_nif"), 0) do
           :ok -> :ok
           {:error, reason} -> {:error, "ex_mujoco: could not load the NIF: \#{inspect(reason)}"}
         end
+      end
+
+      # Windows environment names are case-insensitive, so a shell's `Path` is
+      # this process's `PATH`; `System.get_env/1` would look for the exact name
+      # and find nothing.
+      defp add_to_path(directory) do
+        {name, entries} =
+          case Enum.find(:os.getenv(), fn {name, _} -> String.upcase(to_string(name)) == "PATH" end) do
+            {name, value} -> {name, String.split(to_string(value), ";", trim: true)}
+            nil -> {~c"PATH", []}
+          end
+
+        unless directory in entries, do: :os.putenv(name, Enum.join([directory | entries], ";"))
+
+        :ok
       end
 
     #{indent(Enum.join(stubs, "\n"))}

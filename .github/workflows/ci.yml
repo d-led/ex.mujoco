@@ -72,7 +72,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-14, windows-2022]
+        # No macOS: this repository's account has no macOS runner, and a job
+        # that cannot start is cancelled rather than failed, which turns every
+        # run red for something the build did not do. macOS is the machine this
+        # is developed on; `docs/building.md` is where it is verified.
+        os: [ubuntu-24.04, windows-2022]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -97,19 +101,16 @@ jobs:
       # What the module actually needs, when a Windows runner says it cannot find
       # something. Compile first so there is a module to ask about.
       # `mujoco.dll` imports the Visual C++ runtime, which a runner has but does
-      # not have on PATH. Asking for the version two ways says which of the two
-      # candidates — the DLL's own neighbours, or its C++ runtime — a load
+      # not have on PATH. Loading twice — as the library names its own directory,
+      # and then with the runtime on PATH as well — says which of the two a
       # failure is about.
       - name: Does the NIF load
         if: runner.os == 'Windows'
         shell: cmd
         run: |
-          echo dlls: & dir /b _build\test\lib\ex_mujoco\priv
-          echo redist: %VCToolsRedistDir%
-          echo without the C++ runtime on PATH:
           mix run -e "IO.inspect(ExMujoco.Native.version())"
           set PATH=%VCToolsRedistDir%x64\Microsoft.VC143.CRT;%PATH%
-          echo with it:
+          echo and with the C++ runtime on PATH:
           mix run -e "IO.inspect(ExMujoco.Native.version())"
       - run: mix test
 
