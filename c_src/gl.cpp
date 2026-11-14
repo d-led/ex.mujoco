@@ -278,13 +278,38 @@ Singleton &singleton() {
 
 }  // namespace
 
+namespace {
+
+// Whether an environment variable is set. `getenv` is what says so, except on
+// Windows, where the CRT deprecates it (C4996) and `/WX` makes that an error;
+// `_dupenv_s` is the replacement and hands back a buffer to free.
+bool environment_set(const char *name) {
+#if defined(_WIN32)
+  char *value = nullptr;
+  size_t length = 0;
+
+  if (_dupenv_s(&value, &length, name) != 0) {
+    return false;
+  }
+
+  const bool set = value != nullptr;
+  std::free(value);
+
+  return set;
+#else
+  return std::getenv(name) != nullptr;
+#endif
+}
+
+}  // namespace
+
 bool available(std::string *reason) {
   // A machine without OpenGL is otherwise only found, never tested: macOS and
   // Linux runners have one, and Windows has no branch. `EX_MUJOCO_NO_GL` says
   // "pretend there is none", so the refusal — the sentence, and every caller
   // that must survive it — runs on a machine that could have rendered. It is not
   // memoised, so one VM can be told both answers.
-  if (std::getenv("EX_MUJOCO_NO_GL") != nullptr) {
+  if (environment_set("EX_MUJOCO_NO_GL")) {
     if (reason != nullptr) {
       *reason = "EX_MUJOCO_NO_GL is set, so this VM renders nothing";
     }
