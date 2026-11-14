@@ -295,7 +295,7 @@ defmodule PrepareMujoco do
     into = archive |> Path.dirname() |> Path.join("unpack")
     File.rm_rf!(into)
     File.mkdir_p!(into)
-    run!("tar", ["xf", archive, "-C", into])
+    run!(tar(), ["xf", archive, "-C", into])
     Path.join(into, hd(File.ls!(into)))
   end
 
@@ -317,7 +317,7 @@ defmodule PrepareMujoco do
     case :os.type() do
       # `tar` on Windows is bsdtar, which reads zip; `Expand-Archive` is slower
       # and says less when it fails.
-      {:win32, _} -> run!("tar", ["xf", archive, "-C", into])
+      {:win32, _} -> run!(tar(), ["xf", archive, "-C", into])
       _ -> run!("unzip", ["-q", archive, "-d", into])
     end
   end
@@ -635,6 +635,21 @@ defmodule PrepareMujoco do
       |> :crypto.hash_final()
 
     Base.encode16(digest, case: :lower)
+  end
+
+  # Windows ships a `tar` of its own — bsdtar, which reads zip — and Git for
+  # Windows puts a GNU `tar` ahead of it on PATH. GNU tar reads `C:\...` as a
+  # remote host and answers "Cannot connect to C: resolve failed", so the one
+  # Windows ships is named, and PATH is the fallback.
+  defp tar do
+    case :os.type() do
+      {:win32, _} ->
+        system = Path.join(System.get_env("SystemRoot") || "C:\\Windows", "System32/tar.exe")
+        if File.exists?(system), do: system, else: "tar"
+
+      _ ->
+        "tar"
+    end
   end
 
   defp run!(command, args) do
