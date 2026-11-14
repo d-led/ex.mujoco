@@ -114,6 +114,14 @@ jobs:
       - name: The libraries load
         shell: bash
         run: mix run -e "IO.puts ExMujoco.version()"
+      # Whether a runner renders is a fact about the runner, and a run that does
+      # not say so leaves the quiet half of the matrix — every case that skips —
+      # unobserved. Printed here, before the suite, so a platform that cannot
+      # render says which one and why.
+      - name: Whether it renders here
+        shell: bash
+        run: |
+          mix run -e 'IO.inspect({ExMujoco.Renderer.available?(), ExMujoco.Renderer.unavailable_reason()}, label: "renderer")'
       - run: mix test
 
   # What a user gets is the tarball, not this checkout. Building it and then
