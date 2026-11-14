@@ -96,14 +96,21 @@ jobs:
       - run: mix compile
       # What the module actually needs, when a Windows runner says it cannot find
       # something. Compile first so there is a module to ask about.
-      # `cmd`, because bash on Windows turns `/dependents` into a path.
-      - name: What the NIF depends on
+      # `mujoco.dll` imports the Visual C++ runtime, which a runner has but does
+      # not have on PATH. Asking for the version two ways says which of the two
+      # candidates — the DLL's own neighbours, or its C++ runtime — a load
+      # failure is about.
+      - name: Does the NIF load
         if: runner.os == 'Windows'
         shell: cmd
         run: |
-          dir _build\test\lib\ex_mujoco\priv
-          dumpbin -dependents _build\test\lib\ex_mujoco\priv\ex_mujoco_nif.dll
-          dumpbin -dependents _build\test\lib\ex_mujoco\priv\mujoco.dll
+          echo dlls: & dir /b _build\test\lib\ex_mujoco\priv
+          echo redist: %VCToolsRedistDir%
+          echo without the C++ runtime on PATH:
+          mix run -e "IO.inspect(ExMujoco.Native.version())"
+          set PATH=%VCToolsRedistDir%x64\Microsoft.VC143.CRT;%PATH%
+          echo with it:
+          mix run -e "IO.inspect(ExMujoco.Native.version())"
       - run: mix test
 
   gen:

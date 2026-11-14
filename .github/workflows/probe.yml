@@ -1,0 +1,8 @@
+# A question, not a build: does a macOS runner exist for this repository?
+name: probe
+on: workflow_dispatch
+jobs:
+  macos:
+    runs-on: macos-14
+    steps:
+      - run: sw_vers
