@@ -16,7 +16,7 @@ defmodule ExMujoco.Gen.Template do
 
   # ------------------------------------------------------------------ Elixir
 
-  @doc "`ExMujoco.Native` — one stub per generated NIF, and the load hook."
+  @doc "The `Native` module this emits — one stub per generated NIF, and the load hook."
   def native(structs, functions, manifest) do
     stubs =
       Enum.map(fields_of(structs), &field_stub/1) ++

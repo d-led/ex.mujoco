@@ -1,7 +1,7 @@
 defmodule ExMujoco.MixProject do
   use Mix.Project
 
-  @version "0.1.2"
+  @version "0.1.3"
   @source_url "https://github.com/d-led/ex.mujoco"
 
   # The MuJoCo version this package is built against. The headers of exactly this
@@ -111,11 +111,23 @@ defmodule ExMujoco.MixProject do
   defp docs do
     [
       main: "readme",
-      extras: ["README.md", "docs/plan.md", "docs/building.md", "docs/coverage.md"],
+      extras: [
+        "README.md",
+        "docs/plan.md",
+        "docs/building.md",
+        "docs/coverage.md",
+        "docs/development.md"
+      ],
+      # A group per thing a reader came for. The two patterns are regular
+      # expressions on the module's own name: eighty-odd `ExMujoco.Types.*`
+      # modules are one group, and the generator's modules are not loose among
+      # the API a caller came for.
       groups_for_modules: [
         Physics: [ExMujoco, ExMujoco.Model, ExMujoco.Data, ExMujoco.Tensor],
-        "The C API": [ExMujoco.Native, ExMujoco.Capi.Functions, ExMujoco.Capi.Structs],
-        Types: [ExMujoco.Types]
+        "The C API": [ExMujoco.Api],
+        Types: ~r/^ExMujoco\.Types(\.|$)/,
+        Errors: [ExMujoco.Error, ExMujoco.Loader],
+        "Generating the bindings": ~r/^ExMujoco\.Gen(\.|$)/
       ]
     ]
   end

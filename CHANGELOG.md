@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.3
+
+The documentation a caller reads, separated from the documentation a maintainer reads.
+
+- `README.md` — which Hex publishes and HexDocs renders as the front page — is now written for
+  using the package: install, the pinned MuJoCo and how to ask which one you have, the curated
+  surface, errors, and a table of where each other question is answered.
+- Everything about working on the package moved to `docs/development.md`: the repository's
+  shape, how the bindings are generated, the tests that state contracts, the CI jobs, and
+  releasing.
+- The API reference is grouped the way a reader looks for things — `Physics`, `The C API`,
+  `Types`, `Errors`, and `Generating the bindings` — so eighty `ExMujoco.Types.*` modules are
+  one group instead of a wall, and the generator's modules are not among the API.
+- `mix docs` prints no warnings: prose names an internal module by what it does, not with a
+  link to a module that is hidden on purpose.
+
 ## 0.1.2
 
 Which MuJoCo is in front of you, answerable from code.

@@ -3,11 +3,11 @@ defmodule ExMujoco.Loader do
   Loading the NIF, and refusing to go on if it does not match the headers it was
   generated from.
 
-  Called from `ExMujoco.Native`'s `@on_load` after the NIF is in, so a mismatch is
+  Called from the NIF module's `@on_load` after the library is in, so a mismatch is
   a module that will not load — which is loud — rather than a physics run that is
   quietly a different version.
 
-  The loading itself has to happen in `ExMujoco.Native`: `:erlang.load_nif` only
+  The loading itself has to happen in the module that names the library: `:erlang.load_nif` only
   loads a library whose `ERL_NIF_INIT` name is the calling module's.
   """
 

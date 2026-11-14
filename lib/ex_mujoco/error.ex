@@ -8,7 +8,7 @@ defmodule ExMujoco.Error do
   MuJoCo's own, with the function that raised it in front of it
   (`mj_step: qpos is not finite`).
 
-  A `RuntimeError` escaping from `ExMujoco.Native` is the same thing before
+  A `RuntimeError` escaping from the NIF is the same thing before
   `ExMujoco` has re-raised it; call the typed functions instead.
   """
   defexception [:message]

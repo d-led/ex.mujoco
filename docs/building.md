@@ -156,9 +156,9 @@ where the loader will look:
   search path, never against the directory of the library doing the importing, so
   `ex_mujoco_nif.dll` reported "the specified module could not be found" with `mujoco.dll`
   sitting right beside it. `priv/ex_mujoco_preload.dll` is the answer: it imports nothing but
-  the C runtime, so it always loads, and `ExMujoco.Preload` calls it with the full path before
-  `ExMujoco.Native` asks for the NIF. Nothing has to be on `PATH`, and no environment variable
-  has to be set before the virtual machine starts.
+  the C runtime, so it always loads, and the NIF's load hook calls it with MuJoCo's full path
+  before asking for the library that imports it. Nothing has to be on `PATH`, and no environment
+  variable has to be set before the virtual machine starts.
 
   `mujoco.dll` itself imports the Visual C++ runtime — `MSVCP140.dll`, `VCRUNTIME140.dll` and
   the Universal CRT — which is MuJoCo's own requirement on Windows and ships with Visual Studio
@@ -190,8 +190,8 @@ ex_mujoco: the MuJoCo library in priv/ is 4.0.0 (4000000), and the headers the N
 generated from are 4.0.1 (4000001).
 ```
 
-It is asked on first use rather than at load because `:erlang.load_nif` happens inside
-`ExMujoco.Native`'s `@on_load`, and a module cannot call itself while it is loading.
+It is asked on first use rather than at load because `:erlang.load_nif` happens inside the NIF
+module's `@on_load`, and a module cannot call itself while it is loading.
 
 ## Tools
 

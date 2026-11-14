@@ -30,7 +30,7 @@ The plan is phased — physics first, then scene building, then rendering — an
 
 ```elixir
 def deps do
-  [{:ex_mujoco, "~> 0.1.2"}]
+  [{:ex_mujoco, "~> 0.1.3"}]
 end
 ```
 
@@ -68,20 +68,9 @@ iex> ExMujoco.header_version()   # what the bindings were generated from
 4000001
 ```
 
-All three agree, or the NIF does not load. What the build itself fetched — version, artifact
-name, artifact checksum, platform, timestamp — is `_build/mujoco/<pin>-<platform>-<arch>/.provider`.
-
-The source build runs CMake and takes a few minutes; the release fetch takes seconds.
-[`docs/building.md`](docs/building.md) has the detail, including what happens to the shared
-library afterwards and why.
-
-Windows needs nothing set up: the library MuJoCo ships is loaded from `priv/` by a second,
-small library, because Windows will not look beside a library for the libraries it imports.
-The one prerequisite is MuJoCo's own — the Visual C++ runtime, which ships with Visual Studio.
-
-CI builds the tarball Hex would ship, unpacks it, and installs it in an empty directory on
-Linux and Windows — compiling MuJoCo from scratch there — because a package that only builds
-in its own checkout is a package nobody can use.
+All three agree, or the NIF does not load — two versions of one physics is not a difference of
+behaviour, it is a difference of answer. What the build itself fetched (version, artifact name,
+artifact checksum, platform, timestamp) is in `_build/mujoco/<version>-<platform>-<arch>/.provider`.
 
 ## What you get
 
@@ -103,7 +92,7 @@ Underneath, generated from the headers:
 - **`ExMujoco.Data`** — the same for `mjData`: `qpos/1`, `qvel/1`, `xpos/1`, `efc_force/1` …
 - **`ExMujoco.Api`** — MuJoCo's own functions, bound one for one, under MuJoCo's names:
   `mj_name2id/3`, `mj_step1/2`, `mj_kinematics/2` …
-- **`ExMujoco.Types`** — every enum, as numbers, with names that read like Monty's Python:
+- **`ExMujoco.Types`** — every enum, as numbers, named as MuJoCo names them:
   `ExMujoco.Types.Geom.box()`, `ExMujoco.Types.Obj.body()`.
 
 Reading a field copies it, so the value you hold does not change when the next step runs.
@@ -139,31 +128,27 @@ iex> ExMujoco.load_string("<mujoco></mujoco>")
 {:error, %ExMujoco.Error{message: "mj_parseXMLString: ..."}}
 ```
 
-## How the bindings are made
+## Where to find what
 
-MuJoCo generates its own Python bindings by reading its headers. This package does the same:
-`mix ex_mujoco.gen` parses `MUJOCO_DIR/include/mujoco/*.h` — functions, struct members with the
-extents from `mjxmacro.h`, and enums — and writes the C++ that Fine registers and the Elixir
-that calls it. The output is committed, so a package build needs neither the generator nor a
-network, and `mix ex_mujoco.gen --check` (which CI runs) fails when the two disagree.
+| link                                                                   | what it answers                                              |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------ |
+| [`ExMujoco`](https://hexdocs.pm/ex_mujoco/ExMujoco.html)               | the curated surface, and the example above                   |
+| [`ExMujoco.Model`](https://hexdocs.pm/ex_mujoco/ExMujoco.Model.html)   | one function per `mjModel` field, named as MuJoCo names them |
+| [`ExMujoco.Data`](https://hexdocs.pm/ex_mujoco/ExMujoco.Data.html)     | the same for `mjData`                                        |
+| [`ExMujoco.Api`](https://hexdocs.pm/ex_mujoco/ExMujoco.Api.html)       | MuJoCo's C functions, bound one for one                      |
+| [`ExMujoco.Tensor`](https://hexdocs.pm/ex_mujoco/ExMujoco.Tensor.html) | what an array field answers, and how to read it              |
+| [`docs/coverage.md`](https://hexdocs.pm/ex_mujoco/coverage.html)       | what is bound, what is not, and why                          |
+| [`docs/plan.md`](https://hexdocs.pm/ex_mujoco/plan.html)               | what is not here yet, and when                               |
+| [`docs/building.md`](https://hexdocs.pm/ex_mujoco/building.html)       | platforms, your own MuJoCo, where the shared library goes    |
+| [`docs/development.md`](https://hexdocs.pm/ex_mujoco/development.html) | working on the package: bindings, tests, releasing           |
 
-`c_src/manifest.exs` is the one hand-edited decision: which C functions are bound 1:1, and
-which are bound by hand because each call needs an answer no signature gives.
-
-## Releasing
-
-`VERSION` is the one place the version lives; `mix.exs` reads it. To publish:
-
-```console
-$ ./scripts/tag_and_push_version.sh --dry-run   # what it would do
-$ ./scripts/tag_and_push_version.sh             # v0.1.1, pushed
-```
-
-It refuses to tag a commit whose CI is not green, and a commit CI never saw —
-a docs-only push, since the workflow ignores markdown — is compared against the
-last run that did succeed. The tag is what `.github/workflows/release.yml`
-publishes from: it builds the package, publishes it to Hex and creates the
-GitHub release.
+That table is the shape of the documentation, on purpose: **this page is for using the
+package** — install, the pin, usage, and where each other question is answered — and everything
+about building it, planning it or working on it is a guide beside it. The API reference is
+grouped the same way, so `Physics` is the curated surface, `The C API` is MuJoCo's own
+functions, `Types` is the enums (eighty-odd tiny modules, in one group rather than loose in the
+list), and the generator's modules sit at the end under `Generating the bindings` where a caller
+never has to scroll past them.
 
 ## Licence
 
