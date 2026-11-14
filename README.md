@@ -129,6 +129,21 @@ network, and `mix ex_mujoco.gen --check` (which CI runs) fails when the two disa
 `c_src/manifest.exs` is the one hand-edited decision: which C functions are bound 1:1, and
 which are bound by hand because each call needs an answer no signature gives.
 
+## Releasing
+
+`VERSION` is the one place the version lives; `mix.exs` reads it. To publish:
+
+```console
+$ ./scripts/tag_and_push_version.sh --dry-run   # what it would do
+$ ./scripts/tag_and_push_version.sh             # v0.1.0, pushed
+```
+
+It refuses to tag a commit whose CI is not green, and a commit CI never saw —
+a docs-only push, since the workflow ignores markdown — is compared against the
+last run that did succeed. The tag is what `.github/workflows/release.yml`
+publishes from: it builds the package, publishes it to Hex and creates the
+GitHub release.
+
 ## Licence
 
 MPL-2.0 for this package. MuJoCo is Apache-2.0 and is linked, not modified; see `NOTICE`.
