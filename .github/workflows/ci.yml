@@ -137,24 +137,28 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1
       - run: mix deps.get
       - run: mix hex.build
+      # `pkgdir` and `consumer` are relative to the checkout: a Windows runner's
+      # `$RUNNER_TEMP` is a backslash path, which bash and tar each read
+      # differently.
       - name: Unpack it the way Hex does
         shell: bash
         run: |
-          mkdir -p "$RUNNER_TEMP/package"
-          tar xf ex_mujoco-*.tar -C "$RUNNER_TEMP/package"
-          mkdir -p "$RUNNER_TEMP/package/contents"
-          tar xf "$RUNNER_TEMP/package/contents.tar.gz" -C "$RUNNER_TEMP/package/contents"
+          rm -rf pkgdir
+          mkdir -p pkgdir/contents
+          tar xf ex_mujoco-*.tar -C pkgdir
+          tar xf pkgdir/contents.tar.gz -C pkgdir/contents
+          ls pkgdir/contents
       - name: Use it from an empty directory
         shell: bash
         run: |
-          mkdir -p "$RUNNER_TEMP/consumer"
-          cd "$RUNNER_TEMP/consumer"
+          rm -rf consumer
+          mkdir -p consumer
+          cd consumer
           cat > check.exs <<'EXS'
-          # A path dependency on what Hex would have installed, with no
-          # `mix.exs` of our own: this is `Mix.install/2`, which is how a
-          # reader tries a package before writing a project around it.
-          package = Path.join(System.get_env("RUNNER_TEMP") || System.tmp_dir!(), "package/contents")
-          Mix.install([{:ex_mujoco, path: package}])
+          # A path dependency on what Hex would have installed, with no `mix.exs`
+          # of our own: this is `Mix.install/2`, which is how a reader tries a
+          # package before writing a project around it.
+          Mix.install([{:ex_mujoco, path: "../pkgdir/contents"}])
 
           xml = """
           <mujoco>
@@ -177,7 +181,14 @@ jobs:
             raise "the library is #{ExMujoco.version()} and the headers are #{ExMujoco.header_version()}"
           end
 
-          {:error, %ExMujoco.Error{}} = ExMujoco.load_string("<mujoco><worldbody><body></worldbody></mujoco>")
+          # A model MuJoCo refuses is the library's own error, not a dead VM. The
+          # struct is compared at run time: `check.exs` is compiled before
+          # `Mix.install/2` has loaded it.
+          {:error, refused} = ExMujoco.load_string("<mujoco><worldbody><body></worldbody></mujoco>")
+
+          unless refused.__struct__ == ExMujoco.Error do
+            raise "a refused model answered #{inspect(refused)}"
+          end
 
           IO.puts("installed and stepped: library #{ExMujoco.version()}, nq #{ExMujoco.Model.nq(model)}")
           EXS

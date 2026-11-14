@@ -33,3 +33,6 @@ Desktop.ini
 .vscode/
 .idea/
 *.swp
+
+# `mix hex.build` writes the package beside the project.
+ex_mujoco-*.tar
