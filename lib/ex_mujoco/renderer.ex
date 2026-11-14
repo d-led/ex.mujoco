@@ -70,7 +70,13 @@ defmodule ExMujoco.Renderer do
   The answer is memoised by the NIF: the platform's OpenGL library is opened once.
   """
   @spec available?() :: boolean()
-  def available?, do: Native.renderer_available()
+  def available? do
+    # `boolean()` is this function's promise, and it is kept here rather than
+    # trusted: the answer comes from a NIF, and one platform has been seen to
+    # encode it as an atom that is neither `true` nor `false`. Anything but
+    # `true` is a machine that does not render, which is what the reason will say.
+    Native.renderer_available() == true
+  end
 
   @doc """
   Why this machine cannot render, in words — empty when it can.

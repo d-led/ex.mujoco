@@ -17,6 +17,14 @@ EGL code — compiles to a refusal with a sentence: `ExMujoco.Renderer.available
 is `false` there, WGL having no implementation yet, and the renderer cases skip
 rather than fail.
 
+That refusal then had a Windows-only bug of its own, which is why
+`Renderer.available?/0` no longer trusts the answer: a NIF typed `bool` comes
+back under MSVC as `:""` — an atom whose name is empty, neither `true` nor
+`false` — and a caller's `not` on it raises `ArgumentError`. The NIF builds the
+atom by name, the Elixir side answers `boolean()` whatever arrives, and
+`test/ex_mujoco/renderer_availability_test.exs` — the one renderer file that
+does not skip — pins both on every platform.
+
 ## 0.2.1
 
 `fine` is required as `>= 0.1.6 and < 0.3.0` rather than `~> 0.2.0`. Nothing this

@@ -71,6 +71,13 @@ offwidth=… offheight=…/>`), and asking for more is refused by name rather th
   CI job on `windows-2022` as the only thing that would have noticed. Anything platform
   specific in a shared unit has to compile where it is not implemented, too: `<dlfcn.h>` is
   included under `__APPLE__ || __linux__` for that reason.
+- **A NIF that answers `bool` answers `:""` under MSVC.** Fine encodes `true` and `false`
+  from atoms it fills in at load, and on Windows the encoding arrives as an atom with an
+  empty name — which is truthy, so `if` takes the wrong branch and `not` raises. Build the
+  atom by name (`fine::Atom(ok ? "true" : "false")`) and normalise at the Elixir boundary
+  (`== true`), and keep one test that runs where the suite runs, not only where it renders:
+  the renderer cases skip on a machine without OpenGL, and the refusal is exactly the path
+  that had the bug.
 
 ## Tests
 

@@ -4,6 +4,7 @@
 
 #include "gl.hpp"
 
+#include <cstdlib>
 #include <mutex>
 #include <stdexcept>
 
@@ -278,6 +279,19 @@ Singleton &singleton() {
 }  // namespace
 
 bool available(std::string *reason) {
+  // A machine without OpenGL is otherwise only found, never tested: macOS and
+  // Linux runners have one, and Windows has no branch. `EX_MUJOCO_NO_GL` says
+  // "pretend there is none", so the refusal — the sentence, and every caller
+  // that must survive it — runs on a machine that could have rendered. It is not
+  // memoised, so one VM can be told both answers.
+  if (std::getenv("EX_MUJOCO_NO_GL") != nullptr) {
+    if (reason != nullptr) {
+      *reason = "EX_MUJOCO_NO_GL is set, so this VM renders nothing";
+    }
+
+    return false;
+  }
+
   Singleton &one = singleton();
 
   std::lock_guard<std::mutex> guard(one.lock);

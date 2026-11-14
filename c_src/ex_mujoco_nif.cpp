@@ -246,9 +246,14 @@ FINE_NIF(contact_force, 0);
 // `renderer_available` is the question a caller asks first: a machine with no
 // OpenGL still loads this package, steps and reads models, and says so here
 // rather than failing at the first frame.
-bool renderer_available(ErlNifEnv *) {
+//
+// The answer is an atom made here by name, not a `bool`: `Encoder<bool>` hands
+// back Fine's `true`/`false` atoms, and under MSVC those arrive as `:""` — an
+// atom whose name is empty — which a caller's `not` then raises on.
+fine::Atom renderer_available(ErlNifEnv *) {
   std::string reason;
-  return exmujoco::gl::available(&reason);
+
+  return fine::Atom(exmujoco::gl::available(&reason) ? "true" : "false");
 }
 FINE_NIF(renderer_available, 0);
 
