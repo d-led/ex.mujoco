@@ -24,7 +24,12 @@ MUJOCO_DIR ?= $(shell elixir "$(SCRIPT)" --print-dir)
 CPPFLAGS := -shared -fPIC -fvisibility=hidden -std=c++17 -Wall -Wextra -Wno-unused-parameter
 CPPFLAGS += -I"$(ERTS_INCLUDE_DIR)" -I"$(FINE_INCLUDE_DIR)" -I"$(MUJOCO_DIR)/include" -I$(C_SRC)
 
-ifdef DEBUG
+# What the package ships is what it builds: `-O3`, on every platform (Windows is
+# `/O2`, in Makefile.win). A debug build is asked for by name —
+# `EX_MUJOCO_DEBUG=1 mix compile` — and not by a bare `DEBUG`, which a shell or a
+# CI runner can be carrying for reasons of its own, and which would otherwise
+# turn a release into `-O0` without saying so.
+ifdef EX_MUJOCO_DEBUG
 	CPPFLAGS += -g -O0
 else
 	CPPFLAGS += -O3

@@ -84,7 +84,21 @@ offwidth=… offheight=…/>`), and asking for more is refused by name rather th
   the renderer cases skip on a machine without OpenGL, and the refusal is exactly the path
   that had the bug.
 
+## What the build compiles
+
+Optimised, on every platform: `-O3` in `Makefile` (Linux and macOS), `/O2` in `Makefile.win`
+(MSVC), and MuJoCo itself either as the upstream release artifact or, where there is none for
+the platform, a CMake `Release` build — `scripts/prepare_mujoco.exs` is what decides, and it
+never asks for a debug configuration.
+
+A debug build is asked for by name: `EX_MUJOCO_DEBUG=1 mix compile` adds `-g -O0`. The
+variable is prefixed for a reason — a bare `DEBUG` can already be set in a shell or on a
+runner for reasons that have nothing to do with this package, and would then quietly turn a
+release into an unoptimised one. Windows has no conditional in `Makefile.win` (nmake has no
+`ifdef`): a debug build there is a change to the `/O2` on its `CPPFLAGS` line.
+
 ## Tests
+
 
 `mix test` runs the suite against the pinned MuJoCo: behaviour (`step`, state round-trips,
 errors), the generated fields, the tensor shape rules, the generator's own checks, and two

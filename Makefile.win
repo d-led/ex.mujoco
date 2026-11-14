@@ -21,6 +21,11 @@ SCRIPT=$(EX_MUJOCO_PROJECT_DIR)\scripts\prepare_mujoco.exs
 # `/wd4611` is the `setjmp` / destructor warning, and it is the one caveat this
 # design owns: MuJoCo's fatal error is caught by a longjmp, and the lambda the
 # call runs in owns nothing that needs unwinding. `c_src/mj_call.hpp` says so.
+#
+# `/O2` is the release optimisation and is not conditional: nmake has no
+# `ifdef`, and a debug build on Windows is `/Od /Zi`, which is a change to this
+# line rather than a flag to set. `Makefile`'s `EX_MUJOCO_DEBUG` covers the other
+# two platforms.
 CPPFLAGS=/LD /std:c++17 /W4 /WX /EHsc /O2 /wd4100 /wd4611
 CPPFLAGS=$(CPPFLAGS) /I"$(ERTS_INCLUDE_DIR)" /I"$(FINE_INCLUDE_DIR)"
 CPPFLAGS=$(CPPFLAGS) /I"$(MUJOCO_DIR)\include" /I"$(C_SRC)"
