@@ -133,8 +133,6 @@ struct Platform {
   void *library = nullptr;
   EGLDisplay display = nullptr;
   EGLConfig config = nullptr;
-  // EGL_NO_SURFACE until a surfaceless context is refused, which is the only
-  // reason to make one: MuJoCo renders into its own framebuffer.
   EGLSurface surface = nullptr;
 
   EGLDisplay (*get_display)(void *) = nullptr;
@@ -240,21 +238,29 @@ struct Platform {
       return nullptr;
     }
 
+    // A surface, even a 1×1 one, because MuJoCo asks whether a default
+    // framebuffer exists before it will make a context of its own: with no
+    // surface at all it answers "Default framebuffer is not complete, error
+    // 0x0" and refuses the model. The size is the renderer's business — MuJoCo
+    // draws into an FBO of its own — so the smallest is enough.
+    const EGLint surface_attributes[] = {kWidth, 1, kHeight, 1, kNone};
+    surface = create_pbuffer(display, config, surface_attributes);
+
+    if (surface == nullptr) {
+      *reason = "EGL could not create an offscreen surface here";
+      return nullptr;
+    }
+
     return context;
   }
 
-  // A render makes the context current, and a context needs a surface only where
-  // the implementation has no `EGL_KHR_surfaceless_context`: MuJoCo renders into
-  // an FBO of its own, so nothing is drawn into a default framebuffer and one is
-  // asked for only when the surfaceless call is refused.
+  // A render makes the context current, on the surface above; an implementation
+  // with `EGL_KHR_surfaceless_context` can do without it, which is the second
+  // attempt.
   void current(EGLContext context) {
-    if (make_current(display, surface, surface, context) || surface != nullptr) {
-      return;
+    if (!make_current(display, surface, surface, context)) {
+      make_current(display, nullptr, nullptr, context);
     }
-
-    const EGLint surface_attributes[] = {kWidth, 1, kHeight, 1, kNone};
-    surface = create_pbuffer(display, config, surface_attributes);
-    make_current(display, surface, surface, context);
   }
 };
 

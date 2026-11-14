@@ -8,14 +8,12 @@ contains everything these notes describe.
 ## 0.2.3
 
 Linux renders. The EGL config asked for a pbuffer and nothing else — no depth
-sizes — and made the context current against a 1×1 surface, so `mjr_makeContext`
-answered `Default framebuffer is not complete, error 0x0` and refused the model:
-`available?/0` said yes and every renderer failed. The configuration now asks for
-the buffers MuJoCo's renderer needs (8-bit colour and alpha, 24-bit depth,
-8-bit stencil, RGB) and the context is made current with **no surface** at all,
-which is what MuJoCo's own EGL bindings do — a render goes into an FBO of the
-renderer's, never into a default framebuffer — with the pbuffer kept as the
-fallback for an implementation without `EGL_KHR_surfaceless_context`.
+sizes — so `mjr_makeContext` answered `Default framebuffer is not complete, error
+0x0` and refused the model: `available?/0` said yes and every renderer failed. The
+configuration now asks for the buffers MuJoCo's renderer needs (8-bit colour and
+alpha, 24-bit depth, 8-bit stencil, RGB), as MuJoCo's own EGL bindings do, and
+keeps the surfaceless call as a fallback for an implementation with
+`EGL_KHR_surfaceless_context`.
 
 That this was possible until now is the other half of the fix: `test
 (ubuntu-24.04)` had no OpenGL either, so the renderer skipped there and only
