@@ -47,38 +47,42 @@ ex_mujoco: MuJoCo 4.0.1 is in _build/mujoco/4.0.1-darwin-arm64
 
 Three ways to point it at a MuJoCo, in the order they are tried:
 
-| how | command | when |
-| --- | --- | --- |
-| your own install | `MUJOCO_DIR=/opt/mujoco mix compile` | Conan, vcpkg, a build of your own, a system package |
-| from source, at any ref | `EX_MUJOCO_SOURCE_REF=main mix compile` | the latest MuJoCo, or a commit that fixes something |
-| from a checkout | `EX_MUJOCO_SOURCE_DIR=~/src/mujoco mix compile` | you are working on MuJoCo |
-| the pinned release | `mix compile` | everything else |
+| how                     | command                                         | when                                                |
+| ----------------------- | ----------------------------------------------- | --------------------------------------------------- |
+| your own install        | `MUJOCO_DIR=/opt/mujoco mix compile`            | Conan, vcpkg, a build of your own, a system package |
+| from source, at any ref | `EX_MUJOCO_SOURCE_REF=main mix compile`         | the latest MuJoCo, or a commit that fixes something |
+| from a checkout         | `EX_MUJOCO_SOURCE_DIR=~/src/mujoco mix compile` | you are working on MuJoCo                           |
+| the pinned release      | `mix compile`                                   | everything else                                     |
 
 The source build runs CMake and takes a few minutes; the release fetch takes seconds.
 [`docs/building.md`](docs/building.md) has the detail, including what happens to the shared
 library afterwards and why.
 
+Windows needs nothing set up: the library MuJoCo ships is loaded from `priv/` by a second,
+small library, because Windows will not look beside a library for the libraries it imports.
+The one prerequisite is MuJoCo's own — the Visual C++ runtime, which ships with Visual Studio.
+
 ## What you get
 
 `ExMujoco` is the curated surface — a model, its data, stepping, state:
 
-| | |
-| --- | --- |
-| `ExMujoco.load_xml/1`, `load_string/1` | compile MJCF, from a file or from memory |
-| `ExMujoco.data/1` | an `mjData` for a model |
-| `ExMujoco.forward/1`, `step/1`, `reset/1` | the three things you do to data |
-| `ExMujoco.state/1,2`, `put_state/3` | save and restore the integration state |
-| `ExMujoco.contact_force/2` | one contact's six numbers |
+|                                           |                                          |
+| ----------------------------------------- | ---------------------------------------- |
+| `ExMujoco.load_xml/1`, `load_string/1`    | compile MJCF, from a file or from memory |
+| `ExMujoco.data/1`                         | an `mjData` for a model                  |
+| `ExMujoco.forward/1`, `step/1`, `reset/1` | the three things you do to data          |
+| `ExMujoco.state/1,2`, `put_state/3`       | save and restore the integration state   |
+| `ExMujoco.contact_force/2`                | one contact's six numbers                |
 
 Underneath, generated from the headers:
 
-* **`ExMujoco.Model`** — every field of `mjModel`, one function each: `nq/1`, `geom_size/1`,
+- **`ExMujoco.Model`** — every field of `mjModel`, one function each: `nq/1`, `geom_size/1`,
   `body_mass/1`, `jnt_axis/1` … A scalar answers a number; an array answers an
   `ExMujoco.Tensor` carrying the element type and the shape.
-* **`ExMujoco.Data`** — the same for `mjData`: `qpos/1`, `qvel/1`, `xpos/1`, `efc_force/1` …
-* **`ExMujoco.Api`** — MuJoCo's own functions, bound one for one, under MuJoCo's names:
+- **`ExMujoco.Data`** — the same for `mjData`: `qpos/1`, `qvel/1`, `xpos/1`, `efc_force/1` …
+- **`ExMujoco.Api`** — MuJoCo's own functions, bound one for one, under MuJoCo's names:
   `mj_name2id/3`, `mj_step1/2`, `mj_kinematics/2` …
-* **`ExMujoco.Types`** — every enum, as numbers, with names that read like Monty's Python:
+- **`ExMujoco.Types`** — every enum, as numbers, with names that read like Monty's Python:
   `ExMujoco.Types.Geom.box()`, `ExMujoco.Types.Obj.body()`.
 
 Reading a field copies it, so the value you hold does not change when the next step runs.
@@ -95,12 +99,12 @@ iex> ExMujoco.Api.mj_name2id(model, ExMujoco.Types.Obj.geom(), "floor")
 
 Both are in [`docs/plan.md`](docs/plan.md) with the reason they are their own phase:
 
-* **`mjSpec`** — building a model in memory (`mjs_addBody` and the rest). Compiling XML, from
+- **`mjSpec`** — building a model in memory (`mjs_addBody` and the rest). Compiling XML, from
   a path or from a string, covers everything that can be expressed in MJCF.
-* **Rendering** — `mjrContext` and offscreen frames. A GL context is per platform (EGL,
+- **Rendering** — `mjrContext` and offscreen frames. A GL context is per platform (EGL,
   OSMesa, CGL, WGL) and belongs to a thread; that is a different job from stepping physics.
 
-`docs/coverage.md` lists every MuJoCo function this package does *not* bind, and why. Nothing
+`docs/coverage.md` lists every MuJoCo function this package does _not_ bind, and why. Nothing
 is dropped in silence.
 
 ## Errors

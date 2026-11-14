@@ -75,11 +75,11 @@ ex_mujoco: Fetching MuJoCo 4.0.1 for darwin-universal
 
 The official artifact for the host, verified against the `.sha256` MuJoCo publishes beside it:
 
-| platform | artifact | contains |
-| --- | --- | --- |
-| linux x86_64, aarch64 | `mujoco-<v>-linux-<arch>.tar.gz` | `include/`, `lib/libmujoco.so*` |
-| macOS universal2 | `mujoco-<v>-macos-universal2.dmg` | `mujoco.framework` |
-| windows x86_64 | `mujoco-<v>-windows-x86_64.zip` | `include/`, `lib/mujoco.lib`, `bin/mujoco.dll` |
+| platform              | artifact                          | contains                                       |
+| --------------------- | --------------------------------- | ---------------------------------------------- |
+| linux x86_64, aarch64 | `mujoco-<v>-linux-<arch>.tar.gz`  | `include/`, `lib/libmujoco.so*`                |
+| macOS universal2      | `mujoco-<v>-macos-universal2.dmg` | `mujoco.framework`                             |
+| windows x86_64        | `mujoco-<v>-windows-x86_64.zip`   | `include/`, `lib/mujoco.lib`, `bin/mujoco.dll` |
 
 A version that is not in the checksum table in `scripts/prepare_mujoco.exs` cannot be
 downloaded on purpose: pinning a release nobody checked is not pinning. Adopting one is two
@@ -94,15 +94,15 @@ The download goes to `<project>/_build/mujoco/<version>-<platform>-<arch>/`; set
 The NIF records the library's own name as the thing to load, so the copy in `priv/` has to sit
 where the loader will look:
 
-* **Linux** — `priv/libmujoco.so.4.0.1`, found through `-Wl,-rpath,'$ORIGIN'`: the NIF's own
+- **Linux** — `priv/libmujoco.so.4.0.1`, found through `-Wl,-rpath,'$ORIGIN'`: the NIF's own
   directory.
-* **macOS** — the release dylib's install name is
+- **macOS** — the release dylib's install name is
   `@rpath/mujoco.framework/Versions/A/libmujoco.4.0.1.dylib` and it is code-signed. Rewriting
   the id of a signed dylib is what makes it refuse to load on Apple Silicon, so the path is
   kept: the file is copied to `priv/mujoco.framework/Versions/A/`, and `@loader_path` supplies
   the `@rpath`. A source build names itself `@rpath/libmujoco.<v>.dylib` and sits directly in
   `priv/`.
-* **Windows** — `priv/mujoco.dll`, and being in `priv/` is not enough on its own. Windows
+- **Windows** — `priv/mujoco.dll`, and being in `priv/` is not enough on its own. Windows
   resolves a library's imports against the modules already in the process and against the
   search path, never against the directory of the library doing the importing, so
   `ex_mujoco_nif.dll` reported "the specified module could not be found" with `mujoco.dll`
@@ -115,6 +115,21 @@ where the loader will look:
   the Universal CRT — which is MuJoCo's own requirement on Windows and ships with Visual Studio
   and with the [Microsoft Visual C++ Redistributable](https://aka.ms/vs/17/release/vc_redist.x64.exe).
   A machine without it says so now, naming the DLL and the loader's error code.
+
+## What Windows does differently
+
+Two things, both of them the loader's rules rather than MuJoCo's:
+
+- A library's imports are resolved against the modules already in the process and against the
+  search path, never against the directory of the library doing the importing. `mujoco.dll`
+  beside `ex_mujoco_nif.dll` is not enough, and `priv/` on the process's `PATH` from inside the
+  load hook does not help either: that is not the environment the loader reads.
+  `priv/ex_mujoco_preload.dll` — which imports only the C runtime, so it always loads — loads
+  MuJoCo by its full path first, and the NIF then finds it among the loaded modules.
+- The NIF layer declines to build the exception struct it builds everywhere else, so a
+  complaint from MuJoCo arrives as the reason of a bare `ErlangError` rather than as a
+  `RuntimeError`. `ExMujoco` turns either into `ExMujoco.Error`, and leaves an `ErlangError`
+  carrying anything other than a binary alone.
 
 ## The version check
 
@@ -131,13 +146,13 @@ It is asked on first use rather than at load because `:erlang.load_nif` happens 
 
 ## Tools
 
-| | |
-| --- | --- |
-| `make` / `nmake` | the NIF, from `Makefile` / `Makefile.win` |
-| `elixir` | `scripts/prepare_mujoco.exs`, the fetch and the CMake build |
-| `curl` | the download (falls back to `:httpc` when it is absent) |
-| `tar`, `unzip`, `hdiutil` | unpacking, per platform |
-| `cmake` | only for a source build |
+|                           |                                                             |
+| ------------------------- | ----------------------------------------------------------- |
+| `make` / `nmake`          | the NIF, from `Makefile` / `Makefile.win`                   |
+| `elixir`                  | `scripts/prepare_mujoco.exs`, the fetch and the CMake build |
+| `curl`                    | the download (falls back to `:httpc` when it is absent)     |
+| `tar`, `unzip`, `hdiutil` | unpacking, per platform                                     |
+| `cmake`                   | only for a source build                                     |
 
 Windows uses MSVC through `nmake`, which is what an Elixir install on Windows already has.
 `Makefile.win` is Fine's own example with the MuJoCo link added.
