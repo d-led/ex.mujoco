@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.1.1
+
+The patch that makes the pin enforced rather than merely intended.
 
 - The release workflow refuses to build a tag against anything but the pinned MuJoCo artifact:
   it fails if an override is set, and it reads the prepared library's `.provider` and requires

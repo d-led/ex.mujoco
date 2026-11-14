@@ -30,7 +30,7 @@ The plan is phased — physics first, then scene building, then rendering — an
 
 ```elixir
 def deps do
-  [{:ex_mujoco, "~> 0.1"}]
+  [{:ex_mujoco, "~> 0.1.1"}]
 end
 ```
 
@@ -144,7 +144,7 @@ which are bound by hand because each call needs an answer no signature gives.
 
 ```console
 $ ./scripts/tag_and_push_version.sh --dry-run   # what it would do
-$ ./scripts/tag_and_push_version.sh             # v0.1.0, pushed
+$ ./scripts/tag_and_push_version.sh             # v0.1.1, pushed
 ```
 
 It refuses to tag a commit whose CI is not green, and a commit CI never saw —
