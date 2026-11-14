@@ -59,6 +59,18 @@ checksum is checked before it is unpacked, and the release workflow refuses to b
 against anything else. The three overrides above are the development paths — `main` included —
 and `mix ex_mujoco.gen --check` tells you when they have moved past the committed bindings.
 
+```elixir
+iex> ExMujoco.mujoco_version()   # the pin, as MuJoCo spells it
+"4.0.1"
+iex> ExMujoco.version()          # what the linked library answers
+4000001
+iex> ExMujoco.header_version()   # what the bindings were generated from
+4000001
+```
+
+All three agree, or the NIF does not load. What the build itself fetched — version, artifact
+name, artifact checksum, platform, timestamp — is `_build/mujoco/<pin>-<platform>-<arch>/.provider`.
+
 The source build runs CMake and takes a few minutes; the release fetch takes seconds.
 [`docs/building.md`](docs/building.md) has the detail, including what happens to the shared
 library afterwards and why.

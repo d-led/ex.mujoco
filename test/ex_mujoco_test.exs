@@ -111,6 +111,17 @@ defmodule ExMujocoTest do
       assert ExMujoco.version() == ExMujoco.header_version()
       assert ExMujoco.version() == 4_000_001
     end
+
+    test "is the version the pin names" do
+      # MuJoCo numbers a release `major * 1_000_000 + minor * 1_000 + patch`. The
+      # pin is a third statement of the version, beside the library's and the
+      # headers', and a build against anything else disagrees here rather than
+      # answering confidently about the wrong physics.
+      [major, minor, patch] =
+        ExMujoco.mujoco_version() |> String.split(".") |> Enum.map(&String.to_integer/1)
+
+      assert ExMujoco.version() == major * 1_000_000 + minor * 1_000 + patch
+    end
   end
 
   defp angle(data) do

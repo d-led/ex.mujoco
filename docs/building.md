@@ -107,12 +107,35 @@ checks the checksum published beside the artifact before it unpacks it. The four
 A git dependency, or a hex dependency, gets the same pinned artifact for the same reason: what
 a package does should not depend on when it was fetched.
 
+A version and a checksum, not a commit: for a binary nobody here built, the checksum is the
+claim that can be checked — it names the bytes, where a commit in MuJoCo's repository names
+source that was compiled by somebody else, with somebody else's compiler flags. Each prepared
+directory records which it was, in `.provider`:
+
+```console
+$ cat _build/mujoco/4.0.1-darwin-arm64/.provider
+version=4.0.1
+header_version=4000001
+platform=darwin
+arch=arm64
+provider=release=4.0.1
+artifact=mujoco-4.0.1-macos-universal2.dmg
+artifact_sha256=2616bb30cf48e5603e09f42ef7898e1302c2f99cdaaea650714f0fcfa3b57722
+prepared_at=2026-11-14T13:51:46.040794Z
+```
+
+At run time `ExMujoco.mujoco_version/0` answers the pin (compiled in from `mujoco.version`, so
+it answers inside a dependency), `ExMujoco.version/0` what the linked library says, and
+`ExMujoco.header_version/0` what the bindings were generated from.
+
 `EX_MUJOCO_SOURCE_REF=main mix compile` is how to work against the latest upstream without
 waiting for a pin. It fetches `heads/main`, builds it with CMake, and names the prepared
 directory after the ref, so a made-up-version build cannot be mistaken for the release one.
-Nothing is checksummed in that mode — it is a development path — and `mix ex_mujoco.gen --check`
-reports the bindings as stale as soon as upstream renames anything, which is the point of
-running it. The `mujoco main` workflow does that build once a day and steps a model, so a pin
+Nothing is checksummed in that mode — it is a development path — and the pin still says `4.0.1`,
+so `mix ex_mujoco.gen --check` reports the bindings as stale as soon as upstream renames
+anything, and "is the version the pin names" in the suite fails while the library is the new
+one. Both are the point of running them: a build against `main` is not a release and should not
+look like one. The `mujoco main` workflow does that build once a day and steps a model, so a pin
 that can no longer be moved is known before somebody tries to move it.
 
 ## Where the shared library goes, and why there

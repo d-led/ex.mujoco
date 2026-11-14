@@ -226,11 +226,10 @@ defmodule PrepareMujoco do
 
   defp install_release!(dir) do
     version = version!()
-    target = {platform(), if(platform() == "darwin", do: "universal", else: arch())}
-    label = Enum.join(Tuple.to_list(target), "-")
+    label = release_target() |> Tuple.to_list() |> Enum.join("-")
 
     artifact =
-      Map.get(@releases, version, %{}) |> Map.get(target) ||
+      release_artifact() ||
         raise """
         MuJoCo #{version} publishes no artifact for #{label}.
 
@@ -531,16 +530,40 @@ defmodule PrepareMujoco do
   # Where the physics came from, in a file, so the next person does not have to
   # read this script to find out.
   defp write_provenance(dir) do
-    lines = [
-      "version=#{version!()}",
-      "header_version=#{header_version!(dir)}",
-      "platform=#{platform()}",
-      "arch=#{arch()}",
-      "provider=#{provider(dir)}",
-      "prepared_at=#{DateTime.utc_now() |> DateTime.to_iso8601()}"
-    ]
+    provider = provider(dir)
+
+    lines =
+      [
+        "version=#{version!()}",
+        "header_version=#{header_version!(dir)}",
+        "platform=#{platform()}",
+        "arch=#{arch()}",
+        "provider=#{provider}"
+      ] ++
+        artifact_lines(provider) ++ ["prepared_at=#{DateTime.utc_now() |> DateTime.to_iso8601()}"]
 
     File.write!(Path.join(dir, ".provider"), Enum.join(lines, "\n") <> "\n")
+  end
+
+  # A version and a checksum, because for a binary nobody here built, the
+  # checksum is the claim that can be checked: it names the bytes. There is
+  # nothing to name when MuJoCo came from a checkout or from source.
+  defp artifact_lines("release=" <> _) do
+    case release_artifact() do
+      nil -> []
+      artifact -> ["artifact=#{artifact.name}", "artifact_sha256=#{artifact.sha256}"]
+    end
+  end
+
+  defp artifact_lines(_provider), do: []
+
+  # The platform MuJoCo publishes for: macOS ships one universal build.
+  defp release_target do
+    {platform(), if(platform() == "darwin", do: "universal", else: arch())}
+  end
+
+  defp release_artifact do
+    @releases |> Map.get(version!(), %{}) |> Map.get(release_target())
   end
 
   defp provider(dir) do

@@ -1,4 +1,13 @@
 defmodule ExMujoco do
+  # The pin, read once at compile time. `mujoco.version` is the single statement
+  # of which MuJoCo this package builds against, it ships in the package, and
+  # `@external_resource` makes a bump recompile this module rather than leave a
+  # number behind. `mix.exs` and `scripts/prepare_mujoco.exs` read the same file
+  # for the same reason.
+  @mujoco_pin Path.expand("../mujoco.version", __DIR__)
+  @external_resource @mujoco_pin
+  @mujoco_version @mujoco_pin |> File.read!() |> String.trim()
+
   @moduledoc """
   MuJoCo, from Elixir.
 
@@ -19,6 +28,24 @@ defmodule ExMujoco do
   function per field of `mjModel` and `mjData`, named as MuJoCo names them, and
   answering either a number or an `ExMujoco.Tensor`. Reading copies, so what you
   hold does not change when the next step runs.
+
+  ## Which MuJoCo
+
+  MuJoCo #{@mujoco_version}, and not whatever was installed. The package pins one release —
+  [`mujoco.version`](https://github.com/d-led/ex.mujoco/blob/main/mujoco.version) — fetches that
+  release's official artifact for the platform, checks it against the checksum MuJoCo publishes
+  beside it, and generates the bindings from its headers. A version and a checksum, rather than a
+  commit: for a binary nobody here built, the checksum says which bytes were used, which is the
+  stronger claim.
+
+  Three functions answer which MuJoCo is in front of you:
+
+    * `mujoco_version/0` — the pin, as MuJoCo spells it: `"#{@mujoco_version}"`;
+    * `version/0` — what the linked library says it is;
+    * `header_version/0` — what the bindings were generated from.
+
+  All three agree, or the NIF does not load. Building against something else is a deliberate
+  act (`EX_MUJOCO_SOURCE_REF=main`) and is documented in `docs/building.md`.
 
   ## Where the code comes from
 
@@ -159,7 +186,18 @@ defmodule ExMujoco do
   end
 
   @doc """
-  The MuJoCo library's version, as MuJoCo numbers it: `4000001` is 4.0.1.
+  The MuJoCo this package is built against, as MuJoCo spells it: `"#{@mujoco_version}"`.
+
+  Compiled in from `mujoco.version`, so it answers in a dependency, where there
+  is no build tree to read. `version/0` is what the linked library says, and
+  `header_version/0` what the bindings were generated from; this is what the
+  build was pinned to.
+  """
+  @spec mujoco_version() :: String.t()
+  def mujoco_version, do: @mujoco_version
+
+  @doc """
+  The MuJoCo library's version, as MuJoCo numbers it: `4000001` is #{@mujoco_version}.
   """
   @spec version() :: non_neg_integer()
   def version, do: Native.version()
