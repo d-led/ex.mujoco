@@ -1,7 +1,7 @@
 defmodule ExMujoco.MixProject do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.2.1"
   @source_url "https://github.com/d-led/ex.mujoco"
 
   # The MuJoCo version this package is built against. The headers of exactly this
@@ -60,7 +60,11 @@ defmodule ExMujoco.MixProject do
     [
       # The NIF is C++ over MuJoCo; Fine supplies the encoders, the resource
       # type and the NIF registration, elixir_make runs the compiler.
-      {:fine, "~> 0.2.0", runtime: false},
+      # Two minor versions, on purpose: nothing this package calls changed
+      # between them, and one application wants both this package and one that
+      # pinned `fine ~> 0.1.2` (pythonx), which a narrower range makes impossible
+      # to resolve. Verified by building and running the whole suite against 0.1.6.
+      {:fine, ">= 0.1.6 and < 0.3.0", runtime: false},
       {:elixir_make, "~> 0.10", runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},

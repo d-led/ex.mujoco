@@ -5,6 +5,14 @@ Every version below is a real change, but not every one reached Hex: 0.1.2,
 patch, and expired. What Hex serves is 0.1.0, 0.1.1, 0.1.4 and 0.1.8, and 0.1.8
 contains everything these notes describe.
 
+## 0.2.1
+
+`fine` is required as `>= 0.1.6 and < 0.3.0` rather than `~> 0.2.0`. Nothing this
+package calls changed between the two, and the wider range is what lets one
+application use both ExMujoco and a package that pinned `fine ~> 0.1.2` — which
+there was no way to resolve otherwise. The whole suite, rendering included, passes
+against 0.1.6 as well as against 0.2.0.
+
 ## 0.2.0
 
 The package renders.
