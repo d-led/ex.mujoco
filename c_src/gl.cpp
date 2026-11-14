@@ -152,7 +152,12 @@ struct Platform {
 
   bool open(std::string *reason) {
     for (const char *name : {"libEGL.so.1", "libEGL.so"}) {
-      library = ::dlopen(name, RTLD_NOW | RTLD_LOCAL);
+      // `RTLD_GLOBAL`, unlike the framework on macOS: a context made through EGL
+      // is drawn into by MuJoCo's own glad, which loads `libGL` and asks
+      // `glXGetProcAddress` for its entry points. On a machine whose GL dispatch
+      // is glvnd, that only answers for a context glvnd was told about — and EGL
+      // is what tells it.
+      library = ::dlopen(name, RTLD_NOW | RTLD_GLOBAL);
 
       if (library != nullptr) {
         break;
