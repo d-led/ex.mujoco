@@ -625,8 +625,18 @@ defmodule ExMujoco.Gen.Template do
   @doc "What is bound, what is not, and why — as Markdown."
   def coverage(structs, functions, enums, manifest) do
     bound = functions |> bound_functions(manifest) |> Enum.map(& &1.name) |> MapSet.new()
-    hand = manifest.hand_written |> Enum.map(& &1.name) |> MapSet.new()
-    unbound = Enum.reject(functions, &expressible?/1)
+
+    # A hand-written NIF is covered even where the function it translates is one
+    # the generator could not bind — that is usually why it is written by hand.
+    by_hand =
+      manifest.hand_written
+      |> Enum.map(& &1.c)
+      |> Enum.reject(&is_nil/1)
+      |> MapSet.new()
+
+    unbound = Enum.reject(functions, &(&1.name in bound or &1.name in by_hand))
+    out_of_reach = Enum.reject(unbound, &expressible?/1)
+    in_reach = Enum.filter(unbound, &expressible?/1)
 
     """
     # What is bound
@@ -637,25 +647,37 @@ defmodule ExMujoco.Gen.Template do
 
     ## Functions
 
-    #{table([["MuJoCo functions", length(functions)], ["bound 1:1 by the generator", MapSet.size(bound)], ["bound by hand", MapSet.size(hand)], ["not bound", length(functions) - MapSet.size(bound) - MapSet.size(hand)]])}
+    #{table([["MuJoCo functions", length(functions)], ["bound 1:1 by the generator", MapSet.size(bound)], ["bound by hand", MapSet.size(by_hand)], ["not bound", length(unbound)]])}
 
     ### Bound by hand
 
     These need a decision per call — an error buffer to allocate, an output array
     whose length is the caller's business, a state signature — so they are written
-    out in `c_src/ex_mujoco_nif.cpp` rather than generated.
+    out in `c_src/ex_mujoco_nif.cpp` rather than generated. Eleven of MuJoCo's
+    functions are covered this way: `state_size/2` and `data_state_size/2` are the
+    same call, and `header_version/0` answers a constant in the header rather than
+    a call.
 
     #{bullets(Enum.map(manifest.hand_written, fn %{name: name, arity: arity, why: why} -> "`#{name}/#{arity}` — #{why}" end))}
 
     ### Not bound
 
-    #{length(unbound)} of MuJoCo's #{length(functions)} functions take something a
-    NIF cannot honestly invent — a callback, a `void*`, an output array whose
-    length nothing states, a variadic argument list — and binding one means
-    deciding that question, one function at a time. The other
-    #{length(functions) - length(unbound) - MapSet.size(bound) - MapSet.size(hand)}
-    are expressible and simply not bound yet: a name in `c_src/manifest.exs`, and
-    `mix ex_mujoco.gen`.
+    #{length(out_of_reach)} of the #{length(unbound)} take something a NIF cannot
+    honestly invent — a callback, a `void*`, an output array whose length nothing
+    states, a variadic argument list — and binding one means deciding that
+    question, one function at a time. The other #{length(in_reach)} need a name in
+    `c_src/manifest.exs` and `mix ex_mujoco.gen`, and nothing else.
+
+    Both lists are below, under the heading MuJoCo's header gives each block of
+    functions, so a reader can look where MuJoCo would put the answer.
+
+    #### A name in the manifest is the whole of it
+
+    #{section_bullets(in_reach)}
+
+    #### What the wall is, by area
+
+    #{table([["MuJoCo's heading", "functions"] | section_counts(out_of_reach)])}
 
     #{notes(manifest)}
 
@@ -679,6 +701,32 @@ defmodule ExMujoco.Gen.Template do
   defp notes(%{notes: notes}) do
     "Decisions worth naming:\n\n" <>
       bullets(Enum.map(notes, fn {name, why} -> "`#{name}` — #{why}" end))
+  end
+
+  # MuJoCo's names, under MuJoCo's heading for the block they belong to — what a
+  # reader looks for is the name, and where they look for it is the area.
+  defp section_bullets(functions) do
+    functions
+    |> by_section()
+    |> Enum.map_join("\n", fn {section, names} ->
+      "* **#{section}** (#{length(names)}) — #{Enum.map_join(names, ", ", &"`#{&1}`")}"
+    end)
+  end
+
+  defp section_counts(functions) do
+    functions
+    |> by_section()
+    |> Enum.sort_by(fn {section, names} -> {-length(names), section} end)
+    |> Enum.map(fn {section, names} -> [section, Integer.to_string(length(names))] end)
+  end
+
+  defp by_section(functions) do
+    functions
+    |> Enum.group_by(&(&1.section || "No heading in the header"))
+    |> Enum.sort_by(fn {section, _names} -> section end)
+    |> Enum.map(fn {section, names} ->
+      {section, names |> Enum.map(& &1.name) |> Enum.sort()}
+    end)
   end
 
   defp field_table(structs) do

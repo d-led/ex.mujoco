@@ -24,7 +24,15 @@ that calls it. The output is committed, so a package build needs neither the gen
 network, and `mix ex_mujoco.gen --check` (which CI runs) fails when the two disagree.
 
 `c_src/manifest.exs` is the one hand-edited decision: which C functions are bound 1:1, and
-which are bound by hand because each call needs an answer no signature gives.
+which are bound by hand because each call needs an answer no signature gives. Each hand-written
+entry also names the C function it translates (`c:`), because `docs/coverage.md` needs it: a
+hand-bound function is covered, and must not be offered there as something still to bind. The
+generator raises when that name is not one MuJoCo declares.
+
+`docs/coverage.md` is generated from the same reading, and answers *can the package do this?*
+with names rather than counts: what is bound, what a name in the manifest would add — under the
+heading MuJoCo's header gives each block of functions — and, per area, what cannot be bound
+from a signature at all. Its rows are one decomposition of the same list, so they add up.
 
 A change to a template in `lib/ex_mujoco/gen/` can emit C++ the compiler rejects, and
 `mix ex_mujoco.gen` compiles the project before it runs — a deadlock. Make the edit to

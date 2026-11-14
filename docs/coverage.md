@@ -9,14 +9,17 @@ disagrees with the headers.
 | MuJoCo functions | 551 |
 | --- | --- |
 | bound 1:1 by the generator | 25 |
-| bound by hand | 13 |
-| not bound | 513 |
+| bound by hand | 11 |
+| not bound | 515 |
 
 ### Bound by hand
 
 These need a decision per call — an error buffer to allocate, an output array
 whose length is the caller's business, a state signature — so they are written
-out in `c_src/ex_mujoco_nif.cpp` rather than generated.
+out in `c_src/ex_mujoco_nif.cpp` rather than generated. Eleven of MuJoCo's
+functions are covered this way: `state_size/2` and `data_state_size/2` are the
+same call, and `header_version/0` answers a constant in the header rather than
+a call.
 
 * `load_xml/1` — the error is a caller-sized char buffer; here it is our buffer and an exception
 * `load_xml_string/1` — a parsed spec has to be compiled and freed around the model, which is a lifetime question
@@ -34,13 +37,72 @@ out in `c_src/ex_mujoco_nif.cpp` rather than generated.
 
 ### Not bound
 
-426 of MuJoCo's 551 functions take something a
-NIF cannot honestly invent — a callback, a `void*`, an output array whose
-length nothing states, a variadic argument list — and binding one means
-deciding that question, one function at a time. The other
-87
-are expressible and simply not bound yet: a name in `c_src/manifest.exs`, and
-`mix ex_mujoco.gen`.
+421 of the 515 take something a NIF cannot
+honestly invent — a callback, a `void*`, an output array whose length nothing
+states, a variadic argument list — and binding one means deciding that
+question, one function at a time. The other 94 need a name in
+`c_src/manifest.exs` and `mix ex_mujoco.gen`, and nothing else.
+
+Both lists are below, under the heading MuJoCo's header gives each block of
+functions, so a reader can look where MuJoCo would put the answer.
+
+#### A name in the manifest is the whole of it
+
+* **Components** (13) — `mj_Euler`, `mj_RungeKutta`, `mj_compareFwdInv`, `mj_fwdAcceleration`, `mj_fwdActuation`, `mj_fwdConstraint`, `mj_fwdKinematics`, `mj_fwdPosition`, `mj_fwdVelocity`, `mj_implicit`, `mj_invConstraint`, `mj_invPosition`, `mj_invVelocity`
+* **Decompositions / Solvers** (1) — `mju_bandDiag`
+* **Error and memory** (4) — `mj_warning`, `mju_clearHandlers`, `mju_setLogConfig`, `mju_writeLog`
+* **Initialization** (9) — `mj_deleteData`, `mj_deleteModel`, `mj_freeStack`, `mj_markStack`, `mj_resetCallbacks`, `mj_resetCtrl`, `mj_resetDataDebug`, `mj_setConst`, `mj_sizeModel`
+* **Main simulation** (3) — `mj_forwardSkip`, `mj_inverse`, `mj_inverseSkip`
+* **Miscellaneous** (17) — `mju_Halton`, `mju_clip`, `mju_isBad`, `mju_isZero`, `mju_max`, `mju_min`, `mju_muscleBias`, `mju_muscleDynamics`, `mju_muscleGain`, `mju_round`, `mju_sigmoid`, `mju_sign`, `mju_springDamper`, `mju_str2Type`, `mju_type2Str`, `mju_warningText`, `mju_writeNumBytes`
+* **No heading in the header** (2) — `mj__freeStack`, `mj__markStack`
+* **OpenGL rendering** (3) — `mjr_finish`, `mjr_getError`, `mjr_rectangle`
+* **Parse and compile** (1) — `mj_freeLastXML`
+* **Plugins** (3) — `mjp_archiveProviderCount`, `mjp_pluginCount`, `mjp_providerCount`
+* **Printing** (6) — `mj_printData`, `mj_printFormattedData`, `mj_printFormattedModel`, `mj_printModel`, `mju_printMat`, `mju_printMatSparse`
+* **Sub components** (11) — `mj_checkAcc`, `mj_checkPos`, `mj_checkVel`, `mj_comVel`, `mj_factorM`, `mj_island`, `mj_makeM`, `mj_maxContact`, `mj_passive`, `mj_rnePostConstraint`, `mj_subtreeVel`
+* **Support** (11) — `mj_actuatorInputName`, `mj_copyState`, `mj_getPluginConfig`, `mj_initCtrlHistory`, `mj_initSensorHistory`, `mj_insideSite`, `mj_isPyramidal`, `mj_loadAllPluginLibraries`, `mj_loadPluginLibrary`, `mj_setKeyframe`, `mj_setTotalmass`
+* **Threads** (1) — `mju_threadpool`
+* **Vector math** (8) — `mju_L1`, `mju_dist3`, `mju_dot`, `mju_dot3`, `mju_mulVecMatVec`, `mju_norm`, `mju_norm3`, `mju_sum`
+* **Visualization** (1) — `mjv_copyModel`
+
+#### What the wall is, by area
+
+| MuJoCo's heading | functions |
+| --- | --- |
+| Vector math | 38 |
+| Support | 27 |
+| Element initialization | 25 |
+| OpenGL rendering | 25 |
+| Element casting | 24 |
+| Find and get utilities | 22 |
+| Initialization | 19 |
+| Interaction | 18 |
+| Non-tree elements | 18 |
+| Plugins | 16 |
+| Quaternions | 14 |
+| Visualization | 14 |
+| Error and memory | 13 |
+| Spec utilities | 13 |
+| Attribute setters | 12 |
+| Parse and compile | 12 |
+| Decompositions / Solvers | 11 |
+| Set actuator parameters | 11 |
+| Miscellaneous | 10 |
+| Tree elements | 9 |
+| Virtual file system | 9 |
+| UI framework | 8 |
+| Attribute getters | 7 |
+| Ray casting | 7 |
+| Resources | 7 |
+| Assets | 6 |
+| Asset cache | 5 |
+| Derivatives | 4 |
+| Sub components | 4 |
+| Poses | 3 |
+| Printing | 3 |
+| Signed Distance Functions | 3 |
+| Sparse math | 3 |
+| Attachment | 1 |
 
 Decisions worth naming:
 

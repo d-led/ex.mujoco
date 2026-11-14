@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.1.8
+
+"Can the package do this?" now has a list for an answer.
+
+- `docs/coverage.md` said how many MuJoCo functions are unbound and named none of the ones that
+  could be bound. It now lists them — 94 names, under the heading MuJoCo's header gives each
+  block, `mj_fwdPosition` and `mju_dot` where you would look for them — because adding one is a
+  name in `c_src/manifest.exs` and `mix ex_mujoco.gen`, and nothing else.
+- The 421 that cannot be bound from a signature are counted per area instead, so it is visible at
+  a glance that nine tenths of `OpenGL rendering` is out of reach and why.
+- The page's rows are one decomposition of one list, so they add up: 551 = 25 generated + 11 by
+  hand + 515 unbound, and 515 = 421 + 94. They did not agree before.
+- `c_src/manifest.exs` now names the C function each hand-written NIF translates (`c:`), which is
+  what makes that last count exact — and the generator raises if the name is one MuJoCo does not
+  declare.
+
 ## 0.1.7
 
 The type pages say what the numbers mean.

@@ -158,6 +158,29 @@ defmodule ExMujoco.Gen do
       can be answered, or take them out of the manifest and say why in `notes`.
       """
     end
+
+    # The hand-written entries name the MuJoCo function each one translates, and
+    # `docs/coverage.md` uses that to keep them out of the list of functions still
+    # waiting for a name in the manifest. A name that MuJoCo does not declare would
+    # look covered and be offered for binding at the same time.
+    mistranslated =
+      for %{name: name, c: c} <- manifest.hand_written,
+          c != nil,
+          not Map.has_key?(known, c) do
+        "#{name} translates #{c}, which MuJoCo does not declare"
+      end
+
+    if mistranslated != [] do
+      raise """
+      c_src/manifest.exs says a hand-written NIF translates a function MuJoCo
+      does not declare:
+
+      #{Enum.map_join(mistranslated, "\n", &("  " <> &1))}
+
+      Either the C name moved, or it was mistyped — `mix ex_mujoco.gen` cannot
+      tell which, but the coverage page would be wrong either way.
+      """
+    end
   end
 
   defp manifest!(project_dir) do

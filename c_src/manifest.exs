@@ -43,20 +43,25 @@ map = %{
   # the reason it is not generated. The arity is here because
   # `:erlang.load_nif` insists that every function the library registers already
   # exists in the module it is loading into — so these get stubs like the rest.
+  #
+  # `c` is the MuJoCo function each one translates, and `nil` where the answer is
+  # a constant in the header rather than a call. Nothing else in the build needs
+  # it; `docs/coverage.md` does, because a hand-bound function is covered and must
+  # not be offered as something to bind.
   hand_written: [
-    %{name: "load_xml", arity: 1, why: "the error is a caller-sized char buffer; here it is our buffer and an exception"},
-    %{name: "load_xml_string", arity: 1, why: "a parsed spec has to be compiled and freed around the model, which is a lifetime question"},
-    %{name: "data", arity: 1, why: "the data block belongs to a model, so the handle holds both"},
-    %{name: "reset", arity: 1, why: "the step surface is `(data)`, because the handle carries its model"},
-    %{name: "forward", arity: 1, why: "same: `ExMujoco.forward/1` takes the data, not model and data"},
-    %{name: "step", arity: 1, why: "same: `ExMujoco.step/1` takes the data"},
-    %{name: "state_size", arity: 2, why: "paired with get_state and set_state, which share the signature's meaning"},
-    %{name: "get_state", arity: 2, why: "writes into a buffer whose length `state_size` fixed; allocated here"},
-    %{name: "set_state", arity: 3, why: "reads a buffer whose length `state_size` fixed; checked here"},
-    %{name: "data_state_size", arity: 2, why: "the same count, asked of the data `put_state` is given"},
-    %{name: "contact_force", arity: 2, why: "writes six numbers into a caller's array; allocated here"},
-    %{name: "version", arity: 0, why: "the library's own version, checked against the headers at load time"},
-    %{name: "header_version", arity: 0, why: "the header's version, for the same check"}
+    %{name: "load_xml", c: "mj_loadXML", arity: 1, why: "the error is a caller-sized char buffer; here it is our buffer and an exception"},
+    %{name: "load_xml_string", c: "mj_parseXMLString", arity: 1, why: "a parsed spec has to be compiled and freed around the model, which is a lifetime question"},
+    %{name: "data", c: "mj_makeData", arity: 1, why: "the data block belongs to a model, so the handle holds both"},
+    %{name: "reset", c: "mj_resetData", arity: 1, why: "the step surface is `(data)`, because the handle carries its model"},
+    %{name: "forward", c: "mj_forward", arity: 1, why: "same: `ExMujoco.forward/1` takes the data, not model and data"},
+    %{name: "step", c: "mj_step", arity: 1, why: "same: `ExMujoco.step/1` takes the data"},
+    %{name: "state_size", c: "mj_stateSize", arity: 2, why: "paired with get_state and set_state, which share the signature's meaning"},
+    %{name: "get_state", c: "mj_getState", arity: 2, why: "writes into a buffer whose length `state_size` fixed; allocated here"},
+    %{name: "set_state", c: "mj_setState", arity: 3, why: "reads a buffer whose length `state_size` fixed; checked here"},
+    %{name: "data_state_size", c: "mj_stateSize", arity: 2, why: "the same count, asked of the data `put_state` is given"},
+    %{name: "contact_force", c: "mj_contactForce", arity: 2, why: "writes six numbers into a caller's array; allocated here"},
+    %{name: "version", c: "mj_version", arity: 0, why: "the library's own version, checked against the headers at load time"},
+    %{name: "header_version", c: nil, arity: 0, why: "the header's version, for the same check"}
   ],
 
   # Choices that would otherwise look like omissions.
