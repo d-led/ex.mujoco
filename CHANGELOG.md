@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- The release workflow refuses to build a tag against anything but the pinned MuJoCo artifact:
+  it fails if an override is set, and it reads the prepared library's `.provider` and requires
+  it to name that release.
+- A `mujoco main` workflow builds and steps a model against upstream `main` once a day, so a
+  pin that can no longer be moved is known before somebody tries to move it.
+
 ## 0.1.0
 
 The first release: physics, and nothing that needs a window.

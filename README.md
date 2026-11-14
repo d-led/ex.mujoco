@@ -54,6 +54,11 @@ Three ways to point it at a MuJoCo, in the order they are tried:
 | from a checkout         | `EX_MUJOCO_SOURCE_DIR=~/src/mujoco mix compile` | you are working on MuJoCo                           |
 | the pinned release      | `mix compile`                                   | everything else                                     |
 
+A release pins one MuJoCo: `mujoco.version` names it, the official artifact's published
+checksum is checked before it is unpacked, and the release workflow refuses to build a tag
+against anything else. The three overrides above are the development paths — `main` included —
+and `mix ex_mujoco.gen --check` tells you when they have moved past the committed bindings.
+
 The source build runs CMake and takes a few minutes; the release fetch takes seconds.
 [`docs/building.md`](docs/building.md) has the detail, including what happens to the shared
 library afterwards and why.

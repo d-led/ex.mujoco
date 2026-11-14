@@ -1,0 +1,62 @@
+name: mujoco main
+
+# MuJoCo moves; this package pins one release on purpose. This asks, once a day,
+# whether the pin could still be moved: the latest `main` builds and steps a model
+# against these bindings.
+#
+# It is information, not a gate. A push is judged by `ci`; a red result here means
+# "adopting the next MuJoCo needs work", not "main is broken", so it runs on a
+# schedule and by hand, never on a push.
+
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  MIX_ENV: test
+  ELIXIR_VERSION: "1.20.5"
+  OTP_VERSION: "29.1"
+  # The whole point of the job: the pin in `mujoco.version` is overridden with
+  # upstream's `main`, fetched as `heads/main` and built with CMake.
+  EX_MUJOCO_SOURCE_REF: main
+
+jobs:
+  main:
+    name: mujoco main
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+      - run: mix deps.get
+      - name: Build against the latest MuJoCo
+        run: mix compile
+      - name: Step a model with it
+        run: |
+          cat > smoke.exs <<'EXS'
+          xml = """
+          <mujoco>
+            <worldbody>
+              <body>
+                <joint type="hinge" axis="0 1 0"/>
+                <geom type="capsule" fromto="0 0 0 0 0 -0.1" size="0.01"/>
+              </body>
+            </worldbody>
+          </mujoco>
+          """
+
+          {:ok, model} = ExMujoco.load_string(xml)
+          data = ExMujoco.data(model)
+
+          :ok = ExMujoco.forward(data)
+          for _ <- 1..10, do: :ok = ExMujoco.step(data)
+
+          IO.puts("mujoco main builds: library #{ExMujoco.version()}, headers #{ExMujoco.header_version()}, nq #{ExMujoco.Model.nq(model)}")
+          EXS
+          mix run smoke.exs

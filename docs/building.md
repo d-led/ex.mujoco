@@ -89,6 +89,32 @@ checksum because it compiles what it fetched.
 The download goes to `<project>/_build/mujoco/<version>-<platform>-<arch>/`; set
 `EX_MUJOCO_CACHE_DIR` to keep it somewhere shared.
 
+## What a release is built against
+
+`mujoco.version` is the single statement of the pin — `4.0.1` at the time of writing. A release
+is built from the official artifact of exactly that version, and `scripts/prepare_mujoco.exs`
+checks the checksum published beside the artifact before it unpacks it. The four ways to fill a
+`MUJOCO_DIR` above exist for development; the release workflow refuses three of them:
+
+- it fails if `MUJOCO_DIR`, `EX_MUJOCO_SOURCE_DIR`, `EX_MUJOCO_SOURCE_REF` or `EX_MUJOCO_BUILD`
+  is set, so a tag cannot be built against a checkout of `main`;
+- after compiling it reads `_build/mujoco/<pin>-*/.provider` and requires
+  `provider=release=<pin>`, so the library that was linked is the one the pin names, not
+  whatever a cache happened to hold;
+- `mix ex_mujoco.gen --check` then compares the committed bindings against that version's
+  headers, so a tag's bindings are a tag's MuJoCo.
+
+A git dependency, or a hex dependency, gets the same pinned artifact for the same reason: what
+a package does should not depend on when it was fetched.
+
+`EX_MUJOCO_SOURCE_REF=main mix compile` is how to work against the latest upstream without
+waiting for a pin. It fetches `heads/main`, builds it with CMake, and names the prepared
+directory after the ref, so a made-up-version build cannot be mistaken for the release one.
+Nothing is checksummed in that mode — it is a development path — and `mix ex_mujoco.gen --check`
+reports the bindings as stale as soon as upstream renames anything, which is the point of
+running it. The `mujoco main` workflow does that build once a day and steps a model, so a pin
+that can no longer be moved is known before somebody tries to move it.
+
 ## Where the shared library goes, and why there
 
 The NIF records the library's own name as the thing to load, so the copy in `priv/` has to sit

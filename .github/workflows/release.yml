@@ -51,6 +51,35 @@ jobs:
       # The bindings in the tag have to be the bindings of the MuJoCo the tag
       # pins, not of some MuJoCo somebody had locally.
       - run: mix compile
+      # A tag is a claim about one MuJoCo. `mujoco.version` is that claim, and
+      # the artifact it names is the one whose published checksum is checked —
+      # unless something in the environment says otherwise, which is a
+      # development path (`EX_MUJOCO_SOURCE_REF=main`) and not a release.
+      - name: A release is the pinned MuJoCo, nothing else
+        run: |
+          for override in EX_MUJOCO_SOURCE_REF EX_MUJOCO_SOURCE_DIR MUJOCO_DIR EX_MUJOCO_BUILD; do
+            if [ -n "${!override}" ]; then
+              echo "$override says '${!override}': a release builds the pinned artifact" >&2
+              exit 1
+            fi
+          done
+
+          pinned=$(tr -d '[:space:]' < mujoco.version)
+          directory=$(ls -d "_build/mujoco/$pinned"-* 2>/dev/null | head -1)
+
+          if [ -z "$directory" ]; then
+            echo "no MuJoCo $pinned was prepared; _build/mujoco holds:" >&2
+            ls _build/mujoco >&2 || true
+            exit 1
+          fi
+
+          provider=$(cat "$directory/.provider")
+          echo "$provider"
+
+          case "$provider" in
+            *"provider=release=$pinned"*) ;;
+            *) echo "this build did not come from the $pinned release artifact" >&2; exit 1 ;;
+          esac
       - run: mix ex_mujoco.gen --check
       - run: mix hex.build
       - name: Publish to Hex
