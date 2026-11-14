@@ -74,4 +74,14 @@ struct Renderer {
   mjtByte default_flags_[mjNRNDFLAG] = {0};
 };
 
+// Whether MuJoCo will make a renderer on this machine, memoised, with the reason
+// when it will not.
+//
+// A context that this package's own GL calls are happy with is not the same
+// thing: `mjr_makeContext` resolves its entry points through its own loader and
+// refuses a model whose default framebuffer it cannot read, so the only answer a
+// caller can trust is MuJoCo's. It is asked once, on a scene of two bodies that
+// is built and thrown away.
+bool renderable(std::string *reason);
+
 }  // namespace exmujoco

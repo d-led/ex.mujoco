@@ -253,14 +253,14 @@ FINE_NIF(contact_force, 0);
 fine::Atom renderer_available(ErlNifEnv *) {
   std::string reason;
 
-  return fine::Atom(exmujoco::gl::available(&reason) ? "true" : "false");
+  return fine::Atom(exmujoco::renderable(&reason) ? "true" : "false");
 }
 FINE_NIF(renderer_available, 0);
 
 // Why rendering is not available, in words a person can read. Empty when it is.
 std::string renderer_unavailable_reason(ErlNifEnv *) {
   std::string reason;
-  exmujoco::gl::available(&reason);
+  exmujoco::renderable(&reason);
   return reason;
 }
 FINE_NIF(renderer_unavailable_reason, 0);

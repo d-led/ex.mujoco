@@ -8,6 +8,7 @@
 #include "renderer.hpp"
 
 #include <cstring>
+#include <mutex>
 #include <stdexcept>
 
 #include "gl.hpp"
@@ -231,6 +232,66 @@ void Renderer::draw(mjrRect rect, Pass pass, std::string &image) {
       break;
     }
   }
+}
+
+bool renderable(std::string *reason) {
+  static std::once_flag once;
+  static bool ok = false;
+  static std::string why;
+
+  std::call_once(once, [&] {
+    if (!gl::available(&why)) {
+      return;
+    }
+
+    // A scene of one body and one geom: enough for `mjr_makeContext` to make its
+    // context and answer, small enough to build and throw away.
+    constexpr const char *kScene =
+        "<mujoco><worldbody><body><geom type=\"sphere\" size=\".1\"/></body></worldbody></mujoco>";
+
+    mjVFS vfs;
+    mj_defaultVFS(&vfs);
+    mj_addBufferVFS(&vfs, "probe.xml", kScene, static_cast<int>(std::strlen(kScene)));
+
+    char error[1024] = "";
+    mjModel *model = mj_loadXML("probe.xml", &vfs, error, sizeof(error));
+    mj_deleteVFS(&vfs);
+
+    if (model == nullptr) {
+      why = std::string("a scene MuJoCo would not compile: ") + error;
+      return;
+    }
+
+    mjvScene scene;
+    mjv_defaultScene(&scene);
+
+    mjrContext context;
+    mjr_defaultContext(&context);
+
+    try {
+      gl::Session session;
+
+      call([&] { mjv_makeScene(model, &scene, kMaxGeom); });
+      call([&] { mjr_makeContext(model, &context, mjFONTSCALE_150); });
+
+      ok = true;
+
+      call([&] {
+        mjr_freeContext(&context);
+        mjv_freeScene(&scene);
+      });
+    } catch (const std::exception &error) {
+      why = error.what();
+    }
+
+    mj_deleteModel(model);
+  });
+
+  if (!ok && reason != nullptr) {
+    *reason = why;
+  }
+
+  return ok;
 }
 
 }  // namespace exmujoco
