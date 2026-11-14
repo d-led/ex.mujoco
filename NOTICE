@@ -1,0 +1,21 @@
+ExMujoco: MuJoCo physics, called from Elixir through a Fine NIF.
+
+Copyright (c) Dmitry Ledentsov and contributors.
+
+This Source Code Form is subject to the terms of the Mozilla Public License, v.
+2.0. If a copy of the MPL was not distributed with this file, You can obtain one
+at https://mozilla.org/MPL/2.0/.
+
+It links against work by others, whose licences it keeps:
+
+  * MuJoCo — Multi-Joint dynamics with Contact, Copyright (c) Google DeepMind,
+    Apache License 2.0 (https://github.com/google-deepmind/mujoco). Linked as a
+    shared library; the MuJoCo sources are not modified and are not
+    redistributed by this package — the release workflow downloads the official
+    upstream artifact at build time and ships the library it contains.
+
+  * Fine — the C++ NIF layer, Copyright (c) the Fine authors, Apache License
+    2.0 (https://github.com/elixir-nx/fine). Used as a dependency; not modified.
+
+`priv/mujoco.framework/`, `priv/libmujoco.*` and `priv/mujoco.dll` are MuJoCo's
+own binary, copied from the official release unmodified.

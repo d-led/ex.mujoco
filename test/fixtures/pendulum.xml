@@ -1,0 +1,17 @@
+<mujoco model="pendulum">
+  <option timestep="0.002" gravity="0 0 -9.81"/>
+
+  <worldbody>
+    <geom name="floor" type="plane" size="5 5 0.1" rgba="0.6 0.6 0.6 1"/>
+
+    <body name="arm" pos="0 0 1" quat="0.9659258 0 0.2588190 0">
+      <joint name="hinge" type="hinge" axis="0 1 0"/>
+      <geom name="link" type="box" size="0.05 0.05 0.5" pos="0 0 -0.5" mass="1"
+            rgba="0.8 0.3 0.2 1"/>
+    </body>
+  </worldbody>
+
+  <sensor>
+    <jointpos name="hinge_angle" joint="hinge"/>
+  </sensor>
+</mujoco>

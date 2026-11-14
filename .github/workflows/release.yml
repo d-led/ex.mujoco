@@ -1,0 +1,72 @@
+name: release
+
+# A tag does two things, and only a tag:
+#
+#   * publishes the package to Hex — `mix hex.publish`, which wants the
+#     `HEX_API_KEY` secret on this repository;
+#   * attaches the source to a GitHub release, so the tag explains itself.
+#
+# Nothing is published from a branch: `ci` proves a commit, a tag says it is a
+# version. The gates run again here rather than being trusted from another
+# workflow's conclusion, because a workflow's own log is the only thing that
+# proves the tree it is publishing.
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+env:
+  # `mix hex.publish` publishes the docs as well as the package, and the docs are
+  # built by ex_doc — a development dependency — so this job runs in `dev`.
+  MIX_ENV: dev
+  ELIXIR_VERSION: "1.20.5"
+  OTP_VERSION: "29.1"
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+      - run: mix deps.get
+      # `VERSION`, the package's `@version` and the tag are three statements of
+      # one number. `check` holds the first two together; the tag is compared
+      # here, because a hand-pushed tag never went through
+      # `scripts/tag_and_push_version.sh`.
+      - name: The tag is the version
+        run: |
+          elixir scripts/release.exs check
+          version=$(tr -d '[:space:]' < VERSION)
+          tag=${GITHUB_REF_NAME#v}
+          if [ "$version" != "$tag" ]; then
+            echo "VERSION says $version and the tag says $tag — one of them is wrong" >&2
+            exit 1
+          fi
+      # The bindings in the tag have to be the bindings of the MuJoCo the tag
+      # pins, not of some MuJoCo somebody had locally.
+      - run: mix compile
+      - run: mix ex_mujoco.gen --check
+      - run: mix hex.build
+      - name: Publish to Hex
+        env:
+          HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
+        run: |
+          if [ -z "$HEX_API_KEY" ]; then
+            echo "no HEX_API_KEY secret: the package was built and not published" >&2
+            exit 1
+          fi
+          mix hex.publish --yes
+      - name: Release notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes \
+            ex_mujoco-*.tar
