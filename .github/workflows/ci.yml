@@ -96,6 +96,12 @@ jobs:
             priv
           key: test-${{ matrix.os }}-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-${{ hashFiles('mix.lock') }}
           restore-keys: test-${{ matrix.os }}-
+      # A cache that already holds a MuJoCo means the download and the unpack
+      # never run — which is how a Linux release download stayed broken for
+      # every run that was green. The artifact is fetched again on every run,
+      # because fetching it is what a first-time user does.
+      - run: rm -rf _build/mujoco
+        shell: bash
       - run: mix deps.get
       - run: mix compile
       # What the module actually needs, when a Windows runner says it cannot find
@@ -109,6 +115,73 @@ jobs:
         shell: bash
         run: mix run -e "IO.puts ExMujoco.version()"
       - run: mix test
+
+  # What a user gets is the tarball, not this checkout. Building it and then
+  # using it from a directory that holds nothing else says whether every file
+  # the build reads is in it — `mujoco.version` was not, so the package could not
+  # compile as a dependency anywhere.
+  package:
+    name: package (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          elixir-version: ${{ env.ELIXIR_VERSION }}
+          otp-version: ${{ env.OTP_VERSION }}
+      - if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+      - run: mix deps.get
+      - run: mix hex.build
+      - name: Unpack it the way Hex does
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/package"
+          tar xf ex_mujoco-*.tar -C "$RUNNER_TEMP/package"
+          mkdir -p "$RUNNER_TEMP/package/contents"
+          tar xf "$RUNNER_TEMP/package/contents.tar.gz" -C "$RUNNER_TEMP/package/contents"
+      - name: Use it from an empty directory
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/consumer"
+          cd "$RUNNER_TEMP/consumer"
+          cat > check.exs <<'EXS'
+          # A path dependency on what Hex would have installed, with no
+          # `mix.exs` of our own: this is `Mix.install/2`, which is how a
+          # reader tries a package before writing a project around it.
+          package = Path.join(System.get_env("RUNNER_TEMP") || System.tmp_dir!(), "package/contents")
+          Mix.install([{:ex_mujoco, path: package}])
+
+          xml = """
+          <mujoco>
+            <worldbody>
+              <body>
+                <joint type="hinge" axis="0 1 0"/>
+                <geom type="capsule" fromto="0 0 0 0 0 -0.1" size="0.01"/>
+              </body>
+            </worldbody>
+          </mujoco>
+          """
+
+          {:ok, model} = ExMujoco.load_string(xml)
+          data = ExMujoco.data(model)
+
+          :ok = ExMujoco.forward(data)
+          :ok = ExMujoco.step(data)
+
+          unless ExMujoco.version() == ExMujoco.header_version() do
+            raise "the library is #{ExMujoco.version()} and the headers are #{ExMujoco.header_version()}"
+          end
+
+          {:error, %ExMujoco.Error{}} = ExMujoco.load_string("<mujoco><worldbody><body></worldbody></mujoco>")
+
+          IO.puts("installed and stepped: library #{ExMujoco.version()}, nq #{ExMujoco.Model.nq(model)}")
+          EXS
+          elixir check.exs
 
   gen:
     runs-on: ubuntu-24.04

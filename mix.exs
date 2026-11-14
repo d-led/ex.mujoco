@@ -98,8 +98,10 @@ defmodule ExMujoco.MixProject do
 
   defp package do
     [
+      # `mujoco.version` ships because the build reads it, both here and in
+      # `scripts/prepare_mujoco.exs`; without it a dependency cannot compile.
       files: ~w(lib c_src Makefile Makefile.win scripts docs mix.exs VERSION
-                README.md CHANGELOG.md LICENSE NOTICE .formatter.exs),
+                mujoco.version README.md CHANGELOG.md LICENSE NOTICE .formatter.exs),
       licenses: ["MPL-2.0"],
       links: %{"GitHub" => @source_url},
       maintainers: ["Dmitry Ledentsov"]

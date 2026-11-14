@@ -62,6 +62,10 @@ Windows needs nothing set up: the library MuJoCo ships is loaded from `priv/` by
 small library, because Windows will not look beside a library for the libraries it imports.
 The one prerequisite is MuJoCo's own — the Visual C++ runtime, which ships with Visual Studio.
 
+CI builds the tarball Hex would ship, unpacks it, and installs it in an empty directory on
+Linux and Windows — compiling MuJoCo from scratch there — because a package that only builds
+in its own checkout is a package nobody can use.
+
 ## What you get
 
 `ExMujoco` is the curated surface — a model, its data, stepping, state:
