@@ -337,7 +337,7 @@ defmodule ExMujoco.Gen.Template do
         // #{one_line(function.doc)}
         fine::Atom #{signature} {
           exmujoco::call([&] { #{call}; });
-          return exmujoco::ok;
+          return exmujoco::ok();
         }
         FINE_NIF(#{function.name}, 0);
         """

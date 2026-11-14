@@ -1,0 +1,7 @@
+# Every checkout is LF, on every platform.
+#
+# `mix ex_mujoco.gen` writes LF and compares what it wrote against what is on
+# disk; a runner that checks the repository out with CRLF reports every
+# generated file as out of date. The C++ it emits is compiled by MSVC too, and
+# MSVC reads LF without complaint.
+* text=auto eol=lf

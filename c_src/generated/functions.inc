@@ -6,133 +6,133 @@
 // 
 fine::Atom mj_step1(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_step1(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_step1, 0);
 
 // 
 fine::Atom mj_step2(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_step2(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_step2, 0);
 
 // 
 fine::Atom mj_resetDataKeyframe(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d, int64_t key) {
   exmujoco::call([&] { ::mj_resetDataKeyframe(m->model, d->data, static_cast<int>(key)); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_resetDataKeyframe, 0);
 
 // 
 fine::Atom mj_sensorPos(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_sensorPos(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_sensorPos, 0);
 
 // 
 fine::Atom mj_sensorVel(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_sensorVel(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_sensorVel, 0);
 
 // 
 fine::Atom mj_sensorAcc(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_sensorAcc(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_sensorAcc, 0);
 
 // 
 fine::Atom mj_energyPos(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_energyPos(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_energyPos, 0);
 
 // 
 fine::Atom mj_energyVel(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_energyVel(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_energyVel, 0);
 
 // 
 fine::Atom mj_kinematics(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_kinematics(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_kinematics, 0);
 
 // 
 fine::Atom mj_comPos(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_comPos(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_comPos, 0);
 
 // 
 fine::Atom mj_camlight(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_camlight(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_camlight, 0);
 
 // 
 fine::Atom mj_flex(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_flex(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_flex, 0);
 
 // 
 fine::Atom mj_tendon(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_tendon(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_tendon, 0);
 
 // 
 fine::Atom mj_transmission(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_transmission(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_transmission, 0);
 
 // 
 fine::Atom mj_crb(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_crb(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_crb, 0);
 
 // 
 fine::Atom mj_collision(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_collision(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_collision, 0);
 
 // 
 fine::Atom mj_makeConstraint(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_makeConstraint(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_makeConstraint, 0);
 
 // 
 fine::Atom mj_projectConstraint(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_projectConstraint(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_projectConstraint, 0);
 
 // 
 fine::Atom mj_referenceConstraint(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> m, fine::ResourcePtr<exmujoco::Data> d) {
   exmujoco::call([&] { ::mj_referenceConstraint(m->model, d->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(mj_referenceConstraint, 0);
 

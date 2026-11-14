@@ -108,6 +108,35 @@ jobs:
       - name: The libraries load
         shell: bash
         run: mix run -e "IO.puts ExMujoco.version()"
+      # Temporary: what this platform's NIF actually answers.
+      - name: What the NIF answers on this platform
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          cat > probe.exs <<'EXS'
+          xml = File.read!("test/fixtures/pendulum.xml")
+          {:ok, model} = ExMujoco.load_string(xml)
+          data = ExMujoco.data(model)
+          IO.inspect(ExMujoco.reset(data), label: "reset")
+          IO.inspect(ExMujoco.state_size(model), label: "state_size")
+
+          calls = [
+            bad_xml: fn -> ExMujoco.load_string("<mujoco><worldbody><body></worldbody></mujoco>") end,
+            missing_file: fn -> ExMujoco.load_xml("/nonexistent/model.xml") end,
+            bad_state: fn ->
+              ExMujoco.put_state(data, ExMujoco.Types.State.integration(), <<0::64>>)
+            end
+          ]
+
+          for {label, call} <- calls do
+            try do
+              IO.inspect({label, call.()})
+            rescue
+              error -> IO.inspect({label, :raised, error.__struct__, Exception.message(error)})
+            end
+          end
+          EXS
+          mix run probe.exs
       - run: mix test
 
   gen:

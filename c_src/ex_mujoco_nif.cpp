@@ -76,7 +76,11 @@ namespace exmujoco {
 
 // Fine stores a NIF's answer in a local, so no NIF can answer `void`. MuJoCo's
 // `void` means "it worked; ask the data", which crosses as `:ok`.
-inline fine::Atom ok("ok");
+//
+// The atom is named at each call rather than kept in a global that Fine caches
+// a term for at load: on Windows the cached term does not survive into a later
+// call, and a truncated atom term is `:""` — an atom nobody meant to write.
+inline fine::Atom ok() { return fine::Atom("ok"); }
 
 namespace {
 
@@ -174,19 +178,19 @@ FINE_NIF(data, 0);
 
 fine::Atom reset(ErlNifEnv *, fine::ResourcePtr<Data> handle) {
   exmujoco::call([&] { ::mj_resetData(handle->model->model, handle->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(reset, 0);
 
 fine::Atom forward(ErlNifEnv *, fine::ResourcePtr<Data> handle) {
   exmujoco::call([&] { ::mj_forward(handle->model->model, handle->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(forward, 0);
 
 fine::Atom step(ErlNifEnv *, fine::ResourcePtr<Data> handle) {
   exmujoco::call([&] { ::mj_step(handle->model->model, handle->data); });
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(step, 0);
 
@@ -230,7 +234,7 @@ fine::Atom set_state(ErlNifEnv *, fine::ResourcePtr<Data> handle, int64_t signat
                   static_cast<int>(signature));
   });
 
-  return exmujoco::ok;
+  return exmujoco::ok();
 }
 FINE_NIF(set_state, 0);
 
