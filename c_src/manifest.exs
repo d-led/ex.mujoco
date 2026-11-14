@@ -61,13 +61,17 @@ map = %{
     %{name: "data_state_size", c: "mj_stateSize", arity: 2, why: "the same count, asked of the data `put_state` is given"},
     %{name: "contact_force", c: "mj_contactForce", arity: 2, why: "writes six numbers into a caller's array; allocated here"},
     %{name: "version", c: "mj_version", arity: 0, why: "the library's own version, checked against the headers at load time"},
-    %{name: "header_version", c: nil, arity: 0, why: "the header's version, for the same check"}
+    %{name: "header_version", c: nil, arity: 0, why: "the header's version, for the same check"},
+    %{name: "renderer_available", c: nil, arity: 0, why: "the question a caller asks before rendering; the answer is this package's own (is there an OpenGL context here), not one MuJoCo declares"},
+    %{name: "renderer_unavailable_reason", c: nil, arity: 0, why: "the sentence `renderer_available/0` answers false with, so a caller can say why instead of only 'no'"},
+    %{name: "renderer_new", c: "mjr_makeContext", arity: 3, why: "a render context uploads the model's meshes and textures into GL objects, so it is a resource that holds its model and needs an OpenGL context of this package's own"},
+    %{name: "renderer_render", c: "mjr_render", arity: 4, why: "one scene update and one draw per pass, answering this pass's bytes rather than a caller-sized buffer — the depth conversion and the vertical flip belong to the answer"}
   ],
 
   # Choices that would otherwise look like omissions.
   notes: %{
     "mjSpec" => "building a model at run time (mjs_addBody and the rest) is v0.2; loading XML, from a path or from a string, is enough to run anything meanwhile",
-    "mjrContext" => "offscreen rendering is v0.3 — it needs a GL context per platform (EGL, OSMesa, CGL, WGL) and owns a thread",
+    "mjr_readPixels, mjv_updateScene, mjv_makeScene, mjr_setBuffer, mjv_defaultScene" => "the renderer's own plumbing: `renderer_render/4` calls them in MuJoCo's own order, and binding them one by one would offer a caller a way to break that order",
     "mj_printData, mj_printModel" => "they write into a buffer the caller sizes; a string-returning wrapper is a design decision, not a translation",
     "mj_copyData" => "it answers the destination it was given, and a handle to a data block you already hold is not a useful answer; copying state is `state/2` and `put_state/3`"
   }

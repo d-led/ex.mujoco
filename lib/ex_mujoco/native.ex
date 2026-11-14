@@ -1720,4 +1720,13 @@ defmodule ExMujoco.Native do
   def version(), do: :erlang.nif_error(:nif_not_loaded)
 
   def header_version(), do: :erlang.nif_error(:nif_not_loaded)
+
+  def renderer_available(), do: :erlang.nif_error(:nif_not_loaded)
+
+  def renderer_unavailable_reason(), do: :erlang.nif_error(:nif_not_loaded)
+
+  def renderer_new(_argument1, _argument2, _argument3), do: :erlang.nif_error(:nif_not_loaded)
+
+  def renderer_render(_argument1, _argument2, _argument3, _argument4),
+    do: :erlang.nif_error(:nif_not_loaded)
 end

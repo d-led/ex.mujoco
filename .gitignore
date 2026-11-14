@@ -36,3 +36,6 @@ Desktop.ini
 
 # `mix hex.build` writes the package beside the project.
 ex_mujoco-*.tar
+
+# MuJoCo writes this beside whatever ran it, when it has something to say.
+MUJOCO_LOG.TXT

@@ -20,57 +20,23 @@
 #include <fine.hpp>
 #include <mujoco/mujoco.h>
 
+#include "gl.hpp"
+#include "handles.hpp"
 #include "mj_call.hpp"
+#include "renderer.hpp"
 
 namespace exmujoco {
 
 // ---------------------------------------------------------------------- handles
 
-// An mjModel, owned. MuJoCo's model is immutable once compiled, so a resource
-// shared between processes is safe to read.
-struct Model {
-  mjModel *model;
-
-  explicit Model(mjModel *m) : model(m) {}
-
-  Model(const Model &) = delete;
-  Model &operator=(const Model &) = delete;
-
-  ~Model() {
-    if (model != nullptr) {
-      mj_deleteModel(model);
-    }
-  }
-};
-
-// An mjData, owned, and the model it was made from — mjData does not point at
-// its model, and every step needs both, so holding the model here is what makes
-// `step(data)` possible and what stops the model being freed first.
-struct Data {
-  fine::ResourcePtr<Model> model;
-  mjData *data;
-
-  explicit Data(fine::ResourcePtr<Model> m)
-      : model(m), data(mj_makeData(m->model)) {
-    if (data == nullptr) {
-      throw std::runtime_error("mj_makeData returned nothing");
-    }
-  }
-
-  Data(const Data &) = delete;
-  Data &operator=(const Data &) = delete;
-
-  ~Data() {
-    if (data != nullptr) {
-      mj_deleteData(data);
-    }
-  }
-};
+// `Model` and `Data` are defined in `handles.hpp`: a renderer holds one of the
+// first, so both sides of this file need to see them.
 
 }  // namespace exmujoco
 
 FINE_RESOURCE(exmujoco::Model);
 FINE_RESOURCE(exmujoco::Data);
+FINE_RESOURCE(exmujoco::Renderer);
 
 namespace exmujoco {
 
@@ -269,6 +235,82 @@ fine::Term contact_force(ErlNifEnv *env, fine::ResourcePtr<Data> handle,
                                sizeof(force));
 }
 FINE_NIF(contact_force, 0);
+
+// ---------------------------------------------------------------------- rendering
+
+// Offscreen rendering, for a machine that has it. The renderer is a resource of
+// its own because it owns a GL context's worth of objects — the model's meshes
+// and textures are uploaded into it — and it has to outlive every call that
+// draws.
+//
+// `renderer_available` is the question a caller asks first: a machine with no
+// OpenGL still loads this package, steps and reads models, and says so here
+// rather than failing at the first frame.
+bool renderer_available(ErlNifEnv *) {
+  std::string reason;
+  return exmujoco::gl::available(&reason);
+}
+FINE_NIF(renderer_available, 0);
+
+// Why rendering is not available, in words a person can read. Empty when it is.
+std::string renderer_unavailable_reason(ErlNifEnv *) {
+  std::string reason;
+  exmujoco::gl::available(&reason);
+  return reason;
+}
+FINE_NIF(renderer_unavailable_reason, 0);
+
+fine::ResourcePtr<exmujoco::Renderer> renderer_new(ErlNifEnv *,
+                                                   fine::ResourcePtr<Model> model,
+                                                   int64_t width, int64_t height) {
+  return fine::make_resource<exmujoco::Renderer>(model, static_cast<int>(width),
+                                                 static_cast<int>(height));
+}
+FINE_NIF(renderer_new, 0);
+
+// One step's images: `passes` names what to draw (`[:rgb, :depth, :segmentation]`),
+// and the answer is one binary per pass, in that order.
+//
+// The scene is updated once and drawn once per pass, which is how MuJoCo's own
+// renderer is used — and the reason a caller asks for one call rather than three
+// is that three calls would update the scene three times.
+fine::Term renderer_render(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Renderer> renderer,
+                           fine::ResourcePtr<Data> data, std::string camera,
+                           std::vector<fine::Atom> passes) {
+  std::vector<exmujoco::Pass> wanted;
+  wanted.reserve(passes.size());
+
+  for (const auto &pass : passes) {
+    const auto name = pass.to_string();
+
+    if (name == "rgb") {
+      wanted.push_back(exmujoco::Pass::kRgb);
+    } else if (name == "depth") {
+      wanted.push_back(exmujoco::Pass::kDepth);
+    } else if (name == "segmentation") {
+      wanted.push_back(exmujoco::Pass::kSegmentation);
+    } else {
+      throw std::invalid_argument("there is no '" + std::string(name) +
+                                 "' pass: ask for :rgb, :depth or :segmentation");
+    }
+  }
+
+  std::vector<std::string> images;
+  images.reserve(wanted.size());
+
+  renderer->render(data->data, camera, wanted, images);
+
+  std::vector<ERL_NIF_TERM> terms;
+  terms.reserve(images.size());
+
+  for (const auto &image : images) {
+    terms.push_back(fine::make_new_binary(env, image.data(), image.size()));
+  }
+
+  return fine::Term(enif_make_list_from_array(env, terms.data(),
+                                              static_cast<unsigned int>(terms.size())));
+}
+FINE_NIF(renderer_render, 0);
 
 }  // namespace
 

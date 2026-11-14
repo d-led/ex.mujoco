@@ -5,6 +5,30 @@ Every version below is a real change, but not every one reached Hex: 0.1.2,
 patch, and expired. What Hex serves is 0.1.0, 0.1.1, 0.1.4 and 0.1.8, and 0.1.8
 contains everything these notes describe.
 
+## 0.2.0
+
+The package renders.
+
+- `ExMujoco.Renderer` draws a scene offscreen through a camera in it, in three
+  passes: `:rgb`, `:depth` (metres, not the projection's reciprocal) and
+  `:segmentation` (geom ids, `-1` for background). One call answers one binary
+  per pass, top row first.
+- The images are byte-identical to MuJoCo's own Python `Renderer` for the same
+  scene and camera — the depth conversion, the reverse-Z read, the vertical flip
+  and the segmentation id packing are copied from it, in the same precision, and
+  a test writes both to disk and compares.
+- Rendering needs an OpenGL context and this package now makes one itself: CGL on
+  macOS, EGL on Linux. **Nothing is linked** — the platform's library is opened
+  with `dlopen` when the first renderer is asked for, so a machine with no GL
+  still loads the package and steps models, and `ExMujoco.Renderer.available?/0`
+  says which machine it is on. Windows has no offscreen context yet and says so.
+- The four new NIFs are hand-written (`renderer_new`, `renderer_render`,
+  `renderer_available`, `renderer_unavailable_reason`), are named in
+  `c_src/manifest.exs` like the rest, and appear in `docs/coverage.md`.
+- `Renderer.new/3` refuses an image larger than the model's own offscreen buffer
+  (`<visual><global offwidth=… offheight=…/>`) by name, rather than rendering it
+  black.
+
 ## 0.1.8
 
 "Can the package do this?" now has a list for an answer.

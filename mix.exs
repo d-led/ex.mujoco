@@ -1,7 +1,7 @@
 defmodule ExMujoco.MixProject do
   use Mix.Project
 
-  @version "0.1.8"
+  @version "0.2.0"
   @source_url "https://github.com/d-led/ex.mujoco"
 
   # The MuJoCo version this package is built against. The headers of exactly this
@@ -124,6 +124,7 @@ defmodule ExMujoco.MixProject do
       # the API a caller came for.
       groups_for_modules: [
         Physics: [ExMujoco, ExMujoco.Model, ExMujoco.Data, ExMujoco.Tensor],
+        Pictures: [ExMujoco.Renderer],
         "The C API": [ExMujoco.Api],
         Types: ~r/^ExMujoco\.Types(\.|$)/,
         Errors: [ExMujoco.Error, ExMujoco.Loader],

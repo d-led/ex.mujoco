@@ -83,6 +83,7 @@ artifact checksum, platform, timestamp) is in `_build/mujoco/<version>-<platform
 | `ExMujoco.forward/1`, `step/1`, `reset/1` | the three things you do to data          |
 | `ExMujoco.state/1,2`, `put_state/3`       | save and restore the integration state   |
 | `ExMujoco.contact_force/2`                | one contact's six numbers                |
+| `ExMujoco.Renderer`                       | the scene as pictures, through a camera  |
 
 Underneath, generated from the headers:
 
@@ -105,14 +106,40 @@ iex> ExMujoco.Api.mj_name2id(model, ExMujoco.Types.Obj.geom(), "floor")
 0
 ```
 
+## Pictures
+
+`ExMujoco.Renderer` draws the scene offscreen through a camera in it, one binary per pass,
+asked for together so the scene is updated once:
+
+```elixir
+iex> ExMujoco.Renderer.available?()
+true
+
+iex> renderer = ExMujoco.Renderer.new(model, 64, 64)
+iex> ExMujoco.Renderer.read(renderer, data, "cam", [:rgb, :depth, :segmentation])
+[<<...>>, <<...>>, <<...>>]
+```
+
+| pass            | shape                | holds                                  |
+| --------------- | -------------------- | -------------------------------------- |
+| `:rgb`          | `width * height * 3` | red, green, blue                       |
+| `:depth`        | `width * height * 4` | float32 metres from the camera         |
+| `:segmentation` | `width * height * 4` | int32 geom id, `-1` for the background |
+
+Rendering needs an OpenGL context and the package makes one itself — **nothing is linked**:
+CGL on macOS, EGL on Linux, both opened with `dlopen` when the first renderer is asked for. A
+machine with no GL still loads this package and steps models; `available?/0` says which
+machine it is on, and `unavailable_reason/0` says why not in words. Windows has no offscreen
+context yet.
+
 ## What is not here yet
 
-Both are in [`docs/plan.md`](docs/plan.md) with the reason they are their own phase:
+In [`docs/plan.md`](docs/plan.md), with the reason it is its own phase:
 
 - **`mjSpec`** — building a model in memory (`mjs_addBody` and the rest). Compiling XML, from
   a path or from a string, covers everything that can be expressed in MJCF.
-- **Rendering** — `mjrContext` and offscreen frames. A GL context is per platform (EGL,
-  OSMesa, CGL, WGL) and belongs to a thread; that is a different job from stepping physics.
+- **WGL** — offscreen rendering on Windows. The classic renderer needs a hidden window there,
+  which is a platform binding this package has not written; macOS and Linux are carried.
 
 `docs/coverage.md` lists every MuJoCo function this package does _not_ bind, and why. Nothing
 is dropped in silence.

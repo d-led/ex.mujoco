@@ -652,11 +652,13 @@ defmodule ExMujoco.Gen.Template do
     ### Bound by hand
 
     These need a decision per call — an error buffer to allocate, an output array
-    whose length is the caller's business, a state signature — so they are written
-    out in `c_src/ex_mujoco_nif.cpp` rather than generated. Eleven of MuJoCo's
-    functions are covered this way: `state_size/2` and `data_state_size/2` are the
-    same call, and `header_version/0` answers a constant in the header rather than
-    a call.
+    whose length is the caller's business, a state signature, a GL context — so
+    they are written out in `c_src/ex_mujoco_nif.cpp` rather than generated.
+    #{MapSet.size(by_hand)} of MuJoCo's functions are covered this way:
+    `state_size/2` and `data_state_size/2` are the same call, `header_version/0`
+    answers a constant in the header rather than a call, and the rendering
+    entries are this package's own questions rather than MuJoCo's (`renderer_new/3`
+    and `renderer_render/4` name the two MuJoCo calls they rest on).
 
     #{bullets(Enum.map(manifest.hand_written, fn %{name: name, arity: arity, why: why} -> "`#{name}/#{arity}` — #{why}" end))}
 

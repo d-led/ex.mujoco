@@ -55,12 +55,19 @@ defmodule ExMujoco do
   [`c_src/ex_mujoco_nif.cpp`](https://github.com/d-led/ex.mujoco) — is the part
   where each call needs a decision: which buffer, whose lifetime.
 
+  ## Pictures
+
+  `ExMujoco.Renderer` draws the scene offscreen through a camera in it: an `:rgb`
+  image, a `:depth` image in metres, and a `:segmentation` image of geom ids. It
+  makes its own OpenGL context (CGL on macOS, EGL on Linux) and links nothing, so
+  a machine without one still runs everything above;
+  `ExMujoco.Renderer.available?/0` answers which machine it is.
+
   ## What is not here yet
 
-  `mjSpec` — building a model in memory, rather than compiling XML — and offscreen
-  rendering. Both are in `docs/plan.md` with the reason they are their own
-  phase: a scene needs a GL context per platform, and that is a different job
-  from stepping physics.
+  `mjSpec` — building a model in memory, rather than compiling XML. It is in
+  `docs/plan.md` with the reason it is its own phase: a scene edited at run time
+  is a different lifetime from a compiled one.
 
   ## Errors
 

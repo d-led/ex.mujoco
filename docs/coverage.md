@@ -9,17 +9,19 @@ disagrees with the headers.
 | MuJoCo functions | 551 |
 | --- | --- |
 | bound 1:1 by the generator | 25 |
-| bound by hand | 11 |
-| not bound | 515 |
+| bound by hand | 13 |
+| not bound | 513 |
 
 ### Bound by hand
 
 These need a decision per call — an error buffer to allocate, an output array
-whose length is the caller's business, a state signature — so they are written
-out in `c_src/ex_mujoco_nif.cpp` rather than generated. Eleven of MuJoCo's
-functions are covered this way: `state_size/2` and `data_state_size/2` are the
-same call, and `header_version/0` answers a constant in the header rather than
-a call.
+whose length is the caller's business, a state signature, a GL context — so
+they are written out in `c_src/ex_mujoco_nif.cpp` rather than generated.
+13 of MuJoCo's functions are covered this way:
+`state_size/2` and `data_state_size/2` are the same call, `header_version/0`
+answers a constant in the header rather than a call, and the rendering
+entries are this package's own questions rather than MuJoCo's (`renderer_new/3`
+and `renderer_render/4` name the two MuJoCo calls they rest on).
 
 * `load_xml/1` — the error is a caller-sized char buffer; here it is our buffer and an exception
 * `load_xml_string/1` — a parsed spec has to be compiled and freed around the model, which is a lifetime question
@@ -34,10 +36,14 @@ a call.
 * `contact_force/2` — writes six numbers into a caller's array; allocated here
 * `version/0` — the library's own version, checked against the headers at load time
 * `header_version/0` — the header's version, for the same check
+* `renderer_available/0` — the question a caller asks before rendering; the answer is this package's own (is there an OpenGL context here), not one MuJoCo declares
+* `renderer_unavailable_reason/0` — the sentence `renderer_available/0` answers false with, so a caller can say why instead of only 'no'
+* `renderer_new/3` — a render context uploads the model's meshes and textures into GL objects, so it is a resource that holds its model and needs an OpenGL context of this package's own
+* `renderer_render/4` — one scene update and one draw per pass, answering this pass's bytes rather than a caller-sized buffer — the depth conversion and the vertical flip belong to the answer
 
 ### Not bound
 
-421 of the 515 take something a NIF cannot
+419 of the 513 take something a NIF cannot
 honestly invent — a callback, a `void*`, an output array whose length nothing
 states, a variadic argument list — and binding one means deciding that
 question, one function at a time. The other 94 need a name in
@@ -72,8 +78,8 @@ functions, so a reader can look where MuJoCo would put the answer.
 | Vector math | 38 |
 | Support | 27 |
 | Element initialization | 25 |
-| OpenGL rendering | 25 |
 | Element casting | 24 |
+| OpenGL rendering | 23 |
 | Find and get utilities | 22 |
 | Initialization | 19 |
 | Interaction | 18 |
@@ -109,7 +115,7 @@ Decisions worth naming:
 * `mjSpec` — building a model at run time (mjs_addBody and the rest) is v0.2; loading XML, from a path or from a string, is enough to run anything meanwhile
 * `mj_copyData` — it answers the destination it was given, and a handle to a data block you already hold is not a useful answer; copying state is `state/2` and `put_state/3`
 * `mj_printData, mj_printModel` — they write into a buffer the caller sizes; a string-returning wrapper is a design decision, not a translation
-* `mjrContext` — offscreen rendering is v0.3 — it needs a GL context per platform (EGL, OSMesa, CGL, WGL) and owns a thread
+* `mjr_readPixels, mjv_updateScene, mjv_makeScene, mjr_setBuffer, mjv_defaultScene` — the renderer's own plumbing: `renderer_render/4` calls them in MuJoCo's own order, and binding them one by one would offer a caller a way to break that order
 
 ## Fields
 

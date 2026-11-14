@@ -9,7 +9,10 @@ reference cover that.
 | --------------------------------- | ------------------------------------------------------------------------- |
 | `lib/ex_mujoco.ex`                | the curated API, hand-written                                             |
 | `lib/ex_mujoco/`                  | `Model`, `Data`, `Api`, `Native` and `Types/*` — **generated**, committed |
-| `c_src/ex_mujoco_nif.cpp`         | the hand-written half of the NIF: loading, state, contacts, errors        |
+| `c_src/ex_mujoco_nif.cpp`         | the hand-written half of the NIF: loading, state, contacts, rendering     |
+| `c_src/renderer.cpp`, `.hpp`      | `mjv_*`/`mjr_*` in a resource: scene, options, context, three passes      |
+| `c_src/gl.cpp`, `.hpp`            | the offscreen OpenGL context: CGL on macOS, EGL on Linux, `dlopen` only   |
+| `lib/ex_mujoco/renderer.ex`       | `ExMujoco.Renderer`, hand-written                                         |
 | `c_src/manifest.exs`              | which C functions are bound 1:1, and which are bound by hand              |
 | `c_src/generated/`                | `fields.inc` and `functions.inc` — **generated**, committed               |
 | `scripts/prepare_mujoco.exs`      | fills one MuJoCo directory, from a release, source, or yours              |
@@ -29,7 +32,7 @@ entry also names the C function it translates (`c:`), because `docs/coverage.md`
 hand-bound function is covered, and must not be offered there as something still to bind. The
 generator raises when that name is not one MuJoCo declares.
 
-`docs/coverage.md` is generated from the same reading, and answers *can the package do this?*
+`docs/coverage.md` is generated from the same reading, and answers _can the package do this?_
 with names rather than counts: what is bound, what a name in the manifest would add — under the
 heading MuJoCo's header gives each block of functions — and, per area, what cannot be bound
 from a signature at all. Its rows are one decomposition of the same list, so they add up.
@@ -37,6 +40,31 @@ from a signature at all. Its rows are one decomposition of the same list, so the
 A change to a template in `lib/ex_mujoco/gen/` can emit C++ the compiler rejects, and
 `mix ex_mujoco.gen` compiles the project before it runs — a deadlock. Make the edit to
 `c_src/generated/*.inc` by hand first, compile, then generate.
+
+## Rendering
+
+A renderer is MuJoCo's own three-part job — an abstract scene, the visualisation options, and an
+`mjrContext` with an offscreen framebuffer attached to a current OpenGL context. Nuances that
+are easy to get wrong, and are pinned by `test/ex_mujoco/renderer_test.exs`:
+
+- **The context is this package's, and nothing links OpenGL.** `c_src/gl.cpp` opens the
+  platform library with `dlopen` — `/System/Library/Frameworks/OpenGL.framework/OpenGL` for CGL,
+  `libEGL.so.1` for EGL — so a machine without GL still loads the package. MuJoCo's glad loader
+  then finds the same library by itself. Windows has no branch; `available?/0` says so.
+- **A GL context belongs to the thread that made it current**, and the BEAM hands successive
+  NIF calls to whichever scheduler is free, so `gl::Session` makes it current _and holds a lock_
+  for the length of a render. Freeing a context is a session too: its GL objects are only
+  deletable while it is current.
+- **The depth pass converts the projection's reciprocal to metres**, in float32 coefficients and
+  float64 arithmetic, exactly as MuJoCo's Python `Renderer` does — and it renders with
+  `mjRND_SEGMENT`/`mjRND_IDCOLOR` set, which is MuJoCo's trick for a depth buffer accurate at
+  both 5 cm and 500 m. With different precision the images differ in the last bits; a test
+  compares ours with Python's byte for byte.
+- **OpenGL hands pixels back bottom row first** and every reader wants the top row first, so
+  each pass is flipped on the way out.
+- **The image may not be larger than the model's offscreen buffer** (`<visual><global
+offwidth=… offheight=…/>`), and asking for more is refused by name rather than rendered
+  black.
 
 ## Tests
 
@@ -102,6 +130,7 @@ documentation is part of a release rather than something added afterwards.
   Earlier releases derived the heading from the name's prefix (`geom_size` → `geom`) once ten
   fields shared it. That left a third of both pages in one alphabetical heap — including the
   dimension counters and `qpos` — because MuJoCo's blocks are not always one prefix.
+
 - The bound functions are filed the same way, and for the same reason. `mujoco.h` writes a prose
   comment above each `MJAPI` declaration and a `// ---- Main simulation ----` line above runs of
   them; the declarations themselves are read with the comments stripped, so a second pass over
