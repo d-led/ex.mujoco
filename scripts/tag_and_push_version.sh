@@ -107,6 +107,33 @@ else
 
   echo "commit $SHA on $BRANCH: ci conclusion ${CONCLUSION}"
 
+  if [ "$CONCLUSION" = "none" ]; then
+    # Markdown, LICENSE and NOTICE are outside what the workflow watches, so a
+    # commit that touches only them has no run of its own. The build it needs is
+    # the last one that ran — and it is that build only if nothing else moved.
+    GREEN=$(
+      gh api "repos/{owner}/{repo}/actions/workflows/ci.yml/runs?branch=$BRANCH&status=success&per_page=1" \
+        --jq '.workflow_runs[0].head_sha // ""' 2>/dev/null || echo ""
+    )
+
+    if [ -z "$GREEN" ]; then
+      echo "Error: no successful CI run on $BRANCH to compare $SHA with."
+      echo "       Pass --no-check to tag anyway."
+      exit 1
+    fi
+
+    BEYOND=$(git diff --name-only "$GREEN" "$SHA" | grep -vE '(\.md$|^LICENSE$|^NOTICE$)' || true)
+
+    if [ -n "$BEYOND" ]; then
+      echo "Error: CI has never run for $SHA, and these are files it does not ignore:"
+      echo "$BEYOND" | sed 's/^/         /'
+      exit 1
+    fi
+
+    echo "ci has not run for $SHA: since $GREEN it is only markdown, LICENSE or NOTICE"
+    CONCLUSION=success
+  fi
+
   if [ "$CONCLUSION" != "success" ]; then
     echo "Error: CI for $SHA is '${CONCLUSION}' — nothing is tagged until it is 'success'."
     echo "       Watch it with: gh run list --commit $SHA"
