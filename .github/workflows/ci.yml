@@ -96,12 +96,14 @@ jobs:
       - run: mix compile
       # What the module actually needs, when a Windows runner says it cannot find
       # something. Compile first so there is a module to ask about.
+      # `cmd`, because bash on Windows turns `/dependents` into a path.
       - name: What the NIF depends on
         if: runner.os == 'Windows'
-        shell: bash
+        shell: cmd
         run: |
-          ls -la _build/test/lib/ex_mujoco/priv
-          dumpbin /dependents _build/test/lib/ex_mujoco/priv/ex_mujoco_nif.dll || true
+          dir _build\test\lib\ex_mujoco\priv
+          dumpbin -dependents _build\test\lib\ex_mujoco\priv\ex_mujoco_nif.dll
+          dumpbin -dependents _build\test\lib\ex_mujoco\priv\mujoco.dll
       - run: mix test
 
   gen:
