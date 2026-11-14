@@ -9,8 +9,8 @@ disagrees with the headers.
 | MuJoCo functions | 551 |
 | --- | --- |
 | bound 1:1 by the generator | 25 |
-| bound by hand | 12 |
-| not bound | 514 |
+| bound by hand | 13 |
+| not bound | 513 |
 
 ### Bound by hand
 
@@ -27,6 +27,7 @@ out in `c_src/ex_mujoco_nif.cpp` rather than generated.
 * `state_size/2` — paired with get_state and set_state, which share the signature's meaning
 * `get_state/2` — writes into a buffer whose length `state_size` fixed; allocated here
 * `set_state/3` — reads a buffer whose length `state_size` fixed; checked here
+* `data_state_size/2` — the same count, asked of the data `put_state` is given
 * `contact_force/2` — writes six numbers into a caller's array; allocated here
 * `version/0` — the library's own version, checked against the headers at load time
 * `header_version/0` — the header's version, for the same check
@@ -37,7 +38,7 @@ out in `c_src/ex_mujoco_nif.cpp` rather than generated.
 NIF cannot honestly invent — a callback, a `void*`, an output array whose
 length nothing states, a variadic argument list — and binding one means
 deciding that question, one function at a time. The other
-88
+87
 are expressible and simply not bound yet: a name in `c_src/manifest.exs`, and
 `mix ex_mujoco.gen`.
 

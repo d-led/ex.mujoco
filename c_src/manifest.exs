@@ -53,6 +53,7 @@ map = %{
     %{name: "state_size", arity: 2, why: "paired with get_state and set_state, which share the signature's meaning"},
     %{name: "get_state", arity: 2, why: "writes into a buffer whose length `state_size` fixed; allocated here"},
     %{name: "set_state", arity: 3, why: "reads a buffer whose length `state_size` fixed; checked here"},
+    %{name: "data_state_size", arity: 2, why: "the same count, asked of the data `put_state` is given"},
     %{name: "contact_force", arity: 2, why: "writes six numbers into a caller's array; allocated here"},
     %{name: "version", arity: 0, why: "the library's own version, checked against the headers at load time"},
     %{name: "header_version", arity: 0, why: "the header's version, for the same check"}

@@ -1713,6 +1713,8 @@ defmodule ExMujoco.Native do
 
   def set_state(_argument1, _argument2, _argument3), do: :erlang.nif_error(:nif_not_loaded)
 
+  def data_state_size(_argument1, _argument2), do: :erlang.nif_error(:nif_not_loaded)
+
   def contact_force(_argument1, _argument2), do: :erlang.nif_error(:nif_not_loaded)
 
   def version(), do: :erlang.nif_error(:nif_not_loaded)

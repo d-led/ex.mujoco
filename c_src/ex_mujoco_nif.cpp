@@ -238,6 +238,19 @@ fine::Atom set_state(ErlNifEnv *, fine::ResourcePtr<Data> handle, int64_t signat
 }
 FINE_NIF(set_state, 0);
 
+// How many float64 values `set_state` wants, so a caller can be told what it
+// asked for by name before handing over a binary of another size. It takes the
+// data because `set_state` does: a state signature is only meaningful together
+// with the model the data belongs to.
+int64_t data_state_size(ErlNifEnv *, fine::ResourcePtr<Data> handle,
+                        int64_t signature) {
+  return exmujoco::call([&] {
+    return static_cast<int64_t>(
+        ::mj_stateSize(handle->model->model, static_cast<int>(signature)));
+  });
+}
+FINE_NIF(data_state_size, 0);
+
 // ---------------------------------------------------------------------- contacts
 
 // `mj_contactForce` writes six numbers into a buffer the caller owns. A NIF that

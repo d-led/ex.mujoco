@@ -124,10 +124,18 @@ defmodule ExMujoco do
   Writes a state read by `state/2` back into the data.
 
   The binary has to be the size that signature implies; anything else is refused
-  rather than written past the end of it.
+  with an `ArgumentError` naming both sizes, rather than written past the end of
+  it.
   """
   @spec put_state(data(), integer(), binary()) :: :ok
-  def put_state(data, signature, values) do
+  def put_state(data, signature, values) when is_binary(values) do
+    expected = Native.data_state_size(data, signature)
+    given = byte_size(values)
+
+    if given != expected * 8 do
+      raise ArgumentError, "expected #{expected} float64 values, got #{given} bytes"
+    end
+
     guarded(fn -> Native.set_state(data, signature, values) end)
   end
 
@@ -186,9 +194,25 @@ defmodule ExMujoco do
   # MuJoCo's own message, in this package's exception. A NIF error that is not a
   # MuJoCo error — `:nif_not_loaded` from a build that never linked — is left
   # alone, because that is a build problem and should look like one.
+  # Whatever the NIF layer raises comes out as `ExMujoco.Error`, because the
+  # message is MuJoCo's either way. A `RuntimeError` is the struct the NIF
+  # runtime builds on macOS and Linux; on Windows it declines to build one and
+  # the text arrives as the reason of a bare `ErlangError`. An `ErlangError`
+  # whose reason is not a binary is not that — it is a fault in the binding —
+  # and is left alone.
   defp guarded(fun) do
     fun.()
   rescue
-    error in RuntimeError -> reraise Error, [message: error.message], __STACKTRACE__
+    error in RuntimeError ->
+      reraise Error, [message: error.message], __STACKTRACE__
+
+    error in ErlangError ->
+      complaint(error, __STACKTRACE__)
   end
+
+  defp complaint(%ErlangError{original: text}, stacktrace) when is_binary(text) do
+    reraise Error, [message: text], stacktrace
+  end
+
+  defp complaint(error, stacktrace), do: reraise(error, stacktrace)
 end
