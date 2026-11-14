@@ -98,6 +98,11 @@ struct Platform {
 
   void current(CGLContextObj context) { set_current(context); }
 
+  // Handing the context back, so the next thread can take it: `CGLSetCurrentContext`
+  // is this thread's state, and a context left current here is one another
+  // thread cannot use.
+  void release() { set_current(nullptr); }
+
   // CGL gives a current context a default framebuffer of its own, so there is
   // nothing left to ask: the check is for a platform whose context can be
   // current and still have none.
@@ -273,6 +278,13 @@ struct Platform {
     }
   }
 
+  // EGL's own rule: a context may be current on **one** thread at a time, and a
+  // surface too. A context left current on the thread that last rendered is one
+  // no other scheduler can bind, and every GL call from that other thread then
+  // fails — `mjr_makeContext` reads the failure as "Default framebuffer is not
+  // complete, error 0x0". So a session hands the context back when it ends.
+  void release() { make_current(display, nullptr, nullptr, nullptr); }
+
   // Whether this context is one MuJoCo will take. MuJoCo binds framebuffer 0 and
   // reads its status before it makes a context of its own — COMPLETE means a
   // window is usable, UNDEFINED means there is none and it draws offscreen, and
@@ -350,6 +362,8 @@ struct Platform {
   }
 
   void current(void *) {}
+
+  void release() {}
 
   bool usable(void *, std::string *reason) {
     *reason = kNoPlatform;
@@ -448,7 +462,11 @@ Session::Session() : lock_(singleton().lock) {
   one.platform.current(one.context);
 }
 
-Session::~Session() = default;
+Session::~Session() {
+  Singleton &one = singleton();
+
+  one.platform.release();
+}
 
 }  // namespace gl
 }  // namespace exmujoco

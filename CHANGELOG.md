@@ -7,17 +7,28 @@ contains everything these notes describe.
 
 ## 0.2.3
 
-Linux renders. The EGL config asked for a pbuffer and nothing else — no depth
-sizes — so `mjr_makeContext` answered `Default framebuffer is not complete, error
-0x0` and refused the model: `available?/0` said yes and every renderer failed. The
-configuration now asks for the buffers MuJoCo's renderer needs (8-bit colour and
-alpha, 24-bit depth, 8-bit stencil, RGB), as MuJoCo's own EGL bindings do, and
-keeps the surfaceless call as a fallback for an implementation with
-`EGL_KHR_surfaceless_context`.
+Linux renders, and rendering survives being called from several processes at
+once.
 
-That this was possible until now is the other half of the fix: `test
-(ubuntu-24.04)` had no OpenGL either, so the renderer skipped there and only
-a macOS laptop ran it. Both platforms' jobs now install Mesa's surfaceless EGL.
+A context was made current for a render and never handed back, and EGL allows a
+context to be current on **one thread at a time** — so the next render, on
+whichever scheduler the BEAM gave it to, could not bind it, ran with no context,
+and MuJoCo reported the consequence as `Default framebuffer is not complete,
+error 0x0`. macOS was unaffected because `CGLSetCurrentContext` is content to be
+reset from another thread, which is why a laptop never saw it and a Linux runner
+running the suite `async` saw nothing else. Eight threads making a render context
+apiece reproduce it in one container; all eight succeed now that a session
+releases the context when it ends.
+
+`available?/0` was also answering a different question than the one a caller
+asks: whether this package could make a context, not whether MuJoCo would take
+it. It now asks MuJoCo — once, on a two-body scene built and thrown away — which
+is the only answer that a renderer will not then contradict.
+
+Two smaller repairs on the same path: the EGL configuration asks for the colour,
+depth and stencil buffers MuJoCo's renderer needs rather than a bare pbuffer, and
+`test (ubuntu-24.04)` installs Mesa's surfaceless EGL, having had no OpenGL at
+all — which is how a renderer that only worked on a laptop stayed unnoticed there.
 
 ## 0.2.2
 
