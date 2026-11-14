@@ -32,9 +32,12 @@ all: mujoco $(NIF_PATH)
 mujoco:
 	@ elixir "$(SCRIPT)" --ensure --priv "$(PRIV_DIR)"
 
+# `/Fe` is a compiler option and has to come before `/link`; after it, `cl` hands
+# it to the linker, which does not recognise it, warns, and writes the DLL under
+# its default name instead of ours.
 $(NIF_PATH): $(SOURCES) $(FINE_HEADERS)
 	@ if not exist "$(PRIV_DIR)" mkdir "$(PRIV_DIR)"
-	cl $(CPPFLAGS) $(SOURCES) $(LDFLAGS) /Fe"$(NIF_PATH)"
+	cl $(CPPFLAGS) $(SOURCES) /Fe"$(NIF_PATH)" $(LDFLAGS)
 
 clean:
 	@ if exist "$(NIF_PATH)" del /q "$(NIF_PATH)"
