@@ -148,27 +148,35 @@ defmodule ExMujoco.Gen.Header do
       text
       |> String.split("\n")
       |> Enum.map(&String.trim/1)
-      |> Enum.reduce({%{}, %{section: nil, doc: []}}, fn line, {found, pending} ->
-        cond do
-          banner?(line) ->
-            {found, %{pending | section: heading(String.replace_prefix(line, "//", ""))}}
-
-          String.starts_with?(line, "//") ->
-            {found, %{pending | doc: [comment(line) | pending.doc]}}
-
-          String.contains?(line, "MJAPI") ->
-            case declared_name(line) do
-              nil -> {found, pending}
-              name -> {Map.put(found, name, note(pending)), %{pending | doc: []}}
-            end
-
-          true ->
-            {found, %{pending | doc: []}}
-        end
-      end)
+      |> Enum.reduce({%{}, %{section: nil, doc: []}}, &read_line/2)
 
     annotations
   end
+
+  # One line at a time: a heading, a line of the description, the declaration the
+  # description belongs to, or something else, which ends the description.
+  defp read_line(line, {found, pending}) do
+    cond do
+      banner?(line) ->
+        {found, %{pending | section: heading(String.replace_prefix(line, "//", ""))}}
+
+      String.starts_with?(line, "//") ->
+        {found, %{pending | doc: [comment(line) | pending.doc]}}
+
+      String.contains?(line, "MJAPI") ->
+        record(found, pending, declared_name(line))
+
+      true ->
+        {found, %{pending | doc: []}}
+    end
+  end
+
+  # A global function pointer (`MJAPI extern void* (*mju_user_malloc)(size_t)`)
+  # has no name to file it under, and is not a function the bindings can expose.
+  defp record(found, pending, nil), do: {found, %{pending | doc: []}}
+
+  defp record(found, pending, name),
+    do: {Map.put(found, name, note(pending)), %{pending | doc: []}}
 
   defp note(pending) do
     doc = pending.doc |> Enum.reverse() |> Enum.join(" ") |> String.trim()
