@@ -83,6 +83,11 @@ documentation is part of a release rather than something added afterwards.
 - The generated field functions carry the generator's description of the field, taken from
   MuJoCo's own header comments, so `ExMujoco.Model.geom_size/1` is documented with MuJoCo's
   documentation for `geom_size`.
+- A field belongs to a family named by MuJoCo's own prefix — `geom_size`, `geom_pos`,
+  `geom_rbound` are `geom` — and the generator puts `@doc group: "geom"` on the function once ten
+  fields share it. Fewer than ten stay in the plain function list: a heading over two functions
+  is worse than no heading. The rule lives in `@family_size` in `lib/ex_mujoco/gen/template.ex`,
+  so it is changed in one place and `mix ex_mujoco.gen` decides the rest.
 
 ## Releasing
 

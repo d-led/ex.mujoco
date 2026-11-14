@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.4
+
+A field reference you can navigate.
+
+- `ExMujoco.Model` and `ExMujoco.Data` group their functions the way MuJoCo names fields:
+  `geom`, `body`, `jnt`, `actuator`, `tendon`, `flex`, `sensor` and the rest are sections of the
+  page instead of one alphabetical wall of several hundred functions. The heading is MuJoCo's own
+  prefix, and a family needs ten fields to earn one, so nothing is invented and no heading
+  covers two functions.
+- The rule is `@family_size` in the generator, so changing it is one edit and
+  `mix ex_mujoco.gen` decides the rest — and `--check` keeps the committed bindings honest.
+
 ## 0.1.3
 
 The documentation a caller reads, separated from the documentation a maintainer reads.
