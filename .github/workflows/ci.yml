@@ -102,8 +102,12 @@ jobs:
       # something. Compile first so there is a module to ask about.
       # Three libraries have to resolve before the suite is worth running: the
       # NIF, the preloader that puts MuJoCo in the process, and MuJoCo itself.
+      # `bash` on every runner: PowerShell hands `mix` (a batch file) to `cmd`
+      # with the parentheses of an Elixir call requoted, and `cmd` says
+      # ") was unexpected at this time".
       - name: The libraries load
-        run: mix run -e "IO.puts(ExMujoco.version())"
+        shell: bash
+        run: mix run -e "IO.puts ExMujoco.version()"
       - run: mix test
 
   gen:
