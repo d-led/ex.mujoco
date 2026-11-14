@@ -29,9 +29,11 @@ on:
 permissions:
   contents: read
 
+# Keyed by commit, not by branch: two pushes in a row are two commits' worth of
+# evidence, and a queued macOS job that a later push cancels never ran at all.
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  group: ci-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
 
 env:
   MIX_ENV: test
@@ -91,6 +93,15 @@ jobs:
           key: test-${{ matrix.os }}-${{ env.OTP_VERSION }}-${{ env.ELIXIR_VERSION }}-${{ hashFiles('mix.lock') }}
           restore-keys: test-${{ matrix.os }}-
       - run: mix deps.get
+      - run: mix compile
+      # What the module actually needs, when a Windows runner says it cannot find
+      # something. Compile first so there is a module to ask about.
+      - name: What the NIF depends on
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          ls -la _build/test/lib/ex_mujoco/priv
+          dumpbin /dependents _build/test/lib/ex_mujoco/priv/ex_mujoco_nif.dll || true
       - run: mix test
 
   gen:
