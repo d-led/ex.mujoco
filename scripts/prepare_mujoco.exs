@@ -277,16 +277,16 @@ defmodule PrepareMujoco do
     File.mkdir_p!(unpack)
     unzip!(archive, unpack)
     root = archive_root(unpack)
-    File.cp_r!(Path.join(root, "include"), Path.join(dir, "include"))
-    File.cp_r!(Path.join(root, "lib"), Path.join(dir, "lib"))
-    File.cp_r!(Path.join(root, "bin"), Path.join(dir, "bin"))
+    copy_tree!(Path.join(root, "include"), Path.join(dir, "include"))
+    copy_tree!(Path.join(root, "lib"), Path.join(dir, "lib"))
+    copy_tree!(Path.join(root, "bin"), Path.join(dir, "bin"))
     File.rm_rf!(unpack)
   end
 
   defp unpack_tarball!(archive, dir) do
-    root = archive_root(extract_tarball!(archive) |> Path.dirname())
-    File.cp_r!(Path.join(root, "include"), Path.join(dir, "include"))
-    File.cp_r!(Path.join(root, "lib"), Path.join(dir, "lib"))
+    root = archive_root(archive |> Path.dirname() |> Path.join("unpack"))
+    copy_tree!(Path.join(root, "include"), Path.join(dir, "include"))
+    copy_tree!(Path.join(root, "lib"), Path.join(dir, "lib"))
   end
 
   # An archive may hold one directory, or its contents directly: MuJoCo's
@@ -313,16 +313,10 @@ defmodule PrepareMujoco do
 
   defp unzip!(archive, into) do
     case :os.type() do
-      {:win32, _} ->
-        run!("powershell", [
-          "-NoProfile",
-          "-NonInteractive",
-          "-Command",
-          "Expand-Archive -LiteralPath '#{archive}' -DestinationPath '#{into}' -Force"
-        ])
-
-      _ ->
-        run!("unzip", ["-q", archive, "-d", into])
+      # `tar` on Windows is bsdtar, which reads zip; `Expand-Archive` is slower
+      # and says less when it fails.
+      {:win32, _} -> run!("tar", ["xf", archive, "-C", into])
+      _ -> run!("unzip", ["-q", archive, "-d", into])
     end
   end
 
@@ -520,6 +514,15 @@ defmodule PrepareMujoco do
   defp copy!(from, to) do
     File.mkdir_p!(Path.dirname(to))
     unless File.exists?(to), do: File.cp!(from, to)
+  end
+
+  defp copy_tree!(from, to) do
+    File.mkdir_p!(Path.dirname(to))
+
+    case File.cp_r(from, to) do
+      {:ok, _files} -> :ok
+      {:error, reason, file} -> raise "could not copy #{file}: #{:file.format_error(reason)}"
+    end
   end
 
   # ---------------------------------------------------------------- provenance
