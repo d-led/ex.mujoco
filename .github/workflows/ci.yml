@@ -133,6 +133,15 @@ jobs:
         run: |
           mix run -e 'IO.inspect({ExMujoco.Renderer.available?(), ExMujoco.Renderer.unavailable_reason()}, label: "renderer")'
       - run: mix test
+      # A release runs every `@on_load` hook while the kernel is still starting,
+      # which is the one arrangement this suite cannot make and a host's server
+      # always is: 0.2.3 died there, in `on_load_function_failed`, before any
+      # application started. One Linux job, because the boot script that does it
+      # is the same script everywhere and a second one would say nothing new.
+      - name: It starts in a release
+        if: runner.os == 'Linux'
+        shell: bash
+        run: scripts/release-boot.sh
 
   # What a user gets is the tarball, not this checkout. Building it and then
   # using it from a directory that holds nothing else says whether every file

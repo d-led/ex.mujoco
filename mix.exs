@@ -1,7 +1,7 @@
 defmodule ExMujoco.MixProject do
   use Mix.Project
 
-  @version "0.2.3"
+  @version "0.2.4"
   @source_url "https://github.com/d-led/ex.mujoco"
 
   # The MuJoCo version this package is built against. The headers of exactly this
@@ -41,9 +41,10 @@ defmodule ExMujoco.MixProject do
   end
 
   def application do
-    # A library, not an application: nothing to start, and the only thing this
-    # code calls is `Logger`.
-    [extra_applications: [:logger]]
+    # `ExMujoco.Application` supervises nothing: it is the moment after the kernel
+    # is up at which the library is loaded for the case where the `@on_load` hook
+    # could not do it — a release, whose boot script runs that hook too early.
+    [extra_applications: [:logger], mod: {ExMujoco.Application, []}]
   end
 
   # `Makefile` and `Makefile.win` are two files, not one file with `if`s: the

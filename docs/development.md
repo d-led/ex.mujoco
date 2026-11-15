@@ -112,6 +112,22 @@ contracts worth knowing about —
 `mix precommit` — when it is present — is compile with `--warnings-as-errors`, format check,
 `credo --strict`, `dialyzer`, the generator check, and the suite.
 
+## A release runs the load hook too early
+
+Every module carrying an `@on_load` goes into a release's boot script, and `init` runs those
+hooks while the kernel is still starting. A library cannot be loaded there: the preloader is a
+module the hook would have to load, and module loading is the one thing that does not work yet,
+so the call answers `undef`, the hook fails, and the VM dies in `on_load_function_failed` before
+any application starts. That was 0.2.3 — a host's server gone in 300 ms with 44 lines of crash
+report — and no test in this repository could see it, because a test VM starts applications and
+never runs a boot script.
+
+The hook now answers `:later` when the module it needs is not reachable, and
+`ExMujoco.Application` loads the library when the application starts — after the kernel is up,
+before any caller can reach a stub that is not a NIF yet. `scripts/release-boot.sh` is the
+check: it builds a release of this library, starts it, and asks it the library's version over
+`rpc`. The `test (ubuntu)` job runs it.
+
 ## CI
 
 `ci.yml`, on every push that touches something other than prose:

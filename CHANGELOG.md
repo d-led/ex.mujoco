@@ -5,6 +5,27 @@ Every version below is a real change, but not every one reached Hex: 0.1.2,
 patch, and expired. What Hex serves is 0.1.0, 0.1.1, 0.1.4 and 0.1.8, and 0.1.8
 contains everything these notes describe.
 
+## 0.2.4
+
+A host's release boots again. It did not boot at all in 0.2.3, on any platform.
+
+A release puts every module that carries an `@on_load` into its boot script, and
+`init` runs those hooks while the kernel is still starting — where a library
+cannot be loaded, because `ExMujoco.Preload` is a module the hook would have to
+load and module loading is the one thing that does not work yet. The hook's call
+answered `undef`, the hook failed, and the VM died in `on_load_function_failed`
+before any application started: a server that starts and is gone in 300 ms, with
+44 lines of crash report in the log. Nothing in this repository had ever started
+the library the way a host does, so nothing here saw it; a desktop bundle did.
+
+The hook now answers `:later` when the module it needs is not reachable, and
+`ExMujoco.Application` — new in this version — loads the library when the
+application starts, which is both after the kernel is up and before any caller
+can reach a stub that is not a NIF yet. `ExMujoco.Native.loaded?/0` says which
+happened. `scripts/release-boot.sh` builds a release of this library, starts it
+and asks it the library's version over `rpc`, and CI runs it on Linux: the class
+of bug a test in this repository could not have caught is a job now.
+
 ## 0.2.3
 
 Linux renders, and rendering survives being called from several processes at

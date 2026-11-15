@@ -36,6 +36,8 @@ defmodule ExMujoco.Gen.Template do
 
       @on_load :load
 
+      @loaded {__MODULE__, :loaded}
+
       # `:erlang.load_nif` only loads a library whose `ERL_NIF_INIT` name is this
       # module's, so the call has to be here. Whether the library and the headers
       # the NIF was generated from are the same version is `ExMujoco.Loader`'s
@@ -45,18 +47,46 @@ defmodule ExMujoco.Gen.Template do
       def load do
         priv = :code.priv_dir(:ex_mujoco) |> to_string()
 
-        # Windows will not look beside a library for the libraries it imports,
-        # so MuJoCo has to be in the process before this one is loaded. On macOS
-        # and Linux this answers `:ok` and does nothing.
-        preload = ExMujoco.Preload.mujoco(priv)
+        case preload(priv) do
+          # The kernel's own startup took the question away, and this hook is not
+          # the place to insist: `ExMujoco.Application` asks again when it starts.
+          :later -> :ok
+          preloaded -> load_the_nif(priv, preloaded)
+        end
+      end
 
+      @doc \"\"\"
+      Whether the library behind these stubs is loaded.
+
+      A release runs this module's `@on_load` hook while the kernel is still
+      starting — every module that carries one is in its boot script — and a
+      library cannot be loaded there: `ExMujoco.Preload` is a module this one
+      would have to load, which is the one thing that does not work yet. The hook
+      answers `:later` rather than taking the whole VM down with it, and
+      `ExMujoco.Application` loads the library when it starts.
+      \"\"\"
+      @spec loaded?() :: boolean()
+      def loaded?, do: :persistent_term.get(@loaded, false)
+
+      # Windows will not look beside a library for the libraries it imports, so
+      # MuJoCo has to be in the process before this one is loaded. On macOS and
+      # Linux this answers `:ok` and does nothing.
+      defp preload(priv) do
+        ExMujoco.Preload.mujoco(priv)
+      catch
+        # Not an answer about the library — a module this one could not reach yet
+        # — so not this hook's to report.
+        :error, :undef -> :later
+      end
+
+      defp load_the_nif(priv, preloaded) do
         case :erlang.load_nif(:filename.join(priv, ~c"ex_mujoco_nif"), 0) do
           :ok ->
-            :ok
+            :persistent_term.put(@loaded, true)
 
           {:error, reason} ->
             {:error,
-             "ex_mujoco: could not load the NIF: \#{inspect(reason)}" <> and_preload(preload)}
+             "ex_mujoco: could not load the NIF: \#{inspect(reason)}" <> and_preload(preloaded)}
         end
       end
 
