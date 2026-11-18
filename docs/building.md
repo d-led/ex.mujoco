@@ -38,7 +38,7 @@ not a default.
 
 ### 2. `EX_MUJOCO_SOURCE_DIR` — a checkout
 
-`EX_MUJOCO_SOURCE_DIR=~/src/mujoco mix compile`, for when you are working on MuJoCo itself or
+`EX_MUJOCO_SOURCE_DIR=/path/to/mujoco mix compile`, for when you are working on MuJoCo itself or
 have a clone you trust. It is built with CMake like the next case.
 
 ### 3. `EX_MUJOCO_SOURCE_REF` — build the latest

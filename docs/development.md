@@ -122,10 +122,11 @@ any application starts. That was 0.2.3 — a host's server gone in 300 ms with 4
 report — and no test in this repository could see it, because a test VM starts applications and
 never runs a boot script.
 
-The hook now answers `:later` when the module it needs is not reachable, and
-`ExMujoco.Application` loads the library when the application starts — after the kernel is up,
-before any caller can reach a stub that is not a NIF yet. `scripts/release-boot.sh` is the
-check: it builds a release of this library, starts it, and asks it the library's version over
+The hook now answers `:later` when the module it needs is not reachable, and the
+application callback (`lib/ex_mujoco/application.ex`) loads the library when the
+application starts — after the kernel is up, before any caller can reach a stub
+that is not a NIF yet. `scripts/release-boot.sh` is the check: it builds a
+release of this library, starts it, and asks it the library's version over
 `rpc`. The `test (ubuntu)` job runs it.
 
 ## CI

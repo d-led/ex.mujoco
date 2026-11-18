@@ -51,7 +51,7 @@ Three ways to point it at a MuJoCo, in the order they are tried:
 | ----------------------- | ----------------------------------------------- | --------------------------------------------------- |
 | your own install        | `MUJOCO_DIR=/opt/mujoco mix compile`            | Conan, vcpkg, a build of your own, a system package |
 | from source, at any ref | `EX_MUJOCO_SOURCE_REF=main mix compile`         | the latest MuJoCo, or a commit that fixes something |
-| from a checkout         | `EX_MUJOCO_SOURCE_DIR=~/src/mujoco mix compile` | you are working on MuJoCo                           |
+| from a checkout         | `EX_MUJOCO_SOURCE_DIR=/path/to/mujoco mix compile` | you are working on MuJoCo                           |
 | the pinned release      | `mix compile`                                   | everything else                                     |
 
 A release pins one MuJoCo: `mujoco.version` names it, the official artifact's published
