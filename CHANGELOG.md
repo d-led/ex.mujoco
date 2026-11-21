@@ -5,6 +5,16 @@ Every version below is a real change, but not every one reached Hex: 0.1.2,
 patch, and expired. What Hex serves is 0.1.0, 0.1.1, 0.1.4 and 0.1.8, and 0.1.8
 contains everything these notes describe.
 
+## 0.2.5
+
+Two renderers on one node draw the same picture. The offscreen buffer a render
+draws into is process-wide GL state, and it was bound once in the constructor: a
+renderer made afterwards rebound it, so the first renderer's next image was drawn
+into the second one's buffer while its own was read back — correct to row 42 of 64
+and black below that, on the first render only. A run of two parts on one node is
+that shape, and it was how a divided run came to disagree with the undivided one
+at step 11. The bind is now in `draw`.
+
 ## 0.2.4
 
 A host's release boots again. It did not boot at all in 0.2.3, on any platform.
