@@ -30,7 +30,7 @@ The plan is phased — physics first, then scene building, then rendering — an
 
 ```elixir
 def deps do
-  [{:ex_mujoco, "~> 0.1.8"}]
+  [{:ex_mujoco, "~> 0.2.6"}]
 end
 ```
 

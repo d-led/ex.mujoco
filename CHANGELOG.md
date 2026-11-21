@@ -5,7 +5,7 @@ Every version below is a real change, but not every one reached Hex: 0.1.2,
 patch, and expired. What Hex serves is 0.1.0, 0.1.1, 0.1.4 and 0.1.8, and 0.1.8
 contains everything these notes describe.
 
-## 0.2.5
+## 0.2.6
 
 Two renderers on one node draw the same picture. The offscreen buffer a render
 draws into is process-wide GL state, and it was bound once in the constructor: a
