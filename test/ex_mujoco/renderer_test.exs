@@ -127,6 +127,27 @@ defmodule ExMujoco.RendererTest do
 
       assert depth |> depths() |> Enum.max() > 1.0
     end
+
+    test "a second renderer of the same scene does not change the first one's picture", %{
+      renderer: first,
+      data: data,
+      model: model
+    } do
+      # Two worlds on one node is what a run of two parts is, and the offscreen
+      # buffer a render draws into is process-wide: a renderer made after this one
+      # bound its own, so this one's first image went into that buffer while its
+      # own was read back — black from halfway down. Making the second one before
+      # the first one draws is what shows it, which is why the image is drawn here
+      # rather than in the setup every case shares.
+      second = Renderer.new(model, 64, 64)
+
+      [one] = Renderer.read(first, data, "cam", [:rgb])
+      [again] = Renderer.read(first, data, "cam", [:rgb])
+      [twin] = Renderer.read(second, data, "cam", [:rgb])
+
+      assert one == again
+      assert twin == one
+    end
   end
 
   describe "refusals" do

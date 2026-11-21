@@ -108,7 +108,6 @@ Renderer::Renderer(fine::ResourcePtr<Model> model, int width, int height)
 
   call([&] { mjv_makeScene(m, &scene_, kMaxGeom); });
   call([&] { mjr_makeContext(m, &context_, mjFONTSCALE_150); });
-  call([&] { mjr_setBuffer(mjFB_OFFSCREEN, &context_); });
 
   // MuJoCo renders in reverse-Z, which is what the conversion above assumes.
   context_.readDepthMap = mjDEPTH_ZEROFAR;
@@ -165,6 +164,12 @@ void Renderer::draw(mjrRect rect, Pass pass, std::string &image) {
   // Every pass starts from the scene's own flags: the segmentation passes set
   // two of them and the next pass must not inherit them.
   std::memcpy(scene_.flags, default_flags_, sizeof(default_flags_));
+
+  // This renderer's own offscreen buffer, bound here rather than once in the
+  // constructor: the binding is process-wide GL state, and another renderer made
+  // after this one has bound its own. Rendering into that one and reading this
+  // one drew a first image whose bottom rows were never written.
+  call([&] { mjr_setBuffer(mjFB_OFFSCREEN, &context_); });
 
   if (pass == Pass::kDepth || pass == Pass::kSegmentation) {
     // MuJoCo's Python bindings render depth this way too: with segmentation on,
