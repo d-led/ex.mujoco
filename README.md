@@ -45,7 +45,7 @@ ex_mujoco: Fetching MuJoCo 4.0.1 for darwin-universal
 ex_mujoco: MuJoCo 4.0.1 is in _build/mujoco/4.0.1-darwin-arm64
 ```
 
-Three ways to point it at a MuJoCo, in the order they are tried:
+Four ways to point it at a MuJoCo, in the order they are tried:
 
 | how                     | command                                         | when                                                |
 | ----------------------- | ----------------------------------------------- | --------------------------------------------------- |
