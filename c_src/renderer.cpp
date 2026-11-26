@@ -104,8 +104,6 @@ Renderer::Renderer(fine::ResourcePtr<Model> model, int width, int height)
   mjv_defaultCamera(&camera_);
   mjr_defaultContext(&context_);
 
-  std::memcpy(default_flags_, scene_.flags, sizeof(default_flags_));
-
   call([&] { mjv_makeScene(m, &scene_, kMaxGeom); });
   call([&] { mjr_makeContext(m, &context_, mjFONTSCALE_150); });
 
@@ -151,6 +149,15 @@ void Renderer::render(const mjData *data, const std::string &camera,
   call([&] { mjv_updateScene(m, const_cast<mjData *>(data), &option_, nullptr, &camera_,
                              mjCAT_ALL, &scene_); });
 
+  // What the model and its options say this frame should be drawn with. Taken
+  // here, after `mjv_updateScene` has written it, and not in the constructor:
+  // `mjv_defaultScene` leaves every `mjRND_` flag clear, so restoring *that*
+  // snapshot drew the colour pass with lighting (and shadows, haze and fog) off.
+  // A patch's pixels came out a constant 0.874 of MuJoCo's own Python renderer —
+  // the flat material colour instead of the lit one — while the depth and
+  // segmentation passes, whose flags this code sets itself, agreed exactly.
+  std::memcpy(default_flags_, scene_.flags, sizeof(default_flags_));
+
   const mjrRect rect{0, 0, width_, height_};
 
   for (Pass pass : passes) {
@@ -161,8 +168,9 @@ void Renderer::render(const mjData *data, const std::string &camera,
 }
 
 void Renderer::draw(mjrRect rect, Pass pass, std::string &image) {
-  // Every pass starts from the scene's own flags: the segmentation passes set
-  // two of them and the next pass must not inherit them.
+  // Every pass starts from the flags `mjv_updateScene` derived for this frame:
+  // the segmentation passes set two of them and the next pass must not inherit
+  // them.
   std::memcpy(scene_.flags, default_flags_, sizeof(default_flags_));
 
   // This renderer's own offscreen buffer, bound here rather than once in the
