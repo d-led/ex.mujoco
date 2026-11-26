@@ -380,16 +380,19 @@ defmodule PrepareMujoco do
       source = source_dir!(work)
       config = if platform() == "win32", do: ["--config", "Release"], else: []
 
-      run!("cmake", [
-        "-S",
-        source,
-        "-B",
-        build,
-        "-DCMAKE_INSTALL_PREFIX=#{dir}" | @cmake_configure
-      ])
+      run!(
+        "cmake",
+        ["-S", source, "-B", build, "-DCMAKE_INSTALL_PREFIX=#{dir}" | @cmake_configure],
+        clean_build_env()
+      )
 
-      run!("cmake", ["--build", build, "--target", "mujoco", "--parallel", jobs() | config])
-      run!("cmake", ["--install", build | config])
+      run!(
+        "cmake",
+        ["--build", build, "--target", "mujoco", "--parallel", jobs() | config],
+        clean_build_env()
+      )
+
+      run!("cmake", ["--install", build | config], clean_build_env())
     after
       File.rm_rf!(work)
     end
@@ -675,8 +678,8 @@ defmodule PrepareMujoco do
     end
   end
 
-  defp run!(command, args) do
-    case System.cmd(command, args, stderr_to_stdout: true) do
+  defp run!(command, args, options \\ []) do
+    case System.cmd(command, args, [stderr_to_stdout: true] ++ options) do
       {_out, 0} ->
         :ok
 
@@ -686,6 +689,17 @@ defmodule PrepareMujoco do
   rescue
     error in ErlangError ->
       missing!(command, error, __STACKTRACE__)
+  end
+
+  # MuJoCo's own build is not the NIF's build. ElixirMake exports `CFLAGS`,
+  # `CPPFLAGS` and `LDFLAGS` — with this project's `-lmujoco` among them — for
+  # the Makefile that compiles the bindings, and a `cmake` started underneath
+  # inherits them: CMake's first test compile is handed `-L<mujoco-dir> -lmujoco`
+  # before any MuJoCo exists, and the configure step fails with `ld: library
+  # 'mujoco' not found`. A source build therefore never worked through `mix`,
+  # only by hand from a shell that had not exported them.
+  defp clean_build_env do
+    [env: [{"CFLAGS", ""}, {"CPPFLAGS", ""}, {"CXXFLAGS", ""}, {"LDFLAGS", ""}]]
   end
 
   # A tool that is not installed is a sentence, not a stack trace.
