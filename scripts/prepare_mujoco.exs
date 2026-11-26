@@ -228,19 +228,22 @@ defmodule PrepareMujoco do
     version = version!()
     label = release_target() |> Tuple.to_list() |> Enum.join("-")
 
-    artifact =
-      release_artifact() ||
-        raise """
-        MuJoCo #{version} publishes no artifact for #{label}.
+    case release_artifact() do
+      # A release this table has not checked cannot be downloaded — and a pin
+      # with no artifact is not a reason to refuse to build: it is a release
+      # MuJoCo publishes no binary for on this platform, so the source at that
+      # tag is the same MuJoCo. Asking for an env var to say so made a pinned
+      # version unbuildable in CI, which is where it matters.
+      nil ->
+        note("MuJoCo #{version} publishes no artifact for #{label}; building it from source")
+        build_source!(dir)
 
-        Two supported ways out:
+      artifact ->
+        fetch_release!(dir, version, label, artifact)
+    end
+  end
 
-          * build the pinned version from source:
-              EX_MUJOCO_BUILD=1 mix compile
-          * build whatever is latest, or a ref you name:
-              EX_MUJOCO_SOURCE_REF=main mix compile
-        """
-
+  defp fetch_release!(dir, version, label, artifact) do
     note("Fetching MuJoCo #{version} for #{label}")
     File.mkdir_p!(dir)
     work = work_dir!("release")
