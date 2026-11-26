@@ -6,11 +6,11 @@ disagrees with the headers.
 
 ## Functions
 
-| MuJoCo functions | 551 |
+| MuJoCo functions | 541 |
 | --- | --- |
 | bound 1:1 by the generator | 25 |
 | bound by hand | 13 |
-| not bound | 513 |
+| not bound | 503 |
 
 ### Bound by hand
 
@@ -43,7 +43,7 @@ and `renderer_render/4` name the two MuJoCo calls they rest on).
 
 ### Not bound
 
-419 of the 513 take something a NIF cannot
+409 of the 503 take something a NIF cannot
 honestly invent — a callback, a `void*`, an output array whose length nothing
 states, a variadic argument list — and binding one means deciding that
 question, one function at a time. The other 94 need a name in
@@ -63,10 +63,10 @@ functions, so a reader can look where MuJoCo would put the answer.
 * **No heading in the header** (2) — `mj__freeStack`, `mj__markStack`
 * **OpenGL rendering** (3) — `mjr_finish`, `mjr_getError`, `mjr_rectangle`
 * **Parse and compile** (1) — `mj_freeLastXML`
-* **Plugins** (3) — `mjp_archiveProviderCount`, `mjp_pluginCount`, `mjp_providerCount`
+* **Plugins** (2) — `mjp_pluginCount`, `mjp_resourceProviderCount`
 * **Printing** (6) — `mj_printData`, `mj_printFormattedData`, `mj_printFormattedModel`, `mj_printModel`, `mju_printMat`, `mju_printMatSparse`
 * **Sub components** (11) — `mj_checkAcc`, `mj_checkPos`, `mj_checkVel`, `mj_comVel`, `mj_factorM`, `mj_island`, `mj_makeM`, `mj_maxContact`, `mj_passive`, `mj_rnePostConstraint`, `mj_subtreeVel`
-* **Support** (11) — `mj_actuatorInputName`, `mj_copyState`, `mj_getPluginConfig`, `mj_initCtrlHistory`, `mj_initSensorHistory`, `mj_insideSite`, `mj_isPyramidal`, `mj_loadAllPluginLibraries`, `mj_loadPluginLibrary`, `mj_setKeyframe`, `mj_setTotalmass`
+* **Support** (12) — `mj_actuatorInputName`, `mj_copyState`, `mj_getPluginConfig`, `mj_initCtrlHistory`, `mj_initSensorHistory`, `mj_insideSite`, `mj_isPyramidal`, `mj_loadAllPluginLibraries`, `mj_loadPluginLibrary`, `mj_readCtrl`, `mj_setKeyframe`, `mj_setTotalmass`
 * **Threads** (1) — `mju_threadpool`
 * **Vector math** (8) — `mju_L1`, `mju_dist3`, `mju_dot`, `mju_dot3`, `mju_mulVecMatVec`, `mju_norm`, `mju_norm3`, `mju_sum`
 * **Visualization** (1) — `mjv_copyModel`
@@ -76,7 +76,7 @@ functions, so a reader can look where MuJoCo would put the answer.
 | MuJoCo's heading | functions |
 | --- | --- |
 | Vector math | 38 |
-| Support | 27 |
+| Support | 26 |
 | Element initialization | 25 |
 | Element casting | 24 |
 | OpenGL rendering | 23 |
@@ -84,23 +84,23 @@ functions, so a reader can look where MuJoCo would put the answer.
 | Initialization | 19 |
 | Interaction | 18 |
 | Non-tree elements | 18 |
-| Plugins | 16 |
+| Plugins | 14 |
 | Quaternions | 14 |
 | Visualization | 14 |
 | Error and memory | 13 |
-| Spec utilities | 13 |
 | Attribute setters | 12 |
-| Parse and compile | 12 |
 | Decompositions / Solvers | 11 |
 | Set actuator parameters | 11 |
 | Miscellaneous | 10 |
+| Parse and compile | 10 |
+| Spec utilities | 9 |
 | Tree elements | 9 |
 | Virtual file system | 9 |
 | UI framework | 8 |
-| Attribute getters | 7 |
 | Ray casting | 7 |
 | Resources | 7 |
 | Assets | 6 |
+| Attribute getters | 6 |
 | Asset cache | 5 |
 | Derivatives | 4 |
 | Sub components | 4 |
@@ -121,14 +121,14 @@ Decisions worth naming:
 
 | struct | scalars | arrays | not exposed |
 | --- | --- | --- | --- |
-| `mjModel` | 101 | 484 | 10 |
-| `mjData` | 38 | 180 | 8 |
+| `mjModel` | 101 | 482 | 10 |
+| `mjData` | 38 | 173 | 8 |
 
 MuJoCo's own API reference describes each of them; the names and the units are
 MuJoCo's, and its documentation is the documentation for the field.
 
 ## Enums
 
-All 83 enums MuJoCo declares are generated into `ExMujoco.Types`
+All 77 enums MuJoCo declares are generated into `ExMujoco.Types`
 with the values resolved from the headers — including the ones C numbers
 implicitly and the ones that are an OR of their siblings.

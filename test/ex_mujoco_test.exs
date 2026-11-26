@@ -108,8 +108,12 @@ defmodule ExMujocoTest do
 
   describe "the library" do
     test "is the version its headers are" do
+      # The library and the headers that generated the bindings are the same
+      # MuJoCo or the numbers on either side of the border describe different
+      # physics. Which version that is, is `mujoco.version`'s statement and the
+      # next test's; a literal here would be a third copy of it to keep in step,
+      # and was one: this file said 4.0.1 while the branch pinned 3.13.0.
       assert ExMujoco.version() == ExMujoco.header_version()
-      assert ExMujoco.version() == 4_000_001
     end
 
     test "is the version the pin names" do

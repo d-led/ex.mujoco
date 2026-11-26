@@ -247,11 +247,11 @@ defmodule ExMujoco.Data do
   def nJ(data), do: Native.data_nJ(data)
 
   @doc """
-  `efm_active` — effective metric M+K: 0 off, 1 on, 2 on with general flex CSR
+  `efm_active` — implicit effective metric M+K is active (see mjd_effBuild)
 
   `int` in C, read as an integer.
   """
-  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
+  @doc group: "effective metric: per-step activity flag and sizes, set by mjd_effBuild"
 
   @spec efm_active(t()) :: integer()
   def efm_active(data), do: Native.data_efm_active(data)
@@ -261,7 +261,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
-  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
+  @doc group: "effective metric: per-step activity flag and sizes, set by mjd_effBuild"
 
   @spec nefmK(t()) :: integer()
   def nefmK(data), do: Native.data_nefmK(data)
@@ -271,7 +271,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
-  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
+  @doc group: "effective metric: per-step activity flag and sizes, set by mjd_effBuild"
 
   @spec nefmcon(t()) :: integer()
   def nefmcon(data), do: Native.data_nefmcon(data)
@@ -281,7 +281,7 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
-  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
+  @doc group: "effective metric: per-step activity flag and sizes, set by mjd_effBuild"
 
   @spec nefmT(t()) :: integer()
   def nefmT(data), do: Native.data_nefmT(data)
@@ -291,27 +291,27 @@ defmodule ExMujoco.Data do
 
   `int` in C, read as an integer.
   """
-  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
+  @doc group: "effective metric: per-step activity flag and sizes, set by mjd_effBuild"
 
   @spec nefmA(t()) :: integer()
   def nefmA(data), do: Native.data_nefmA(data)
 
   @doc """
-  `nefmdof` — number of covered vertex triples in the effective metric
+  `nefmdof` — number of 3x3 blocks in the effective-metric preconditioner
 
   `int` in C, read as an integer.
   """
-  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
+  @doc group: "effective metric: per-step activity flag and sizes, set by mjd_effBuild"
 
   @spec nefmdof(t()) :: integer()
   def nefmdof(data), do: Native.data_nefmdof(data)
 
   @doc """
-  `nefmL` — size of efm_L (packed Cholesky factor or island lists)
+  `nefmL` — size of the effective-metric block storage (9*nefmdof)
 
   `int` in C, read as an integer.
   """
-  @doc group: "effective metric: per-step activity flag and sizes, set by mj_effBuild"
+  @doc group: "effective metric: per-step activity flag and sizes, set by mjd_effBuild"
 
   @spec nefmL(t()) :: integer()
   def nefmL(data), do: Native.data_nefmL(data)
@@ -508,19 +508,6 @@ defmodule ExMujoco.Data do
   @spec history(t()) :: ExMujoco.Tensor.t()
   def history(data) do
     {data, rows, cols} = Native.data_history(data)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
-  `plastic` — plastic state (nplastic x 1)
-
-  `mjtNum*` in C, `nplastic` × `1`.
-  """
-  @doc group: "state"
-
-  @spec plastic(t()) :: ExMujoco.Tensor.t()
-  def plastic(data) do
-    {data, rows, cols} = Native.data_plastic(data)
     Tensor.new(:f64, {rows, cols}, data)
   end
 
@@ -759,19 +746,6 @@ defmodule ExMujoco.Data do
   end
 
   @doc """
-  `xiquat` — Cartesian orientation of body inertia (nbody x 4)
-
-  `mjtNum*` in C, `nbody` × `4`.
-  """
-  @doc group: "computed by mj_fwdPosition/mj_kinematics"
-
-  @spec xiquat(t()) :: ExMujoco.Tensor.t()
-  def xiquat(data) do
-    {data, rows, cols} = Native.data_xiquat(data)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
   `ximat` — Cartesian orientation of body inertia (nbody x 9)
 
   `mjtNum*` in C, `nbody` × `9`.
@@ -824,19 +798,6 @@ defmodule ExMujoco.Data do
   end
 
   @doc """
-  `geom_xquat` — Cartesian geom orientation (ngeom x 4)
-
-  `mjtNum*` in C, `ngeom` × `4`.
-  """
-  @doc group: "computed by mj_fwdPosition/mj_kinematics"
-
-  @spec geom_xquat(t()) :: ExMujoco.Tensor.t()
-  def geom_xquat(data) do
-    {data, rows, cols} = Native.data_geom_xquat(data)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
   `geom_xmat` — Cartesian geom orientation (ngeom x 9)
 
   `mjtNum*` in C, `ngeom` × `9`.
@@ -859,19 +820,6 @@ defmodule ExMujoco.Data do
   @spec site_xpos(t()) :: ExMujoco.Tensor.t()
   def site_xpos(data) do
     {data, rows, cols} = Native.data_site_xpos(data)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
-  `site_xquat` — Cartesian site orientation (nsite x 4)
-
-  `mjtNum*` in C, `nsite` × `4`.
-  """
-  @doc group: "computed by mj_fwdPosition/mj_kinematics"
-
-  @spec site_xquat(t()) :: ExMujoco.Tensor.t()
-  def site_xquat(data) do
-    {data, rows, cols} = Native.data_site_xquat(data)
     Tensor.new(:f64, {rows, cols}, data)
   end
 
@@ -1019,45 +967,6 @@ defmodule ExMujoco.Data do
   end
 
   @doc """
-  `flex_hessian_valid` — Cartesian stretch Hessian cache is current (nflex x 1)
-
-  `mjtBool*` in C, `nflex` × `1`.
-  """
-  @doc group: "computed by mj_fwdPosition/mj_flex"
-
-  @spec flex_hessian_valid(t()) :: ExMujoco.Tensor.t()
-  def flex_hessian_valid(data) do
-    {data, rows, cols} = Native.data_flex_hessian_valid(data)
-    Tensor.new(:u8, {rows, cols}, data)
-  end
-
-  @doc """
-  `flexvert_hessian` — symmetric diagonal Hessian blocks (nflexvert x 6)
-
-  `mjtNum*` in C, `nflexvert` × `6`.
-  """
-  @doc group: "computed by mj_fwdPosition/mj_flex"
-
-  @spec flexvert_hessian(t()) :: ExMujoco.Tensor.t()
-  def flexvert_hessian(data) do
-    {data, rows, cols} = Native.data_flexvert_hessian(data)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
-  `flexedge_hessian` — oriented off-diagonal Hessian blocks (nflexedge x 9)
-
-  `mjtNum*` in C, `nflexedge` × `9`.
-  """
-  @doc group: "computed by mj_fwdPosition/mj_flex"
-
-  @spec flexedge_hessian(t()) :: ExMujoco.Tensor.t()
-  def flexedge_hessian(data) do
-    {data, rows, cols} = Native.data_flexedge_hessian(data)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
   `flexedge_J` — flex edge Jacobian (nJfe x 1)
 
   `mjtNum*` in C, `nJfe` × `1`.
@@ -1084,6 +993,32 @@ defmodule ExMujoco.Data do
   end
 
   @doc """
+  `flexvert_J` — flex vertex Jacobian (nJfv x 2)
+
+  `mjtNum*` in C, `nJfv` × `2`.
+  """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
+
+  @spec flexvert_J(t()) :: ExMujoco.Tensor.t()
+  def flexvert_J(data) do
+    {data, rows, cols} = Native.data_flexvert_J(data)
+    Tensor.new(:f64, {rows, cols}, data)
+  end
+
+  @doc """
+  `flexvert_length` — flex vertex lengths (nflexvert x 2)
+
+  `mjtNum*` in C, `nflexvert` × `2`.
+  """
+  @doc group: "computed by mj_fwdPosition/mj_flex"
+
+  @spec flexvert_length(t()) :: ExMujoco.Tensor.t()
+  def flexvert_length(data) do
+    {data, rows, cols} = Native.data_flexvert_length(data)
+    Tensor.new(:f64, {rows, cols}, data)
+  end
+
+  @doc """
   `bvh_aabb_dyn` — global bounding box (center, size) (nbvhdynamic x 6)
 
   `mjtNum*` in C, `nbvhdynamic` × `6`.
@@ -1094,32 +1029,6 @@ defmodule ExMujoco.Data do
   def bvh_aabb_dyn(data) do
     {data, rows, cols} = Native.data_bvh_aabb_dyn(data)
     Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
-  `flexvert_lambda` — flex contact multiplier (nflexvert x 1)
-
-  `mjtNum*` in C, `nflexvert` × `1`.
-  """
-  @doc group: "AL contact state carried across steps (flag ipc, not in mjtState)"
-
-  @spec flexvert_lambda(t()) :: ExMujoco.Tensor.t()
-  def flexvert_lambda(data) do
-    {data, rows, cols} = Native.data_flexvert_lambda(data)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
-  `flexvert_conage` — flex contact age: <0 loaded, >0 steps since (nflexvert x 1)
-
-  `int*` in C, `nflexvert` × `1`.
-  """
-  @doc group: "AL contact state carried across steps (flag ipc, not in mjtState)"
-
-  @spec flexvert_conage(t()) :: ExMujoco.Tensor.t()
-  def flexvert_conage(data) do
-    {data, rows, cols} = Native.data_flexvert_conage(data)
-    Tensor.new(:i32, {rows, cols}, data)
   end
 
   @doc """
@@ -1682,7 +1591,7 @@ defmodule ExMujoco.Data do
   end
 
   @doc """
-  `qfrc_constraint` — constraint force (flag ipc: incl. flex contact) (nv x 1)
+  `qfrc_constraint` — constraint force (nv x 1)
 
   `mjtNum*` in C, `nv` × `1`.
   """
@@ -2621,7 +2530,7 @@ defmodule ExMujoco.Data do
   end
 
   @doc """
-  `efm_con_ind` — contact rows, packed [nnz, conid, colind...] (nefmcon x 1)
+  `efm_con_ind` — contact rank-1 rows, packed [nnz, colind...] (nefmcon x 1)
 
   `int*` in C, `nefmcon@data` × `1`.
   """
@@ -2634,7 +2543,7 @@ defmodule ExMujoco.Data do
   end
 
   @doc """
-  `efm_con_val` — contact rows, packed [scale, force, val...] (nefmcon x 1)
+  `efm_con_val` — contact rank-1 rows, packed [scale, val...] (nefmcon x 1)
 
   `mjtNum*` in C, `nefmcon@data` × `1`.
   """
@@ -2647,7 +2556,7 @@ defmodule ExMujoco.Data do
   end
 
   @doc """
-  `efm_L` — packed Cholesky factor of M+K or island lists (nefmL x 1)
+  `efm_L` — factored 3x3 diagonal blocks of M+K (nefmL x 1)
 
   `mjtNum*` in C, `nefmL@data` × `1`.
   """

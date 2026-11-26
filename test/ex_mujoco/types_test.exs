@@ -36,9 +36,12 @@ defmodule ExMujoco.TypesTest do
   end
 
   test "a bitmask enum resolves its shifts and its ORs" do
-    # `mjSTATE_TIME = 1<<0`, `mjSTATE_INTEGRATION` is every bit set.
+    # `mjSTATE_TIME = 1<<0`, `mjSTATE_INTEGRATION` is every bit set. The width
+    # is MuJoCo's: fourteen bits through 3.13, fifteen from 4.0 when `mjSTATE_`
+    # gained one, so this number follows `mujoco.version` rather than describing
+    # this port.
     assert State.time() == 1
     assert State.qpos() == 2
-    assert State.integration() == 32_767
+    assert State.integration() == 16_383
   end
 end

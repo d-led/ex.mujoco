@@ -24,7 +24,7 @@ defmodule ExMujoco.Types.Eq do
   @spec flex() :: 4
   def flex, do: 4
 
-  @doc "mjEQ_FLEXVERT is 5 — unsupported, will cause an error if used."
+  @doc "mjEQ_FLEXVERT is 5 — fix all vertex lengths of a flex."
   @spec flexvert() :: 5
   def flexvert, do: 5
 

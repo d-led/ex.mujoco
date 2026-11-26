@@ -132,15 +132,17 @@ defmodule ExMujoco.Native do
 
   def model_nefm0L(_model), do: :erlang.nif_error(:nif_not_loaded)
 
-  def model_nefmCvert(_model), do: :erlang.nif_error(:nif_not_loaded)
-
   def model_nflexelemedge(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_nflexshelldata(_model), do: :erlang.nif_error(:nif_not_loaded)
 
+  def model_nflexevpair(_model), do: :erlang.nif_error(:nif_not_loaded)
+
   def model_nflextexcoord(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_nJfe(_model), do: :erlang.nif_error(:nif_not_loaded)
+
+  def model_nJfv(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_nmesh(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -235,8 +237,6 @@ defmodule ExMujoco.Native do
   def model_nnames(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_npaths(_model), do: :erlang.nif_error(:nif_not_loaded)
-
-  def model_nplastic(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_nnames_map(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -362,8 +362,6 @@ defmodule ExMujoco.Native do
 
   def model_jnt_group(_model), do: :erlang.nif_error(:nif_not_loaded)
 
-  def model_jnt_plasticadr(_model), do: :erlang.nif_error(:nif_not_loaded)
-
   def model_jnt_limited(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_jnt_actfrclimited(_model), do: :erlang.nif_error(:nif_not_loaded)
@@ -381,8 +379,6 @@ defmodule ExMujoco.Native do
   def model_jnt_stiffness(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_jnt_stiffnesspoly(_model), do: :erlang.nif_error(:nif_not_loaded)
-
-  def model_jnt_springyield(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_jnt_range(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -453,8 +449,6 @@ defmodule ExMujoco.Native do
   def model_geom_plugin(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_geom_sameframe(_model), do: :erlang.nif_error(:nif_not_loaded)
-
-  def model_geom_castshadow(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_geom_solmix(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -606,6 +600,8 @@ defmodule ExMujoco.Native do
 
   def model_flex_gap(_model), do: :erlang.nif_error(:nif_not_loaded)
 
+  def model_flex_internal(_model), do: :erlang.nif_error(:nif_not_loaded)
+
   def model_flex_selfcollide(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_flex_activelayers(_model), do: :erlang.nif_error(:nif_not_loaded)
@@ -646,13 +642,13 @@ defmodule ExMujoco.Native do
 
   def model_flex_bendingadr(_model), do: :erlang.nif_error(:nif_not_loaded)
 
-  def model_flex_plasticadr(_model), do: :erlang.nif_error(:nif_not_loaded)
-
-  def model_flex_plasticmode(_model), do: :erlang.nif_error(:nif_not_loaded)
-
   def model_flex_shellnum(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_flex_shelldataadr(_model), do: :erlang.nif_error(:nif_not_loaded)
+
+  def model_flex_evpairadr(_model), do: :erlang.nif_error(:nif_not_loaded)
+
+  def model_flex_evpairnum(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_flex_texcoordadr(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -660,7 +656,11 @@ defmodule ExMujoco.Native do
 
   def model_flex_vertbodyid(_model), do: :erlang.nif_error(:nif_not_loaded)
 
-  def model_flex_vertcell(_model), do: :erlang.nif_error(:nif_not_loaded)
+  def model_flex_vertedgeadr(_model), do: :erlang.nif_error(:nif_not_loaded)
+
+  def model_flex_vertedgenum(_model), do: :erlang.nif_error(:nif_not_loaded)
+
+  def model_flex_vertedge(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_flex_edge(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -676,9 +676,13 @@ defmodule ExMujoco.Native do
 
   def model_flex_shell(_model), do: :erlang.nif_error(:nif_not_loaded)
 
+  def model_flex_evpair(_model), do: :erlang.nif_error(:nif_not_loaded)
+
   def model_flex_vert(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_flex_vert0(_model), do: :erlang.nif_error(:nif_not_loaded)
+
+  def model_flex_vertmetric(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_flex_node(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -706,11 +710,7 @@ defmodule ExMujoco.Native do
 
   def model_efm0_L(_model), do: :erlang.nif_error(:nif_not_loaded)
 
-  def model_efmC_perm(_model), do: :erlang.nif_error(:nif_not_loaded)
-
   def model_flex_damping(_model), do: :erlang.nif_error(:nif_not_loaded)
-
-  def model_flex_yield(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_flex_edgestiffness(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -735,6 +735,12 @@ defmodule ExMujoco.Native do
   def model_flexedge_J_rowadr(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_flexedge_J_colind(_model), do: :erlang.nif_error(:nif_not_loaded)
+
+  def model_flexvert_J_rownnz(_model), do: :erlang.nif_error(:nif_not_loaded)
+
+  def model_flexvert_J_rowadr(_model), do: :erlang.nif_error(:nif_not_loaded)
+
+  def model_flexvert_J_colind(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_flex_rgba(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -878,8 +884,6 @@ defmodule ExMujoco.Native do
 
   def model_tex_pathadr(_model), do: :erlang.nif_error(:nif_not_loaded)
 
-  def model_tex_contenttypeadr(_model), do: :erlang.nif_error(:nif_not_loaded)
-
   def model_mat_texid(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_mat_texuniform(_model), do: :erlang.nif_error(:nif_not_loaded)
@@ -940,8 +944,6 @@ defmodule ExMujoco.Native do
 
   def model_eq_data(_model), do: :erlang.nif_error(:nif_not_loaded)
 
-  def model_tendon_type(_model), do: :erlang.nif_error(:nif_not_loaded)
-
   def model_tendon_adr(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_tendon_num(_model), do: :erlang.nif_error(:nif_not_loaded)
@@ -951,8 +953,6 @@ defmodule ExMujoco.Native do
   def model_tendon_actuatorid(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_tendon_group(_model), do: :erlang.nif_error(:nif_not_loaded)
-
-  def model_tendon_plasticadr(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_tendon_treenum(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -997,8 +997,6 @@ defmodule ExMujoco.Native do
   def model_tendon_frictionloss(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_tendon_lengthspring(_model), do: :erlang.nif_error(:nif_not_loaded)
-
-  def model_tendon_springyield(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_tendon_length0(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -1163,8 +1161,6 @@ defmodule ExMujoco.Native do
   def model_key_mquat(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_key_ctrl(_model), do: :erlang.nif_error(:nif_not_loaded)
-
-  def model_key_plastic(_model), do: :erlang.nif_error(:nif_not_loaded)
 
   def model_name_bodyadr(_model), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -1332,8 +1328,6 @@ defmodule ExMujoco.Native do
 
   def data_history(_data), do: :erlang.nif_error(:nif_not_loaded)
 
-  def data_plastic(_data), do: :erlang.nif_error(:nif_not_loaded)
-
   def data_qacc_warmstart(_data), do: :erlang.nif_error(:nif_not_loaded)
 
   def data_plugin_state(_data), do: :erlang.nif_error(:nif_not_loaded)
@@ -1370,8 +1364,6 @@ defmodule ExMujoco.Native do
 
   def data_xipos(_data), do: :erlang.nif_error(:nif_not_loaded)
 
-  def data_xiquat(_data), do: :erlang.nif_error(:nif_not_loaded)
-
   def data_ximat(_data), do: :erlang.nif_error(:nif_not_loaded)
 
   def data_xanchor(_data), do: :erlang.nif_error(:nif_not_loaded)
@@ -1380,13 +1372,9 @@ defmodule ExMujoco.Native do
 
   def data_geom_xpos(_data), do: :erlang.nif_error(:nif_not_loaded)
 
-  def data_geom_xquat(_data), do: :erlang.nif_error(:nif_not_loaded)
-
   def data_geom_xmat(_data), do: :erlang.nif_error(:nif_not_loaded)
 
   def data_site_xpos(_data), do: :erlang.nif_error(:nif_not_loaded)
-
-  def data_site_xquat(_data), do: :erlang.nif_error(:nif_not_loaded)
 
   def data_site_xmat(_data), do: :erlang.nif_error(:nif_not_loaded)
 
@@ -1410,21 +1398,15 @@ defmodule ExMujoco.Native do
 
   def data_flexelem_krot(_data), do: :erlang.nif_error(:nif_not_loaded)
 
-  def data_flex_hessian_valid(_data), do: :erlang.nif_error(:nif_not_loaded)
-
-  def data_flexvert_hessian(_data), do: :erlang.nif_error(:nif_not_loaded)
-
-  def data_flexedge_hessian(_data), do: :erlang.nif_error(:nif_not_loaded)
-
   def data_flexedge_J(_data), do: :erlang.nif_error(:nif_not_loaded)
 
   def data_flexedge_length(_data), do: :erlang.nif_error(:nif_not_loaded)
 
+  def data_flexvert_J(_data), do: :erlang.nif_error(:nif_not_loaded)
+
+  def data_flexvert_length(_data), do: :erlang.nif_error(:nif_not_loaded)
+
   def data_bvh_aabb_dyn(_data), do: :erlang.nif_error(:nif_not_loaded)
-
-  def data_flexvert_lambda(_data), do: :erlang.nif_error(:nif_not_loaded)
-
-  def data_flexvert_conage(_data), do: :erlang.nif_error(:nif_not_loaded)
 
   def data_ten_wrapadr(_data), do: :erlang.nif_error(:nif_not_loaded)
 

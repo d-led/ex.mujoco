@@ -338,16 +338,6 @@ defmodule ExMujoco.Model do
   def nefm0L(model), do: Native.model_nefm0L(model)
 
   @doc """
-  `nefmCvert` — number of sparse metric factor ordering slots
-
-  `mjtSize` in C, read as an integer.
-  """
-  @doc group: "sizes needed at mjModel construction"
-
-  @spec nefmCvert(t()) :: integer()
-  def nefmCvert(model), do: Native.model_nefmCvert(model)
-
-  @doc """
   `nflexelemedge` — number of element edge ids in all flexes
 
   `mjtSize` in C, read as an integer.
@@ -368,6 +358,16 @@ defmodule ExMujoco.Model do
   def nflexshelldata(model), do: Native.model_nflexshelldata(model)
 
   @doc """
+  `nflexevpair` — number of element-vertex pairs in all flexes
+
+  `mjtSize` in C, read as an integer.
+  """
+  @doc group: "sizes needed at mjModel construction"
+
+  @spec nflexevpair(t()) :: integer()
+  def nflexevpair(model), do: Native.model_nflexevpair(model)
+
+  @doc """
   `nflextexcoord` — number of vertices with texture coordinates
 
   `mjtSize` in C, read as an integer.
@@ -386,6 +386,16 @@ defmodule ExMujoco.Model do
 
   @spec nJfe(t()) :: integer()
   def nJfe(model), do: Native.model_nJfe(model)
+
+  @doc """
+  `nJfv` — number of non-zeros in sparse flexvert Jacobian matrix
+
+  `mjtSize` in C, read as an integer.
+  """
+  @doc group: "sizes needed at mjModel construction"
+
+  @spec nJfv(t()) :: integer()
+  def nJfv(model), do: Native.model_nJfv(model)
 
   @doc """
   `nmesh` — number of meshes
@@ -856,16 +866,6 @@ defmodule ExMujoco.Model do
 
   @spec npaths(t()) :: integer()
   def npaths(model), do: Native.model_npaths(model)
-
-  @doc """
-  `nplastic` — number of mjtNums in plastic state vector
-
-  `mjtSize` in C, read as an integer.
-  """
-  @doc group: "sizes needed at mjModel construction"
-
-  @spec nplastic(t()) :: integer()
-  def nplastic(model), do: Native.model_nplastic(model)
 
   @doc """
   `nnames_map` — number of slots in the names hash map
@@ -1623,19 +1623,6 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
-  `jnt_plasticadr` — start addr in plastic state (-1: none) (njnt x 1)
-
-  `int*` in C, `njnt` × `1`.
-  """
-  @doc group: "joints"
-
-  @spec jnt_plasticadr(t()) :: ExMujoco.Tensor.t()
-  def jnt_plasticadr(model) do
-    {data, rows, cols} = Native.model_jnt_plasticadr(model)
-    Tensor.new(:i32, {rows, cols}, data)
-  end
-
-  @doc """
   `jnt_limited` — does joint have limits (njnt x 1)
 
   `mjtBool*` in C, `njnt` × `1`.
@@ -1749,19 +1736,6 @@ defmodule ExMujoco.Model do
   @spec jnt_stiffnesspoly(t()) :: ExMujoco.Tensor.t()
   def jnt_stiffnesspoly(model) do
     {data, rows, cols} = Native.model_jnt_stiffnesspoly(model)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
-  `jnt_springyield` — plastic yield threshold (njnt x 1)
-
-  `mjtNum*` in C, `njnt` × `1`.
-  """
-  @doc group: "joints"
-
-  @spec jnt_springyield(t()) :: ExMujoco.Tensor.t()
-  def jnt_springyield(model) do
-    {data, rows, cols} = Native.model_jnt_springyield(model)
     Tensor.new(:f64, {rows, cols}, data)
   end
 
@@ -2217,19 +2191,6 @@ defmodule ExMujoco.Model do
   @spec geom_sameframe(t()) :: ExMujoco.Tensor.t()
   def geom_sameframe(model) do
     {data, rows, cols} = Native.model_geom_sameframe(model)
-    Tensor.new(:u8, {rows, cols}, data)
-  end
-
-  @doc """
-  `geom_castshadow` — does geom cast shadows (ngeom x 1)
-
-  `mjtBool*` in C, `ngeom` × `1`.
-  """
-  @doc group: "geoms"
-
-  @spec geom_castshadow(t()) :: ExMujoco.Tensor.t()
-  def geom_castshadow(model) do
-    {data, rows, cols} = Native.model_geom_castshadow(model)
     Tensor.new(:u8, {rows, cols}, data)
   end
 
@@ -3209,6 +3170,19 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
+  `flex_internal` — internal flex collision enabled (nflex x 1)
+
+  `mjtBool*` in C, `nflex` × `1`.
+  """
+  @doc group: "flexes: contact properties"
+
+  @spec flex_internal(t()) :: ExMujoco.Tensor.t()
+  def flex_internal(model) do
+    {data, rows, cols} = Native.model_flex_internal(model)
+    Tensor.new(:u8, {rows, cols}, data)
+  end
+
+  @doc """
   `flex_selfcollide` — self collision mode (mjtFlexSelf) (nflex x 1)
 
   `int*` in C, `nflex` × `1`.
@@ -3261,9 +3235,9 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
-  `flex_matid` — material id for rendering (nflexelem x 1)
+  `flex_matid` — material id for rendering (nflex x 1)
 
-  `int*` in C, `nflexelem` × `1`.
+  `int*` in C, `nflex` × `1`.
   """
   @doc group: "flexes: other properties"
 
@@ -3469,32 +3443,6 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
-  `flex_plasticadr` — plastic state address; -1: elastic (nflex x 1)
-
-  `int*` in C, `nflex` × `1`.
-  """
-  @doc group: "flexes: other properties"
-
-  @spec flex_plasticadr(t()) :: ExMujoco.Tensor.t()
-  def flex_plasticadr(model) do
-    {data, rows, cols} = Native.model_flex_plasticadr(model)
-    Tensor.new(:i32, {rows, cols}, data)
-  end
-
-  @doc """
-  `flex_plasticmode` — plastic state bits; 1: bend, 2: stretch (nflex x 1)
-
-  `int*` in C, `nflex` × `1`.
-  """
-  @doc group: "flexes: other properties"
-
-  @spec flex_plasticmode(t()) :: ExMujoco.Tensor.t()
-  def flex_plasticmode(model) do
-    {data, rows, cols} = Native.model_flex_plasticmode(model)
-    Tensor.new(:i32, {rows, cols}, data)
-  end
-
-  @doc """
   `flex_shellnum` — number of shells (nflex x 1)
 
   `int*` in C, `nflex` × `1`.
@@ -3517,6 +3465,32 @@ defmodule ExMujoco.Model do
   @spec flex_shelldataadr(t()) :: ExMujoco.Tensor.t()
   def flex_shelldataadr(model) do
     {data, rows, cols} = Native.model_flex_shelldataadr(model)
+    Tensor.new(:i32, {rows, cols}, data)
+  end
+
+  @doc """
+  `flex_evpairadr` — first evpair address (nflex x 1)
+
+  `int*` in C, `nflex` × `1`.
+  """
+  @doc group: "flexes: other properties"
+
+  @spec flex_evpairadr(t()) :: ExMujoco.Tensor.t()
+  def flex_evpairadr(model) do
+    {data, rows, cols} = Native.model_flex_evpairadr(model)
+    Tensor.new(:i32, {rows, cols}, data)
+  end
+
+  @doc """
+  `flex_evpairnum` — number of evpairs (nflex x 1)
+
+  `int*` in C, `nflex` × `1`.
+  """
+  @doc group: "flexes: other properties"
+
+  @spec flex_evpairnum(t()) :: ExMujoco.Tensor.t()
+  def flex_evpairnum(model) do
+    {data, rows, cols} = Native.model_flex_evpairnum(model)
     Tensor.new(:i32, {rows, cols}, data)
   end
 
@@ -3560,15 +3534,41 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
-  `flex_vertcell` — finite cell index for vertex; -1: none (nflexvert x 1)
+  `flex_vertedgeadr` — first edge address (nflexvert x 1)
 
   `int*` in C, `nflexvert` × `1`.
   """
   @doc group: "flexes: other properties"
 
-  @spec flex_vertcell(t()) :: ExMujoco.Tensor.t()
-  def flex_vertcell(model) do
-    {data, rows, cols} = Native.model_flex_vertcell(model)
+  @spec flex_vertedgeadr(t()) :: ExMujoco.Tensor.t()
+  def flex_vertedgeadr(model) do
+    {data, rows, cols} = Native.model_flex_vertedgeadr(model)
+    Tensor.new(:i32, {rows, cols}, data)
+  end
+
+  @doc """
+  `flex_vertedgenum` — number of edges (nflexvert x 1)
+
+  `int*` in C, `nflexvert` × `1`.
+  """
+  @doc group: "flexes: other properties"
+
+  @spec flex_vertedgenum(t()) :: ExMujoco.Tensor.t()
+  def flex_vertedgenum(model) do
+    {data, rows, cols} = Native.model_flex_vertedgenum(model)
+    Tensor.new(:i32, {rows, cols}, data)
+  end
+
+  @doc """
+  `flex_vertedge` — edge indices (nflexedge x 2)
+
+  `int*` in C, `nflexedge` × `2`.
+  """
+  @doc group: "flexes: other properties"
+
+  @spec flex_vertedge(t()) :: ExMujoco.Tensor.t()
+  def flex_vertedge(model) do
+    {data, rows, cols} = Native.model_flex_vertedge(model)
     Tensor.new(:i32, {rows, cols}, data)
   end
 
@@ -3664,6 +3664,19 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
+  `flex_evpair` — (element, vertex) collision pairs (nflexevpair x 2)
+
+  `int*` in C, `nflexevpair` × `2`.
+  """
+  @doc group: "flexes: other properties"
+
+  @spec flex_evpair(t()) :: ExMujoco.Tensor.t()
+  def flex_evpair(model) do
+    {data, rows, cols} = Native.model_flex_evpair(model)
+    Tensor.new(:i32, {rows, cols}, data)
+  end
+
+  @doc """
   `flex_vert` — vertex positions in local body frames (nflexvert x 3)
 
   `mjtNum*` in C, `nflexvert` × `3`.
@@ -3686,6 +3699,19 @@ defmodule ExMujoco.Model do
   @spec flex_vert0(t()) :: ExMujoco.Tensor.t()
   def flex_vert0(model) do
     {data, rows, cols} = Native.model_flex_vert0(model)
+    Tensor.new(:f64, {rows, cols}, data)
+  end
+
+  @doc """
+  `flex_vertmetric` — inverse of reference shape matrix (nflexvert x 4)
+
+  `mjtNum*` in C, `nflexvert` × `4`.
+  """
+  @doc group: "flexes: other properties"
+
+  @spec flex_vertmetric(t()) :: ExMujoco.Tensor.t()
+  def flex_vertmetric(model) do
+    {data, rows, cols} = Native.model_flex_vertmetric(model)
     Tensor.new(:f64, {rows, cols}, data)
   end
 
@@ -3859,19 +3885,6 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
-  `efmC_perm` — sparse factor order: vertex dof or -1 (nefmCvert x 1)
-
-  `int*` in C, `nefmCvert` × `1`.
-  """
-  @doc group: "flexes: other properties"
-
-  @spec efmC_perm(t()) :: ExMujoco.Tensor.t()
-  def efmC_perm(model) do
-    {data, rows, cols} = Native.model_efmC_perm(model)
-    Tensor.new(:i32, {rows, cols}, data)
-  end
-
-  @doc """
   `flex_damping` — Rayleigh's damping coefficient (nflex x 1)
 
   `mjtNum*` in C, `nflex` × `1`.
@@ -3881,19 +3894,6 @@ defmodule ExMujoco.Model do
   @spec flex_damping(t()) :: ExMujoco.Tensor.t()
   def flex_damping(model) do
     {data, rows, cols} = Native.model_flex_damping(model)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
-  `flex_yield` — yield strain (stretch, bend); 0: elastic (nflex x 2)
-
-  `mjtNum*` in C, `nflex` × `2`.
-  """
-  @doc group: "flexes: other properties"
-
-  @spec flex_yield(t()) :: ExMujoco.Tensor.t()
-  def flex_yield(model) do
-    {data, rows, cols} = Native.model_flex_yield(model)
     Tensor.new(:f64, {rows, cols}, data)
   end
 
@@ -3924,7 +3924,7 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
-  `flex_edgeequality` — 0:none, 1:edges, 3:strain (nflex x 1)
+  `flex_edgeequality` — 0:none, 1:edges, 2:vertices, 3:strain (nflex x 1)
 
   `int*` in C, `nflex` × `1`.
   """
@@ -4050,6 +4050,45 @@ defmodule ExMujoco.Model do
   @spec flexedge_J_colind(t()) :: ExMujoco.Tensor.t()
   def flexedge_J_colind(model) do
     {data, rows, cols} = Native.model_flexedge_J_colind(model)
+    Tensor.new(:i32, {rows, cols}, data)
+  end
+
+  @doc """
+  `flexvert_J_rownnz` — number of non-zeros in Jacobian row (nflexvert x 2)
+
+  `int*` in C, `nflexvert` × `2`.
+  """
+  @doc group: "flexes: other properties"
+
+  @spec flexvert_J_rownnz(t()) :: ExMujoco.Tensor.t()
+  def flexvert_J_rownnz(model) do
+    {data, rows, cols} = Native.model_flexvert_J_rownnz(model)
+    Tensor.new(:i32, {rows, cols}, data)
+  end
+
+  @doc """
+  `flexvert_J_rowadr` — row start address in colind array (nflexvert x 2)
+
+  `int*` in C, `nflexvert` × `2`.
+  """
+  @doc group: "flexes: other properties"
+
+  @spec flexvert_J_rowadr(t()) :: ExMujoco.Tensor.t()
+  def flexvert_J_rowadr(model) do
+    {data, rows, cols} = Native.model_flexvert_J_rowadr(model)
+    Tensor.new(:i32, {rows, cols}, data)
+  end
+
+  @doc """
+  `flexvert_J_colind` — column indices in sparse Jacobian (nJfv x 2)
+
+  `int*` in C, `nJfv` × `2`.
+  """
+  @doc group: "flexes: other properties"
+
+  @spec flexvert_J_colind(t()) :: ExMujoco.Tensor.t()
+  def flexvert_J_colind(model) do
+    {data, rows, cols} = Native.model_flexvert_J_colind(model)
     Tensor.new(:i32, {rows, cols}, data)
   end
 
@@ -4977,19 +5016,6 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
-  `tex_contenttypeadr` — content type address in paths; -1: none (ntex x 1)
-
-  `int*` in C, `ntex` × `1`.
-  """
-  @doc group: "textures"
-
-  @spec tex_contenttypeadr(t()) :: ExMujoco.Tensor.t()
-  def tex_contenttypeadr(model) do
-    {data, rows, cols} = Native.model_tex_contenttypeadr(model)
-    Tensor.new(:i32, {rows, cols}, data)
-  end
-
-  @doc """
   `mat_texid` — indices of textures; -1: none (nmat x mjNTEXROLE)
 
   `int*` in C, `nmat` × `mjNTEXROLE`.
@@ -5380,19 +5406,6 @@ defmodule ExMujoco.Model do
   end
 
   @doc """
-  `tendon_type` — type of tendon (mjtTendon) (ntendon x 1)
-
-  `int*` in C, `ntendon` × `1`.
-  """
-  @doc group: "tendons"
-
-  @spec tendon_type(t()) :: ExMujoco.Tensor.t()
-  def tendon_type(model) do
-    {data, rows, cols} = Native.model_tendon_type(model)
-    Tensor.new(:i32, {rows, cols}, data)
-  end
-
-  @doc """
   `tendon_adr` — address of first object in tendon's path (ntendon x 1)
 
   `int*` in C, `ntendon` × `1`.
@@ -5454,19 +5467,6 @@ defmodule ExMujoco.Model do
   @spec tendon_group(t()) :: ExMujoco.Tensor.t()
   def tendon_group(model) do
     {data, rows, cols} = Native.model_tendon_group(model)
-    Tensor.new(:i32, {rows, cols}, data)
-  end
-
-  @doc """
-  `tendon_plasticadr` — start addr in plastic state (-1: none) (ntendon x 1)
-
-  `int*` in C, `ntendon` × `1`.
-  """
-  @doc group: "tendons"
-
-  @spec tendon_plasticadr(t()) :: ExMujoco.Tensor.t()
-  def tendon_plasticadr(model) do
-    {data, rows, cols} = Native.model_tendon_plasticadr(model)
     Tensor.new(:i32, {rows, cols}, data)
   end
 
@@ -5753,19 +5753,6 @@ defmodule ExMujoco.Model do
   @spec tendon_lengthspring(t()) :: ExMujoco.Tensor.t()
   def tendon_lengthspring(model) do
     {data, rows, cols} = Native.model_tendon_lengthspring(model)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
-  `tendon_springyield` — plastic yield threshold (ntendon x 1)
-
-  `mjtNum*` in C, `ntendon` × `1`.
-  """
-  @doc group: "tendons"
-
-  @spec tendon_springyield(t()) :: ExMujoco.Tensor.t()
-  def tendon_springyield(model) do
-    {data, rows, cols} = Native.model_tendon_springyield(model)
     Tensor.new(:f64, {rows, cols}, data)
   end
 
@@ -6832,19 +6819,6 @@ defmodule ExMujoco.Model do
   @spec key_ctrl(t()) :: ExMujoco.Tensor.t()
   def key_ctrl(model) do
     {data, rows, cols} = Native.model_key_ctrl(model)
-    Tensor.new(:f64, {rows, cols}, data)
-  end
-
-  @doc """
-  `key_plastic` — key plastic state (nkey x nplastic)
-
-  `mjtNum*` in C, `nkey` × `nplastic@model`.
-  """
-  @doc group: "keyframes"
-
-  @spec key_plastic(t()) :: ExMujoco.Tensor.t()
-  def key_plastic(model) do
-    {data, rows, cols} = Native.model_key_plastic(model)
     Tensor.new(:f64, {rows, cols}, data)
   end
 

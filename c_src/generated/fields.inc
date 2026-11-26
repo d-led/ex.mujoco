@@ -192,12 +192,6 @@ int64_t model_nefm0L(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
 }
 FINE_NIF(model_nefm0L, 0);
 
-int64_t model_nefmCvert(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  return static_cast<int64_t>(m->nefmCvert);
-}
-FINE_NIF(model_nefmCvert, 0);
-
 int64_t model_nflexelemedge(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
   return static_cast<int64_t>(m->nflexelemedge);
@@ -210,6 +204,12 @@ int64_t model_nflexshelldata(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> mod
 }
 FINE_NIF(model_nflexshelldata, 0);
 
+int64_t model_nflexevpair(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  return static_cast<int64_t>(m->nflexevpair);
+}
+FINE_NIF(model_nflexevpair, 0);
+
 int64_t model_nflextexcoord(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
   return static_cast<int64_t>(m->nflextexcoord);
@@ -221,6 +221,12 @@ int64_t model_nJfe(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
   return static_cast<int64_t>(m->nJfe);
 }
 FINE_NIF(model_nJfe, 0);
+
+int64_t model_nJfv(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  return static_cast<int64_t>(m->nJfv);
+}
+FINE_NIF(model_nJfv, 0);
 
 int64_t model_nmesh(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -503,12 +509,6 @@ int64_t model_npaths(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
   return static_cast<int64_t>(m->npaths);
 }
 FINE_NIF(model_npaths, 0);
-
-int64_t model_nplastic(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  return static_cast<int64_t>(m->nplastic);
-}
-FINE_NIF(model_nplastic, 0);
 
 int64_t model_nnames_map(ErlNifEnv *, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -1107,17 +1107,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_jnt_group(ErlNifEnv *env, fine::R
 }
 FINE_NIF(model_jnt_group, 0);
 
-// start addr in plastic state (-1: none) (njnt x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_jnt_plasticadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->njnt;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->jnt_plasticadr),
-            sizeof(int) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_jnt_plasticadr, 0);
-
 // does joint have limits (njnt x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_jnt_limited(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -1216,17 +1205,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_jnt_stiffnesspoly(ErlNifEnv *env,
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(model_jnt_stiffnesspoly, 0);
-
-// plastic yield threshold (njnt x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_jnt_springyield(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->njnt;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->jnt_springyield),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_jnt_springyield, 0);
 
 // joint limits (njnt x 2)
 std::tuple<fine::Term, int64_t, int64_t> model_jnt_range(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
@@ -1612,17 +1590,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_geom_sameframe(ErlNifEnv *env, fi
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(model_geom_sameframe, 0);
-
-// does geom cast shadows (ngeom x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_geom_castshadow(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->ngeom;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->geom_castshadow),
-            sizeof(mjtBool) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_geom_castshadow, 0);
 
 // mixing coef for solref/imp in geom pair (ngeom x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_geom_solmix(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
@@ -2449,6 +2416,17 @@ std::tuple<fine::Term, int64_t, int64_t> model_flex_gap(ErlNifEnv *env, fine::Re
 }
 FINE_NIF(model_flex_gap, 0);
 
+// internal flex collision enabled (nflex x 1)
+std::tuple<fine::Term, int64_t, int64_t> model_flex_internal(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nflex;
+  const size_t cols = 1;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_internal),
+            sizeof(mjtBool) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flex_internal, 0);
+
 // self collision mode (mjtFlexSelf) (nflex x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_selfcollide(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -2493,10 +2471,10 @@ std::tuple<fine::Term, int64_t, int64_t> model_flex_dim(ErlNifEnv *env, fine::Re
 }
 FINE_NIF(model_flex_dim, 0);
 
-// material id for rendering (nflexelem x 1)
+// material id for rendering (nflex x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_matid(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->nflexelem;
+  const size_t rows = m->nflex;
   const size_t cols = 1;
   return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_matid),
             sizeof(int) * rows * cols),
@@ -2669,28 +2647,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_flex_bendingadr(ErlNifEnv *env, f
 }
 FINE_NIF(model_flex_bendingadr, 0);
 
-// plastic state address; -1: elastic (nflex x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_flex_plasticadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->nflex;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_plasticadr),
-            sizeof(int) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_flex_plasticadr, 0);
-
-// plastic state bits; 1: bend, 2: stretch (nflex x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_flex_plasticmode(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->nflex;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_plasticmode),
-            sizeof(int) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_flex_plasticmode, 0);
-
 // number of shells (nflex x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_shellnum(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -2712,6 +2668,28 @@ std::tuple<fine::Term, int64_t, int64_t> model_flex_shelldataadr(ErlNifEnv *env,
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(model_flex_shelldataadr, 0);
+
+// first evpair address (nflex x 1)
+std::tuple<fine::Term, int64_t, int64_t> model_flex_evpairadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nflex;
+  const size_t cols = 1;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_evpairadr),
+            sizeof(int) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flex_evpairadr, 0);
+
+// number of evpairs (nflex x 1)
+std::tuple<fine::Term, int64_t, int64_t> model_flex_evpairnum(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nflex;
+  const size_t cols = 1;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_evpairnum),
+            sizeof(int) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flex_evpairnum, 0);
 
 // address in flex_texcoord; -1: none (nflex x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_texcoordadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
@@ -2746,16 +2724,38 @@ std::tuple<fine::Term, int64_t, int64_t> model_flex_vertbodyid(ErlNifEnv *env, f
 }
 FINE_NIF(model_flex_vertbodyid, 0);
 
-// finite cell index for vertex; -1: none (nflexvert x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_flex_vertcell(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+// first edge address (nflexvert x 1)
+std::tuple<fine::Term, int64_t, int64_t> model_flex_vertedgeadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
   const size_t rows = m->nflexvert;
   const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_vertcell),
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_vertedgeadr),
             sizeof(int) * rows * cols),
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
-FINE_NIF(model_flex_vertcell, 0);
+FINE_NIF(model_flex_vertedgeadr, 0);
+
+// number of edges (nflexvert x 1)
+std::tuple<fine::Term, int64_t, int64_t> model_flex_vertedgenum(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nflexvert;
+  const size_t cols = 1;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_vertedgenum),
+            sizeof(int) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flex_vertedgenum, 0);
+
+// edge indices (nflexedge x 2)
+std::tuple<fine::Term, int64_t, int64_t> model_flex_vertedge(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nflexedge;
+  const size_t cols = 2;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_vertedge),
+            sizeof(int) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flex_vertedge, 0);
 
 // edge vertex ids (2 per edge) (nflexedge x 2)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_edge(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
@@ -2834,6 +2834,17 @@ std::tuple<fine::Term, int64_t, int64_t> model_flex_shell(ErlNifEnv *env, fine::
 }
 FINE_NIF(model_flex_shell, 0);
 
+// (element, vertex) collision pairs (nflexevpair x 2)
+std::tuple<fine::Term, int64_t, int64_t> model_flex_evpair(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nflexevpair;
+  const size_t cols = 2;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_evpair),
+            sizeof(int) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flex_evpair, 0);
+
 // vertex positions in local body frames (nflexvert x 3)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_vert(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -2855,6 +2866,17 @@ std::tuple<fine::Term, int64_t, int64_t> model_flex_vert0(ErlNifEnv *env, fine::
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(model_flex_vert0, 0);
+
+// inverse of reference shape matrix (nflexvert x 4)
+std::tuple<fine::Term, int64_t, int64_t> model_flex_vertmetric(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nflexvert;
+  const size_t cols = 4;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_vertmetric),
+            sizeof(mjtNum) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flex_vertmetric, 0);
 
 // node positions in local body frames (nflexnode x 3)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_node(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
@@ -2999,17 +3021,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_efm0_L(ErlNifEnv *env, fine::Reso
 }
 FINE_NIF(model_efm0_L, 0);
 
-// sparse factor order: vertex dof or -1 (nefmCvert x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_efmC_perm(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->nefmCvert;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->efmC_perm),
-            sizeof(int) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_efmC_perm, 0);
-
 // Rayleigh's damping coefficient (nflex x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_damping(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -3020,17 +3031,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_flex_damping(ErlNifEnv *env, fine
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(model_flex_damping, 0);
-
-// yield strain (stretch, bend); 0: elastic (nflex x 2)
-std::tuple<fine::Term, int64_t, int64_t> model_flex_yield(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->nflex;
-  const size_t cols = 2;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flex_yield),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_flex_yield, 0);
 
 // edge stiffness (nflex x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_edgestiffness(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
@@ -3054,7 +3054,7 @@ std::tuple<fine::Term, int64_t, int64_t> model_flex_edgedamping(ErlNifEnv *env, 
 }
 FINE_NIF(model_flex_edgedamping, 0);
 
-// 0:none, 1:edges, 3:strain (nflex x 1)
+// 0:none, 1:edges, 2:vertices, 3:strain (nflex x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_edgeequality(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
   const size_t rows = m->nflex;
@@ -3163,6 +3163,39 @@ std::tuple<fine::Term, int64_t, int64_t> model_flexedge_J_colind(ErlNifEnv *env,
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(model_flexedge_J_colind, 0);
+
+// number of non-zeros in Jacobian row (nflexvert x 2)
+std::tuple<fine::Term, int64_t, int64_t> model_flexvert_J_rownnz(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nflexvert;
+  const size_t cols = 2;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flexvert_J_rownnz),
+            sizeof(int) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flexvert_J_rownnz, 0);
+
+// row start address in colind array (nflexvert x 2)
+std::tuple<fine::Term, int64_t, int64_t> model_flexvert_J_rowadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nflexvert;
+  const size_t cols = 2;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flexvert_J_rowadr),
+            sizeof(int) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flexvert_J_rowadr, 0);
+
+// column indices in sparse Jacobian (nJfv x 2)
+std::tuple<fine::Term, int64_t, int64_t> model_flexvert_J_colind(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
+  [[maybe_unused]] auto *m = model->model;
+  const size_t rows = m->nJfv;
+  const size_t cols = 2;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->flexvert_J_colind),
+            sizeof(int) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(model_flexvert_J_colind, 0);
 
 // rgba when material is omitted (nflex x 4)
 std::tuple<fine::Term, int64_t, int64_t> model_flex_rgba(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
@@ -3945,17 +3978,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_tex_pathadr(ErlNifEnv *env, fine:
 }
 FINE_NIF(model_tex_pathadr, 0);
 
-// content type address in paths; -1: none (ntex x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_tex_contenttypeadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->ntex;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->tex_contenttypeadr),
-            sizeof(int) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_tex_contenttypeadr, 0);
-
 // indices of textures; -1: none (nmat x mjNTEXROLE)
 std::tuple<fine::Term, int64_t, int64_t> model_mat_texid(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -4286,17 +4308,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_eq_data(ErlNifEnv *env, fine::Res
 }
 FINE_NIF(model_eq_data, 0);
 
-// type of tendon (mjtTendon) (ntendon x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_tendon_type(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->ntendon;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->tendon_type),
-            sizeof(int) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_tendon_type, 0);
-
 // address of first object in tendon's path (ntendon x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_tendon_adr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -4351,17 +4362,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_tendon_group(ErlNifEnv *env, fine
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(model_tendon_group, 0);
-
-// start addr in plastic state (-1: none) (ntendon x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_tendon_plasticadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->ntendon;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->tendon_plasticadr),
-            sizeof(int) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_tendon_plasticadr, 0);
 
 // number of trees along tendon's path (ntendon x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_tendon_treenum(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
@@ -4604,17 +4604,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_tendon_lengthspring(ErlNifEnv *en
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(model_tendon_lengthspring, 0);
-
-// plastic yield threshold (ntendon x 1)
-std::tuple<fine::Term, int64_t, int64_t> model_tendon_springyield(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->ntendon;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->tendon_springyield),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_tendon_springyield, 0);
 
 // tendon length in qpos0 (ntendon x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_tendon_length0(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
@@ -5518,17 +5507,6 @@ std::tuple<fine::Term, int64_t, int64_t> model_key_ctrl(ErlNifEnv *env, fine::Re
 }
 FINE_NIF(model_key_ctrl, 0);
 
-// key plastic state (nkey x nplastic)
-std::tuple<fine::Term, int64_t, int64_t> model_key_plastic(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
-  [[maybe_unused]] auto *m = model->model;
-  const size_t rows = m->nkey;
-  const size_t cols = m->nplastic;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(m->key_plastic),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(model_key_plastic, 0);
-
 // body name pointers (nbody x 1)
 std::tuple<fine::Term, int64_t, int64_t> model_name_bodyadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Model> model) {
   [[maybe_unused]] auto *m = model->model;
@@ -6298,18 +6276,6 @@ std::tuple<fine::Term, int64_t, int64_t> data_history(ErlNifEnv *env, fine::Reso
 }
 FINE_NIF(data_history, 0);
 
-// plastic state (nplastic x 1)
-std::tuple<fine::Term, int64_t, int64_t> data_plastic(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
-  [[maybe_unused]] auto *m = data->model->model;
-  [[maybe_unused]] auto *d = data->data;
-  const size_t rows = m->nplastic;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->plastic),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(data_plastic, 0);
-
 // acceleration used for warmstart (nv x 1)
 std::tuple<fine::Term, int64_t, int64_t> data_qacc_warmstart(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
   [[maybe_unused]] auto *m = data->model->model;
@@ -6526,18 +6492,6 @@ std::tuple<fine::Term, int64_t, int64_t> data_xipos(ErlNifEnv *env, fine::Resour
 }
 FINE_NIF(data_xipos, 0);
 
-// Cartesian orientation of body inertia (nbody x 4)
-std::tuple<fine::Term, int64_t, int64_t> data_xiquat(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
-  [[maybe_unused]] auto *m = data->model->model;
-  [[maybe_unused]] auto *d = data->data;
-  const size_t rows = m->nbody;
-  const size_t cols = 4;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->xiquat),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(data_xiquat, 0);
-
 // Cartesian orientation of body inertia (nbody x 9)
 std::tuple<fine::Term, int64_t, int64_t> data_ximat(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
   [[maybe_unused]] auto *m = data->model->model;
@@ -6586,18 +6540,6 @@ std::tuple<fine::Term, int64_t, int64_t> data_geom_xpos(ErlNifEnv *env, fine::Re
 }
 FINE_NIF(data_geom_xpos, 0);
 
-// Cartesian geom orientation (ngeom x 4)
-std::tuple<fine::Term, int64_t, int64_t> data_geom_xquat(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
-  [[maybe_unused]] auto *m = data->model->model;
-  [[maybe_unused]] auto *d = data->data;
-  const size_t rows = m->ngeom;
-  const size_t cols = 4;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->geom_xquat),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(data_geom_xquat, 0);
-
 // Cartesian geom orientation (ngeom x 9)
 std::tuple<fine::Term, int64_t, int64_t> data_geom_xmat(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
   [[maybe_unused]] auto *m = data->model->model;
@@ -6621,18 +6563,6 @@ std::tuple<fine::Term, int64_t, int64_t> data_site_xpos(ErlNifEnv *env, fine::Re
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(data_site_xpos, 0);
-
-// Cartesian site orientation (nsite x 4)
-std::tuple<fine::Term, int64_t, int64_t> data_site_xquat(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
-  [[maybe_unused]] auto *m = data->model->model;
-  [[maybe_unused]] auto *d = data->data;
-  const size_t rows = m->nsite;
-  const size_t cols = 4;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->site_xquat),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(data_site_xquat, 0);
 
 // Cartesian site orientation (nsite x 9)
 std::tuple<fine::Term, int64_t, int64_t> data_site_xmat(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
@@ -6766,42 +6696,6 @@ std::tuple<fine::Term, int64_t, int64_t> data_flexelem_krot(ErlNifEnv *env, fine
 }
 FINE_NIF(data_flexelem_krot, 0);
 
-// Cartesian stretch Hessian cache is current (nflex x 1)
-std::tuple<fine::Term, int64_t, int64_t> data_flex_hessian_valid(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
-  [[maybe_unused]] auto *m = data->model->model;
-  [[maybe_unused]] auto *d = data->data;
-  const size_t rows = m->nflex;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->flex_hessian_valid),
-            sizeof(mjtBool) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(data_flex_hessian_valid, 0);
-
-// symmetric diagonal Hessian blocks (nflexvert x 6)
-std::tuple<fine::Term, int64_t, int64_t> data_flexvert_hessian(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
-  [[maybe_unused]] auto *m = data->model->model;
-  [[maybe_unused]] auto *d = data->data;
-  const size_t rows = m->nflexvert;
-  const size_t cols = 6;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->flexvert_hessian),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(data_flexvert_hessian, 0);
-
-// oriented off-diagonal Hessian blocks (nflexedge x 9)
-std::tuple<fine::Term, int64_t, int64_t> data_flexedge_hessian(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
-  [[maybe_unused]] auto *m = data->model->model;
-  [[maybe_unused]] auto *d = data->data;
-  const size_t rows = m->nflexedge;
-  const size_t cols = 9;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->flexedge_hessian),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(data_flexedge_hessian, 0);
-
 // flex edge Jacobian (nJfe x 1)
 std::tuple<fine::Term, int64_t, int64_t> data_flexedge_J(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
   [[maybe_unused]] auto *m = data->model->model;
@@ -6826,6 +6720,30 @@ std::tuple<fine::Term, int64_t, int64_t> data_flexedge_length(ErlNifEnv *env, fi
 }
 FINE_NIF(data_flexedge_length, 0);
 
+// flex vertex Jacobian (nJfv x 2)
+std::tuple<fine::Term, int64_t, int64_t> data_flexvert_J(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
+  [[maybe_unused]] auto *m = data->model->model;
+  [[maybe_unused]] auto *d = data->data;
+  const size_t rows = m->nJfv;
+  const size_t cols = 2;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->flexvert_J),
+            sizeof(mjtNum) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(data_flexvert_J, 0);
+
+// flex vertex lengths (nflexvert x 2)
+std::tuple<fine::Term, int64_t, int64_t> data_flexvert_length(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
+  [[maybe_unused]] auto *m = data->model->model;
+  [[maybe_unused]] auto *d = data->data;
+  const size_t rows = m->nflexvert;
+  const size_t cols = 2;
+  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->flexvert_length),
+            sizeof(mjtNum) * rows * cols),
+          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
+}
+FINE_NIF(data_flexvert_length, 0);
+
 // global bounding box (center, size) (nbvhdynamic x 6)
 std::tuple<fine::Term, int64_t, int64_t> data_bvh_aabb_dyn(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
   [[maybe_unused]] auto *m = data->model->model;
@@ -6837,30 +6755,6 @@ std::tuple<fine::Term, int64_t, int64_t> data_bvh_aabb_dyn(ErlNifEnv *env, fine:
           static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
 }
 FINE_NIF(data_bvh_aabb_dyn, 0);
-
-// flex contact multiplier (nflexvert x 1)
-std::tuple<fine::Term, int64_t, int64_t> data_flexvert_lambda(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
-  [[maybe_unused]] auto *m = data->model->model;
-  [[maybe_unused]] auto *d = data->data;
-  const size_t rows = m->nflexvert;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->flexvert_lambda),
-            sizeof(mjtNum) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(data_flexvert_lambda, 0);
-
-// flex contact age: <0 loaded, >0 steps since (nflexvert x 1)
-std::tuple<fine::Term, int64_t, int64_t> data_flexvert_conage(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
-  [[maybe_unused]] auto *m = data->model->model;
-  [[maybe_unused]] auto *d = data->data;
-  const size_t rows = m->nflexvert;
-  const size_t cols = 1;
-  return {fine::make_new_binary(env, reinterpret_cast<const char *>(d->flexvert_conage),
-            sizeof(int) * rows * cols),
-          static_cast<int64_t>(rows), static_cast<int64_t>(cols)};
-}
-FINE_NIF(data_flexvert_conage, 0);
 
 // start address of tendon's path (ntendon x 1)
 std::tuple<fine::Term, int64_t, int64_t> data_ten_wrapadr(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
@@ -7378,7 +7272,7 @@ std::tuple<fine::Term, int64_t, int64_t> data_qacc_smooth(ErlNifEnv *env, fine::
 }
 FINE_NIF(data_qacc_smooth, 0);
 
-// constraint force (flag ipc: incl. flex contact) (nv x 1)
+// constraint force (nv x 1)
 std::tuple<fine::Term, int64_t, int64_t> data_qfrc_constraint(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
   [[maybe_unused]] auto *m = data->model->model;
   [[maybe_unused]] auto *d = data->data;
@@ -8242,7 +8136,7 @@ std::tuple<fine::Term, int64_t, int64_t> data_efm_dofid(ErlNifEnv *env, fine::Re
 }
 FINE_NIF(data_efm_dofid, 0);
 
-// contact rows, packed [nnz, conid, colind...] (nefmcon x 1)
+// contact rank-1 rows, packed [nnz, colind...] (nefmcon x 1)
 std::tuple<fine::Term, int64_t, int64_t> data_efm_con_ind(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
   [[maybe_unused]] auto *m = data->model->model;
   [[maybe_unused]] auto *d = data->data;
@@ -8254,7 +8148,7 @@ std::tuple<fine::Term, int64_t, int64_t> data_efm_con_ind(ErlNifEnv *env, fine::
 }
 FINE_NIF(data_efm_con_ind, 0);
 
-// contact rows, packed [scale, force, val...] (nefmcon x 1)
+// contact rank-1 rows, packed [scale, val...] (nefmcon x 1)
 std::tuple<fine::Term, int64_t, int64_t> data_efm_con_val(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
   [[maybe_unused]] auto *m = data->model->model;
   [[maybe_unused]] auto *d = data->data;
@@ -8266,7 +8160,7 @@ std::tuple<fine::Term, int64_t, int64_t> data_efm_con_val(ErlNifEnv *env, fine::
 }
 FINE_NIF(data_efm_con_val, 0);
 
-// packed Cholesky factor of M+K or island lists (nefmL x 1)
+// factored 3x3 diagonal blocks of M+K (nefmL x 1)
 std::tuple<fine::Term, int64_t, int64_t> data_efm_L(ErlNifEnv *env, fine::ResourcePtr<exmujoco::Data> data) {
   [[maybe_unused]] auto *m = data->model->model;
   [[maybe_unused]] auto *d = data->data;
