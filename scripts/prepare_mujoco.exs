@@ -48,6 +48,24 @@ defmodule PrepareMujoco do
         name: "mujoco-4.0.1-windows-x86_64.zip",
         sha256: "abe3104a2ae0ca18a4b50fa1e79aaf57699496c7ee78ec7214104a0d1593fc75"
       }
+    },
+    "3.13.0" => %{
+      {"linux", "x86_64"} => %{
+        name: "mujoco-3.13.0-linux-x86_64.tar.gz",
+        sha256: "a01ab187aa017b3729f01bc2a8c05e56411fa0198a6ef26e7b8b93a3edbdc28e"
+      },
+      {"linux", "arm64"} => %{
+        name: "mujoco-3.13.0-linux-aarch64.tar.gz",
+        sha256: "b591c1f4c343f11112be769af89721b5d1cf5488533dcc103a4cf424e9f96fb4"
+      },
+      {"darwin", "universal"} => %{
+        name: "mujoco-3.13.0-macos-universal2.dmg",
+        sha256: "623bb99cdfdeb5a53ebb142e1c100b1cb548277c310a1d0f7d475e9447d7656c"
+      },
+      {"win32", "x86_64"} => %{
+        name: "mujoco-3.13.0-windows-x86_64.zip",
+        sha256: "333cc18cd471aa58442f27c347637540e5382b1970c4db1cab3e9283cf37f40a"
+      }
     }
   }
 
