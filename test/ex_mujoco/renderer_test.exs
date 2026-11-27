@@ -33,6 +33,29 @@ defmodule ExMujoco.RendererTest do
   </mujoco>
   """
 
+  # The same cube, lifted clear of the floor and seen from above at an angle, so
+  # the light throws its shadow on the floor where the camera can see it. The
+  # cube's place is the one thing a case moves: the shadow only appears where
+  # something stands between the light and the floor.
+  @scene_with_a_shadow """
+  <mujoco>
+    <visual>
+      <global offwidth="64" offheight="64"/>
+      <map znear="0.005" zfar="500"/>
+      <headlight ambient="0.5 0.5 0.5" diffuse="0 0 0" specular="0 0 0"/>
+    </visual>
+    <option gravity="0 0 0"/>
+    <worldbody>
+      <light pos="0 0 1" diffuse="0.6 0.6 0.6" specular="0 0 0" directional="true"/>
+      <geom name="floor" type="plane" size="1 1 0.2" rgba="0.3 0.3 0.3 1"/>
+      <body name="cube" pos="@PLACE@">
+        <geom name="cube_geom" type="box" size="0.05 0.05 0.05" rgba="1 0 0 1"/>
+      </body>
+      <camera name="cam" pos="0 -0.9 1" xyaxes="1 0 0 0 0.6 0.8"/>
+    </worldbody>
+  </mujoco>
+  """
+
   setup do
     {:ok, model} = ExMujoco.load_string(@scene)
     data = ExMujoco.data(model)
@@ -185,12 +208,68 @@ defmodule ExMujoco.RendererTest do
     end
   end
 
+  describe "the flags a pass draws with" do
+    test "a colour pass is the same picture however many passes came before it", %{
+      renderer: renderer,
+      data: data
+    } do
+      # MuJoCo's renderer reads the scene's flags itself, and a segmentation pass
+      # sets two of them (`SEGMENT` and `IDCOLOR`). A pass that does not put them
+      # back leaves the next colour pass drawing ids: a patch came back as
+      # [1, 0, 0], the geom's number in the red byte.
+      [alone] = Renderer.read(renderer, data, "cam", [:rgb])
+
+      [_segmentation, after_segmentation] =
+        Renderer.read(renderer, data, "cam", [:segmentation, :rgb])
+
+      assert after_segmentation == alone
+    end
+
+    test "the light casts the cube's shadow on the floor" do
+      # The scene's flags are MuJoCo's own: `mjv_defaultScene` sets shadows among
+      # them and nothing in the engine derives them afterwards, so a renderer
+      # that clears them draws without the light's shadow — and, in the textured
+      # mesh scene a sensor actually sees, a constant 0.869 of the light as well.
+      # A plane lit by a directional light is one colour wherever it is, so the
+      # test is the same pixel with the occluder moved away: it must be brighter.
+      {shaded_rgb, shaded_floor} = render_shadow(0.0)
+      {lit_rgb, lit_floor} = render_shadow(0.5)
+
+      {row, column} =
+        Enum.min_by(shaded_floor, fn {row, column} -> red(shaded_rgb, row, column) end)
+
+      assert {row, column} in lit_floor
+      assert red(lit_rgb, row, column) - red(shaded_rgb, row, column) > 20
+    end
+  end
+
   # Row and column for every pixel, with the id drawn there.
   defp pixels(segmentation) do
     segmentation
     |> ids()
     |> Enum.with_index()
     |> Enum.map(fn {id, at} -> {{div(at, 64), rem(at, 64)}, id} end)
+  end
+
+  # The shadow scene with the cube at `cube_x`, and where its floor came back.
+  defp render_shadow(cube_x) do
+    {:ok, model} =
+      ExMujoco.load_string(String.replace(@scene_with_a_shadow, "@PLACE@", "#{cube_x} 0 0.15"))
+
+    data = ExMujoco.data(model)
+    :ok = ExMujoco.forward(data)
+
+    [rgb, segmentation] =
+      Renderer.read(Renderer.new(model, 64, 64), data, "cam", [:rgb, :segmentation])
+
+    floor = for {{row, column}, id} <- pixels(segmentation), id == floor(), do: {row, column}
+
+    {rgb, floor}
+  end
+
+  defp red(rgb, row, column) do
+    {red, _green, _blue} = pixel(rgb, row, column)
+    red
   end
 
   # MuJoCo's id for the floor, which is the first geom the scene declares.

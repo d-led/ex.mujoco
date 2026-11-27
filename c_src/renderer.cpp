@@ -146,25 +146,17 @@ void Renderer::render(const mjData *data, const std::string &camera,
   gl::Session &held = session;
   (void)held;
 
-  // `mjv_updateScene` writes the flags its option derives but does not clear the
-  // ones already there, and the last pass of the previous frame left `SEGMENT`
-  // and `IDCOLOR` set. Clearing first is what makes this frame's flags this
-  // frame's: without it the snapshot below carried the segmentation pass into
-  // every colour pass, and a patch rendered as id colour — [1, 0, 0], the geom's
-  // number in the red byte.
-  std::memset(scene_.flags, 0, sizeof(scene_.flags));
-
+  // The scene's flags are MuJoCo's, not this code's: `mjv_defaultScene` sets
+  // shadows, reflections, the skybox, haze and face culling, and nothing in the
+  // engine writes them afterwards — `mjv_updateScene` reads `REFLECTION` to
+  // decide whether to build planar reflections, and the renderer reads `SHADOW`
+  // to decide whether to draw the lit half of the lighting. A frame drawn with
+  // those flags cleared is a frame with its shading off: a patch came out a
+  // constant 0.869 of MuJoCo's own Python renderer, which is the shadowless
+  // pass, while the depth and segmentation passes agreed exactly because they
+  // set their own flags. So they are left exactly as the scene was made.
   call([&] { mjv_updateScene(m, const_cast<mjData *>(data), &option_, nullptr, &camera_,
                              mjCAT_ALL, &scene_); });
-
-  // What the model and its options say this frame should be drawn with. Taken
-  // here, after `mjv_updateScene` has written it, and not in the constructor:
-  // `mjv_defaultScene` leaves every `mjRND_` flag clear, so restoring *that*
-  // snapshot drew the colour pass with lighting (and shadows, haze and fog) off.
-  // A patch's pixels came out a constant 0.874 of MuJoCo's own Python renderer —
-  // the flat material colour instead of the lit one — while the depth and
-  // segmentation passes, whose flags this code sets itself, agreed exactly.
-  std::memcpy(default_flags_, scene_.flags, sizeof(default_flags_));
 
   const mjrRect rect{0, 0, width_, height_};
 
@@ -176,10 +168,12 @@ void Renderer::render(const mjData *data, const std::string &camera,
 }
 
 void Renderer::draw(mjrRect rect, Pass pass, std::string &image) {
-  // Every pass starts from the flags `mjv_updateScene` derived for this frame:
-  // the segmentation passes set two of them and the next pass must not inherit
-  // them.
-  std::memcpy(scene_.flags, default_flags_, sizeof(default_flags_));
+  // This pass draws with the scene's own flags, so the two a segmentation pass
+  // adds are put back before the next pass runs — MuJoCo's Python renderer
+  // wraps its `mjr_render` call the same way. Without the restore a patch came
+  // back as id colour: [1, 0, 0], the geom's number in the red byte.
+  mjtByte held[mjNRNDFLAG];
+  std::memcpy(held, scene_.flags, sizeof(held));
 
   // This renderer's own offscreen buffer, bound here rather than once in the
   // constructor: the binding is process-wide GL state, and another renderer made
@@ -196,6 +190,8 @@ void Renderer::draw(mjrRect rect, Pass pass, std::string &image) {
   }
 
   call([&] { mjr_render(rect, &scene_, &context_); });
+
+  std::memcpy(scene_.flags, held, sizeof(held));
 
   const size_t pixels = static_cast<size_t>(width_) * static_cast<size_t>(height_);
 

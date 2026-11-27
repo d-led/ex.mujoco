@@ -68,10 +68,6 @@ struct Renderer {
   mjvOption option_;
   mjvCamera camera_;
   mjrContext context_;
-
-  // The flags `mjv_defaultScene` set: a pass starts from these, because the
-  // segmentation passes set two of them and nothing may be left over.
-  mjtByte default_flags_[mjNRNDFLAG] = {0};
 };
 
 // Whether MuJoCo will make a renderer on this machine, memoised, with the reason
