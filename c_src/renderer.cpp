@@ -146,6 +146,14 @@ void Renderer::render(const mjData *data, const std::string &camera,
   gl::Session &held = session;
   (void)held;
 
+  // `mjv_updateScene` writes the flags its option derives but does not clear the
+  // ones already there, and the last pass of the previous frame left `SEGMENT`
+  // and `IDCOLOR` set. Clearing first is what makes this frame's flags this
+  // frame's: without it the snapshot below carried the segmentation pass into
+  // every colour pass, and a patch rendered as id colour — [1, 0, 0], the geom's
+  // number in the red byte.
+  std::memset(scene_.flags, 0, sizeof(scene_.flags));
+
   call([&] { mjv_updateScene(m, const_cast<mjData *>(data), &option_, nullptr, &camera_,
                              mjCAT_ALL, &scene_); });
 
